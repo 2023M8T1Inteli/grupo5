@@ -52,6 +52,24 @@ Com base na avaliação e em sua descrição previamente realizada. A seguir, é
 
 <img src="./img/grafico_oceano.png">
 
+### Reduzir:
+
+* Conforto: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 10) nesse atributo, não é necessário fazer melhorias adicionais. Portanto, a ação aqui é reduzir o foco em aprimorar o conforto, uma vez que já é excelente em comparação com os concorrentes.
+  
+### Eliminar:
+
+* Tecnologia: Como o Grupo 5 se destacou com uma pontuação alta (nota 9) em termos de tecnologia, não é necessário eliminar nenhum aspecto tecnológico. Manter a inovação tecnológica é essencial para se destacar.
+
+### Aumentar:
+
+* Praticidade: O Teclado Inteligente Multifuncional TiX recebeu a pontuação mais alta (nota 10) em praticidade. Portanto, é interessante se concentrar em melhorar a praticidade do Grupo 5, tornando-o ainda mais fácil de instalar e usar, a fim de competir mais eficazmente nesse aspecto.
+
+### Criar:
+
+* Interface Digital: O Grupo 5 possui uma interface digital altamente avaliada (nota 10). No entanto, o TiX e o GregMaker não oferecem esse recurso. Isso pode ser uma oportunidade para criar um novo atributo que os concorrentes não têm. Deve-se considerar expandir e aprimorar ainda mais a interface digital, tornando-a uma característica única e valiosa do produto.
+
+* Versatilidade: Embora o Grupo 5 tenha recebido uma boa pontuação (nota 7) em versatilidade, o GregMaker obteve uma pontuação mais alta (nota 9). Portanto,  pode-se considerar aprimorar a versatilidade do Grupo 5 para competir mais eficazmente nesse aspecto.
+
 Em resumo, a escolha entre esses produtos depende das prioridades e necessidades específicas. O Grupo 5 se destaca em termos de tecnologia, interface digital e preço acessível. O Teclado Inteligente Multifuncional TiX oferece praticidade e comodidade, enquanto o GregMaker é altamente versátil e proporciona variedade de estímulos.
 
 ## Análise Financeira do Projeto
