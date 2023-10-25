@@ -1,8 +1,8 @@
 # Entendimento de negócio
 
 ## Matriz de Avaliação de Valor Oceano Azul
-Esta ferramenta consiste em analisar o mercado em que uma empresa está inserida e quais são seus principais concorrentes usando quatro ações: reduzir, eliminar, aumentar e criar. Usando essas ações, é possível avaliar oportunidades de inovação e criar diferencial, o que leva an uma empresa a criar um novo mercado (chamado de oceano azul) e sair do mercado atual, onde há muitos concorrentes.
-Para comparar as soluções atuais e a proposta para o projeto, o grupo criou uma matriz de avaliação Blue Ocean após fazer pesquisas e aprender sobre o produto. Uma análise com as informações a seguir está disponível: oito atributos de comparação: preço, versatilidade, tecnologia, conforto, comodidade, praticidade, acessibilidade e interface digital; três produtos concorrentes: Grupo 5, Teclado Inteligente Multifuncional TiX e GregMaker; e uma classificação de 0 a 10. Após a apresentação e explicação de cada característica, você pode ver um gráfico para obter uma compreensão visual da comparação dos três produtos concorrentes e as conclusões que o grupo chegou com base na avaliação realizada.
+Esta ferramenta consiste em analisar o mercado em que uma empresa está inserida e quais são seus principais concorrentes usando quatro ações: reduzir, eliminar, aumentar e criar. Usando essas ações, é possível avaliar oportunidades de inovação e criar diferencial, o que leva a uma empresa a criar um novo mercado (chamado de oceano azul) e sair do mercado atual, onde há muitos concorrentes.
+Para comparar as soluções atuais e a proposta para o projeto, o grupo criou uma Matriz de Avaliação de Valor Oceano Azul após fazer pesquisas e aprender sobre o produto. Uma análise com as informações a seguir está disponível: oito atributos de comparação: preço, versatilidade, tecnologia, conforto, comodidade, praticidade, acessibilidade e interface digital; três produtos concorrentes: Grupo 5, Teclado Inteligente Multifuncional TiX e GregMaker; e uma classificação de 0 a 10. Após a apresentação e explicação de cada característica, você pode ver um gráfico para obter uma compreensão visual da comparação dos três produtos concorrentes e as conclusões que o grupo chegou com base na avaliação realizada.
 
 ### Matriz Oceano Azul
 <img src="./img/planilha_oceano.png">
@@ -11,7 +11,7 @@ A seguir, acompanhe a explicação sobre cada atributo; qual a ação que ele re
 
 ### Preço
 
-A avaliação do preço baseou-se nos valores encontrados nos sites de cada produto de tecnologia assistiva. As notas atribuídas a este atributo foram as seguintes: O Grupo 5 recebeu nota 10, pois oferece sua tecnologia assistiva gratuitamente à AACD. O Teclado Inteligente Multifuncional TiX recebeu nota 3 devido ao custo de R$4.680 para um tratamento de 24 meses. O GregMaker obteve nota 6, pois tem um custo de R$500 para o mesmo período.
+A avaliação do preço baseou-se nos valores encontrados nos sites de cada produto de tecnologia assistiva. As notas atribuídas a este atributo foram as seguintes: O Grupo 5 recebeu nota 0, pois isenta a AACD de pagar pela tecnologia assistiva. O Teclado Inteligente Multifuncional TiX recebeu nota 6 devido ao custo de R$4.680 para um tratamento de 24 meses. O GregMaker obteve nota 3, pois tem um custo de R$500 para o mesmo período.Levando em conta aqui que quanto maior a nota mais caro é o produto.
 
 
 ### Versatilidade
@@ -35,7 +35,7 @@ A avaliação da comodidade levou em consideração o affordance do produto, ou 
 
 ### Praticidade
 
-A avaliação da praticidade considerou a facilidade de instalação e uso do produto. As notas atribuídas para este atributo foram as seguintes: O Grupo 5 obteve nota 7, uma vez que requer programação prévia e espaço adicional. O Teclado Inteligente Multifuncional TiX recebeu nota 10, pois é fácil de ser usado e pode ser utilizado em diferentes sistemas e ambientes, sendo plug-and-play. O GregMaker obteve nota 6, uma vez que depende de uma configuração e preparação maiores em relação aos outros produtos para alcançar os mesmos níveis de estímulos.
+A avaliação da praticidade considerou a facilidade de instalação e uso do produto. As notas atribuídas para este atributo foram as seguintes: O Grupo 5 obteve nota 7, uma vez que requer programação prévia e espaço adicional para alocar o produto. O Teclado Inteligente Multifuncional TiX recebeu nota 10, pois é fácil de ser usado e pode ser utilizado em diferentes sistemas e ambientes, sendo plug-and-play. O GregMaker obteve nota 6, uma vez que depende de uma configuração e preparação maiores em relação aos outros produtos para alcançar os mesmos níveis de estímulos.
 
 
 ### Acessibilidade
@@ -52,25 +52,27 @@ Com base na avaliação e em sua descrição previamente realizada. A seguir, é
 
 <img src="./img/grafico_oceano.png">
 
-### Reduzir:
+### Aumentar:
 
-* Conforto: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 10) nesse atributo, não é necessário fazer melhorias adicionais. Portanto, a ação aqui é reduzir o foco em aprimorar o conforto, uma vez que já é excelente em comparação com os concorrentes.
+* Conforto: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 10) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
+
+* Tecnologia: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
+
+* Acessibilidade: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
   
 ### Eliminar:
 
-* Tecnologia: Como o Grupo 5 se destacou com uma pontuação alta (nota 9) em termos de tecnologia, não é necessário eliminar nenhum aspecto tecnológico. Manter a inovação tecnológica é essencial para se destacar.
-
-### Aumentar:
-
-* Praticidade: O Teclado Inteligente Multifuncional TiX recebeu a pontuação mais alta (nota 10) em praticidade. Portanto, é interessante se concentrar em melhorar a praticidade do Grupo 5, tornando-o ainda mais fácil de instalar e usar, a fim de competir mais eficazmente nesse aspecto.
+* Preço: Levando em consideração que o Grupo 5 recebeu pontuação (nota 0) nula neste atributo, se entende que ele eliminou os custos de desenvolvimento da solução, se tornando gratuita.
 
 ### Criar:
 
-* Interface Digital: O Grupo 5 possui uma interface digital altamente avaliada (nota 10). No entanto, o TiX e o GregMaker não oferecem esse recurso. Isso pode ser uma oportunidade para criar um novo atributo que os concorrentes não têm. Deve-se considerar expandir e aprimorar ainda mais a interface digital, tornando-a uma característica única e valiosa do produto.
+* Interface Digital: O Grupo 5 possui uma interface digital altamente avaliada (nota 10). No entanto, o TiX e o GregMaker não oferecem esse recurso. Logo o Grupo 5 inovou dentro da categoria de produtos de Tecnologia Assistiva Táteis. Deve-se considerar expandir e aprimorar ainda mais a interface digital, tornando-a uma característica única e valiosa do produto.
 
-* Versatilidade: Embora o Grupo 5 tenha recebido uma boa pontuação (nota 7) em versatilidade, o GregMaker obteve uma pontuação mais alta (nota 9). Portanto,  pode-se considerar aprimorar a versatilidade do Grupo 5 para competir mais eficazmente nesse aspecto.
+### Reduzir:
 
-Em resumo, a escolha entre esses produtos depende das prioridades e necessidades específicas. O Grupo 5 se destaca em termos de tecnologia, interface digital e preço acessível. O Teclado Inteligente Multifuncional TiX oferece praticidade e comodidade, enquanto o GregMaker é altamente versátil e proporciona variedade de estímulos.
+* Nenhum atributo foi reduzido pelo produto Grupo 5.
+
+Em resumo, a escolha entre esses produtos depende das prioridades e necessidades específicas. O Grupo 5 se destaca em termos de acessibilidade, conforto, tecnologia, interface digital e preço acessível. O Teclado Inteligente Multifuncional TiX oferece praticidade e comodidade, enquanto o GregMaker é altamente versátil e proporciona variedade de estímulos.
 
 ## Análise Financeira do Projeto
 
