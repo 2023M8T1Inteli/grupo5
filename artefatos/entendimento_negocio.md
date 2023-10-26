@@ -76,30 +76,30 @@ Em resumo, a escolha entre esses produtos depende das prioridades e necessidades
 
 ## Análise Financeira do Projeto
 
-Este documento corresponde ao que é solicitado no card "Entendimento de Negócio" na Sprint 1.
+A análise financeira do projeto é um processo importante que envolve a avaliação e o estudo detalhado dos aspectos financeiros de um projeto ou investimento sugerido. Ela é essencial para tomar decisões informadas sobre a alocação de recursos e para determinar a viabilidade financeira de um projeto. A análise financeira de um projeto analisa vários fatores, incluindo custos, receitas, orçamento, retorno sobre o investimento e riscos financeiros. No entanto, a análise financeira deste projeto em particular tem um caráter acadêmico porque o Instituto de Tecnologia e Lideranças e seus alunos irão desenvolver o produto sem custo algum.
 
-### Receita 
+Iniciando pelo escopo do desenvolvimento, abordamos 6 conceitos principais, incluindo:
 
+* Número de integrantes no time - O número de gerentes de projetos júnior na equipe.
+* Disponibilidade em caixa da empresa para o custeio do projeto - Valor que o cliente está disposto a investir no projeto. Até o momento, não nos foi disponibilizado nenhum valor.
+* Salário de cada desenvolvedor júnior - Baseado na média salarial de um gerente de projetos júnior, conforme informações disponíveis no site da <a href="https://www.glassdoor.com.br/Sal%C3%A1rios/desenvolvedor-j%C3%BAnior-sal%C3%A1rio-SRCH_KO0,20.htm#:~:text=A%20m%C3%A9dia%20salarial%20de%20Desenvolvedor,%24%201.025%20e%20R%24%207.362">Glassdoor</a>
+* Horas totais - Considerando o plano da faculdade para este módulo e descontando os dias de encontros com o cliente e as Sprints Planning, temos 232h 30min disponíveis para a realização do estudo e desenvolvimento do projeto.
+* Remuneração por hora - Com base no salário total de cada desenvolvedor (R$ 3250,00) e na quantidade total de horas trabalhadas em um mês (160h), a remuneração por hora para cada desenvolvedor júnior é de R$ 20,31.
+* Custo dos dispositivos - Custo do hardware implementado, circuitos eletrônicos e elétricos e peças de microeletrônica.
 
+### Tabela Resumida da Análise Financeira do Projeto
+| Item | Descrição| Valor |
+| - | - | - |
+| Remuneração por hora | Salário total / horas totais | R$ 20,31 |
+| Time de Desenvolvimento | Custo de um time 7 desenvolvedores júnior por um período de 232h 30min | R$ 33.054,49 |
+| GregMaker | Dispositivo de Tecnologia Assitiva Tátil | R$ 500,00 |
+| Tapete Sensorial | Tapete de tecido com diferentes blocos de estímulos | R$ 370,00 |
+| Recursos Extras | Sensores, Fios e Microeletrônicos | R$ 100,00 |
+| Custo Total | Soma de todos os custos | R$ 34.024,49 |
 
-### Orçamento total
+#### Considerações Adicionais
+É importante ressaltar que, a receita gerada pelo projeto em um ano não foi estimada nesta análise, pois está fora do escopo do projeto e depende de fatores externos. Recomendamos uma análise adicional para estimar a receita gerada pelo projeto e avaliar seu impacto financeiro no longo prazo. Entretanto, podemos estimar que, este projeto pode gerar resultados e consequentemente trazer investimentos para a instituição da AACD através de outros patrocínios e doações.
 
+Além disso, a disponibilidade em caixa da empresa para o custeio do projeto não foi fornecida pela AACD. Entretanto, nesse caso, essa informação não inviabiliza a realização do projeto justamente pois se trata de uma doação realizada pela instituição através de um produto desenvolvido pelo Grupo 5.
 
-
-### Custos
-
-#### Métodos de pagamento
-
-
-### Simulação de preço
-
-
-*Sistema Operacional: Ubuntu*
-
-*Carga de Trabalho: Pico de tráfego semanal*
-
-*Instância: T3 micro*
-
-*Pagamento: Sob demanda* 
-
-![](./img/cost-aws.PNG)
+Por fim, é importante notar que, a análise financeira é somente uma estimativa de gastos, necessária para avaliar a viabilidade do projeto.
