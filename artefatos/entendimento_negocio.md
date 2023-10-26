@@ -43,7 +43,7 @@ A avaliação do preço baseou-se nos valores encontrados nos sites de cada prod
 
 ### Versatilidade
 
-A avaliação da versatilidade levou em consideração a capacidade de cada produto ser adaptado para executar tarefas específicas determinadas por um Terapeuta Ocupacional (TO). As notas atribuídas para este atributo foram as seguintes: O Grupo 5 recebeu nota 7, pois oferece programação em blocos de histórias terapêuticas. O Teclado Inteligente Multifuncional TiX recebeu nota 4, pois possui poucas oportunidades de programação, mas ainda é adaptável para uso versátil dentro de um computador. O GregMaker obteve nota 9 devido à sua alta capacidade de programação, permitindo versatilidade tátil quase infinita e sua utilização como base para outros projetos.
+A avaliação da versatilidade levou em consideração a capacidade de cada produto ser adaptado para executar tarefas específicas determinadas por um Terapeuta Ocupacional (T.O.). As notas atribuídas para este atributo foram as seguintes: O Grupo 5 recebeu nota 7, pois oferece programação em blocos de histórias terapêuticas. O Teclado Inteligente Multifuncional TiX recebeu nota 4, pois possui poucas oportunidades de programação, mas ainda é adaptável para uso versátil dentro de um computador. O GregMaker obteve nota 9 devido à sua alta capacidade de programação, permitindo versatilidade tátil quase infinita e sua utilização como base para outros projetos.
 
 ### Tecnologia
 
