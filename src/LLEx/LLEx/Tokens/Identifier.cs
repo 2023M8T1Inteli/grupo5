@@ -8,10 +8,10 @@ namespace LLEx.Tokens
 {
     internal class Identifier : Token
     {
-        public override string Name { get => this.GetType().Name; }
-        public override string Value { get; }
+        public override String Name { get => this.GetType().Name; }
+        public override String Value { get; set; }
 
-        public Identifier(string value)
+        public Identifier(String value)
         {
             this.Value = value;
         }

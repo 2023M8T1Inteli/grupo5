@@ -9,10 +9,10 @@ namespace LLEx
     abstract class Token
     {
         public abstract string Name { get; }
-        public abstract string Value { get; }
+        public abstract string Value { get; set; }
         public override string ToString()
         {
-            return $"<{Name}>{Value}</{Name}>";
+            return $"<{Name}>{Value}</{Name}>\n";
         }
     }
 }

@@ -1,22 +1,48 @@
 ﻿using System.IO;
+using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LLEx
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private const int BUFFER_SIZE = 8;
+
+        public static void Main(String[] args)
         {
-            FileManager fileManager = new FileManager(args);
+            String? path;
 
-            String text = fileManager.GetTextFromInputFile();
+            var arguments = new Dictionary<String, String>();
 
-            String output;
+            for (int i = 0; i < args.Length; i += 2)
+            {
+                arguments[args[i]] = args[i + 1];
+            }
 
-            new Tokenizer(text, out output);
+            arguments.TryGetValue("-t", out path);
 
-            fileManager.SaveOutput(output);
+            if (path == null)
+            {
+                throw new ArgumentNullException("-t");
+            }
 
-            
+            String fileExtension = Path.GetExtension(path).ToLower();
+
+            if (fileExtension.CompareTo(".cgn") != 0)
+            {
+                throw new ArgumentException("Invalid file extension. Please provide a .cgn file!");
+            }
+
+            Source source = new Source(path, BUFFER_SIZE);
+
+            StringBuilder output;
+
+            new Tokenizer(source, out output);
+
+            StreamWriter sw = File.CreateText("Output.llex");
+            sw.Write(output);
+            sw.Dispose();
+            sw.Close();
         }
     }
 }
