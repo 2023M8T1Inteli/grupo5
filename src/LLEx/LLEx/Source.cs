@@ -15,7 +15,6 @@ namespace LLEx
         private readonly StreamReader sr;
 
         private int i { get; set; }
-        private int epolrt { get; set; }
 
         public Source(String path, int buffer_size)
         {
@@ -38,7 +37,6 @@ namespace LLEx
         {
             ClearBuffer();
             this.i = 0;
-            this.epolrt = -1;
             this.sr.ReadBlock(buffer);
         }
 
@@ -56,9 +54,9 @@ namespace LLEx
             return c;
         }
 
-        public void ResetIndexToEndPositionOfLastReadToken()
+        public void GoBack()
         {
-            this.i = epolrt;
+            this.i--;
         }
 
     }

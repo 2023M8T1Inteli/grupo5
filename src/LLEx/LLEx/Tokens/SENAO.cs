@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace LLEx.Tokens
 {
-    internal class Identifier : Token
+    internal class SENAO : Token
     {
         public override String Name { get => this.GetType().Name; }
         public override String Value { get; set; }
 
-        public Identifier(String value)
+        public SENAO(String value)
         {
             this.Value = value;
         }
