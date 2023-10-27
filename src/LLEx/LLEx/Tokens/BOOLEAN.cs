@@ -11,9 +11,10 @@ namespace LLEx.Tokens
         public override String Name { get => this.GetType().Name; }
         public override String Value { get; set; }
 
-        public BOOLEAN(String value)
+        public BOOLEAN(String value, int line)
         {
             this.Value = value;
+            this.Line = line;
         }
     }
 }

@@ -11,8 +11,9 @@ namespace LLEx.Tokens
         public override String Name { get => this.GetType().Name; }
         public override String Value { get; set; }
 
-        public NAO(String value)
+        public NAO(String value, int line)
         {
+            this.Line = line;
             this.Value = value;
         }
     }

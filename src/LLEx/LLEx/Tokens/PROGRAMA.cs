@@ -11,8 +11,9 @@ namespace LLEx.Tokens
         public override String Name { get => this.GetType().Name; }
         public override String Value { get; set; }
 
-        public PROGRAMA(String value)
+        public PROGRAMA(String value, int line)
         {
+            this.Line = line;
             this.Value = value;
         }
     }

@@ -9,6 +9,7 @@ namespace LLEx
     {
         private Source src;
         private StringBuilder lexema;
+        private int line = 1;
 
         public Tokenizer(Source src, out StringBuilder output)
         {
@@ -25,7 +26,7 @@ namespace LLEx
 
             while((token = ReadToken()) != null)
             {
-                output.AppendLine($"\t<{token.Name}>{token.Value}</{token.Name}>");
+                output.AppendLine($"\t<{token.Name} line={token.Line}>{token.Value}</{token.Name}>");
             }
 
             // Ending with tag </tokens>.
@@ -72,90 +73,94 @@ namespace LLEx
 
                 if (IsLexemaEqualsToPrograma(lexemaStr))
                 {
-                    return new PROGRAMA(lexemaStr);
+                    return new PROGRAMA(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToSe(lexemaStr))
                 {
-                    return new SE(lexemaStr);
+                    return new SE(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToEntao(lexemaStr))
                 {
-                    return new ENTAO(lexemaStr);
+                    return new ENTAO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToSenao(lexemaStr))
                 {
-                    return new SENAO(lexemaStr);
+                    return new SENAO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToEnquanto(lexemaStr))
                 {
-                    return new ENQUANTO(lexemaStr);
+                    return new ENQUANTO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToFaca(lexemaStr))
                 {
-                    return new FACA(lexemaStr);
+                    return new FACA(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToNao(lexemaStr))
                 {
-                    return new NAO(lexemaStr);
+                    return new NAO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToInicio(lexemaStr))
                 {
-                    return new LBLOCK(lexemaStr);
+                    return new LBLOCK(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToFim(lexemaStr))
                 {
-                    return new RBLOCK(lexemaStr);
+                    return new RBLOCK(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToVerdade(lexemaStr))
                 {
-                    return new BOOLEAN(lexemaStr);
+                    return new BOOLEAN(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToFalso(lexemaStr))
                 {
-                    return new BOOLEAN(lexemaStr);
+                    return new BOOLEAN(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToLer(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToLerVarios(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToMostrar(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToTocar(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToMostrarTocar(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToEsperar(lexemaStr))
                 {
-                    return new COMANDO(lexemaStr);
+                    return new COMANDO(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToE(lexemaStr))
                 {
-                    return new OPMUL(lexemaStr);
+                    return new OPMUL(lexemaStr, line);
                 }
                 else if (IsLexemaEqualsToOu(lexemaStr))
                 {
-                    return new OPSUM(lexemaStr);
+                    return new OPSUM(lexemaStr, line);
                 }
                 else
                 {
-                    return new ID(lexemaStr);
+                    return new ID(lexemaStr, line);
                 }
 
             }
-            else if (IsCharSpaceOrReturnOrNewLineOrTab(c))
+            else if (IsCharNewLine(c))
             {
-                // Fazer a lógica para continuar a leitura e ignorar caracteres em branco.
-                return new NullCharacter("");
+                line++;
+                return ReadToken();
+            }
+            else if (IsCharSpaceOrReturnOrTab(c))
+            {
+                return ReadToken();
             }
 
             throw new Exception("Unhandled characther.");
@@ -195,9 +200,14 @@ namespace LLEx
             return IsCharAlphabetic(c) || IsCharUnderline(c);
         }
 
-        private bool IsCharSpaceOrReturnOrNewLineOrTab(char c)
+        private bool IsCharSpaceOrReturnOrTab(char c)
         {
-            return c.CompareTo(' ') == 0 || c.CompareTo('\r') == 0 || c.CompareTo('\n') == 0 || c.CompareTo('\t') == 0;
+            return c.CompareTo(' ') == 0 || c.CompareTo('\r') == 0 || c.CompareTo('\t') == 0;
+        }
+
+        private bool IsCharNewLine(char c)
+        {
+            return c.CompareTo('\n') == 0;
         }
 
         private bool IsLexemaEqualsToPrograma(string lexema)

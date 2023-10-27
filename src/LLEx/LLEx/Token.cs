@@ -10,9 +10,10 @@ namespace LLEx
     {
         public abstract string Name { get; }
         public abstract string Value { get; set; }
+        public int Line { get; set; }
         public override string ToString()
         {
-            return $"<{Name}>{Value}</{Name}>\n";
+            return $"<{Name} line={Line}>{Value}</{Name}>\n";
         }
     }
 }

@@ -11,8 +11,9 @@ namespace LLEx.Tokens
         public override String Name { get => this.GetType().Name; }
         public override String Value { get; set; }
 
-        public LBLOCK(String value)
+        public LBLOCK(String value, int line)
         {
+            this.Line = line;
             this.Value = value;
         }
     }
