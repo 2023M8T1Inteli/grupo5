@@ -55,7 +55,7 @@ namespace LLEx
             if (IsCharAlphabeticOrUnderline(c)) // Ou é um identificador ou uma palavra reservada
             {
                 bool IsCharAlphanumericOrUnderlineBool;
-
+                // ----------------------------------------------------------------
                 do
                 {
                     c = this.src.Peek();
@@ -153,6 +153,60 @@ namespace LLEx
                 }
 
             }
+            else if (IsCharRelationalOperator(c)) // É um operador relacional
+            {
+                c = this.src.Peek();
+                if (IsCharRelationalOperator(c))
+                {
+                    this.lexema.Append(c);
+                    return new OPREL(this.lexema.ToString(), line);
+                }
+                else if (IsLexemaEqualsToAtribuicao(c.ToString()))
+                {
+                    return new ASSIGN(c.ToString(), line);
+                }
+                else
+                {
+                    return new OPREL(this.lexema.ToString(), line);
+                }
+
+            }
+            else if (IsLexemaEqualsToSumOperator(c))
+            {
+                return new OPSUM(c.ToString(), line);
+            }
+            else if (IsCharMultiplicationOperator(c))
+            {
+                return new OPMUL(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToPotencia(c.ToString()))
+            {
+                return new OPPOW(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToDoisPontos(c.ToString()))
+            {
+                return new COLON(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToVirgula(c.ToString()))
+            {
+                return new COMMA(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToPontoFinal(c.ToString()))
+            {
+                return new DOT(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToAspas(c.ToString()))
+            {
+                return new DQUOTE(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToAbreParenteses(c.ToString()))
+            {
+                return new LPAR(c.ToString(), line);
+            }
+            else if (IsLexemaEqualsToFechaParenteses(c.ToString()))
+            {
+                return new RPAR(c.ToString(), line);
+            }
             else if (IsCharNewLine(c))
             {
                 line++;
@@ -190,9 +244,29 @@ namespace LLEx
             return c.CompareTo('_') == 0;
         }
 
+        private bool IsCharGreaterThan(char c)
+        {
+            return c.CompareTo('>') == 0;
+        }
+
+        private bool IsCharLessThan(char c)
+        {
+            return c.CompareTo('<') == 0;
+        }
+
+        private bool IsCharEquals(char c)
+        {
+            return c.CompareTo('=') == 0;
+        }
+
         private bool IsCharAlphabeticOrUnderline(char c)
         {
             return IsCharAlphabetic(c) || IsCharUnderline(c);
+        }
+
+        private bool IsCharRelationalOperator(char c)
+        {
+            return IsCharGreaterThan(c) || IsCharLessThan(c) || IsCharEquals(c);
         }
 
         private bool IsCharAlphanumericOrUnderline(char c)
@@ -208,6 +282,41 @@ namespace LLEx
         private bool IsCharNewLine(char c)
         {
             return c.CompareTo('\n') == 0;
+        }
+
+        private bool IsCharSum(char c)
+        {
+            return c.CompareTo('+') == 0;
+        }
+
+        private bool IsCharSubtraction(char c)
+        {
+            return c.CompareTo('-') == 0;
+        }
+
+        private bool IsCharTimes(char c)
+        {
+            return c.CompareTo('*') == 0;
+        }
+
+        private bool IsCharSlash(char c)
+        {
+            return c.CompareTo('/') == 0;
+        }
+
+        private bool IsCharMod(char c)
+        {
+            return c.CompareTo('%') == 0;
+        }
+
+        private bool IsCharMultiplicationOperator(char c)
+        {
+            return IsCharTimes(c) || IsCharSlash(c) || IsCharMod(c);
+        }
+
+        private bool IsLexemaEqualsToSumOperator(char c)
+        {
+            return IsCharSum(c) || IsCharSubtraction(c);
         }
 
         private bool IsLexemaEqualsToPrograma(string lexema)
@@ -303,5 +412,44 @@ namespace LLEx
             return lexema.CompareTo("ou") == 0;
         }
 
+        private bool IsLexemaEqualsToDoisPontos(string lexema)
+        {
+            return lexema.CompareTo(":") == 0;
+        }
+
+        private bool IsLexemaEqualsToVirgula(string lexema)
+        {
+            return lexema.CompareTo(",") == 0;
+        }
+
+        private bool IsLexemaEqualsToPontoFinal(string lexema)
+        {
+            return lexema.CompareTo(".") == 0;
+        }
+
+        private bool IsLexemaEqualsToAspas(string lexema)
+        {
+            return lexema.CompareTo("\"") == 0;
+        }
+
+        private bool IsLexemaEqualsToAtribuicao(string lexema)
+        {
+            return lexema.CompareTo("=") == 0;
+        }
+
+        private bool IsLexemaEqualsToAbreParenteses(string lexema)
+        {
+            return lexema.CompareTo("(") == 0;
+        }
+
+        private bool IsLexemaEqualsToFechaParenteses(string lexema)
+        {
+            return lexema.CompareTo(")") == 0;
+        }
+
+        private bool IsLexemaEqualsToPotencia(string lexema)
+        {
+            return lexema.CompareTo("^") == 0;
+        }
     }
 }
