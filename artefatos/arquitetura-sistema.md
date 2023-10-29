@@ -2,9 +2,9 @@
 
 ### Diagrama de blocos do hardware do sistema
 
-![Alt](artefatos/img/arquitetura-hardware.png)
+![Alt text](https://i.postimg.cc/sD1pP6pF/arquitetura-hardware.png)
 
-*Descrição*
+#### Descrição
 
 
 Principais Funções de Cada Dispositivo:
