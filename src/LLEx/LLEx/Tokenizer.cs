@@ -10,6 +10,7 @@ namespace LLEx
         private Source src;
         private StringBuilder lexema;
         private int line = 1;
+        private bool isString = false;
 
         public Tokenizer(Source src, out StringBuilder output)
         {
@@ -52,10 +53,32 @@ namespace LLEx
 
             this.lexema.Append(c);
 
+            if (IsLexemaEqualsToAspas(c.ToString()))
+            {
+                this.isString = !isString;
+                return new DQUOTE(c.ToString(), line);
+            }
+            else if (isString)
+            {
+                while (isString)
+                {
+                    c = this.src.Peek();
+
+                    if (IsCharQuotationMark(c))
+                    {
+                        this.src.GoBack();
+                        return new STRING(this.lexema.ToString(), line);
+                    }
+                    else
+                    {
+                        this.lexema.Append(c);
+                    }
+                }
+            }
             if (IsCharAlphabeticOrUnderline(c)) // Ou é um identificador ou uma palavra reservada
             {
                 bool IsCharAlphanumericOrUnderlineBool;
-                // ----------------------------------------------------------------
+
                 do
                 {
                     c = this.src.Peek();
@@ -153,7 +176,7 @@ namespace LLEx
                 }
 
             }
-            else if (IsCharRelationalOperator(c)) // É um operador relacional
+            else if (IsCharRelationalOperator(c))
             {
                 c = this.src.Peek();
                 if (IsCharRelationalOperator(c))
@@ -194,10 +217,6 @@ namespace LLEx
             else if (IsLexemaEqualsToPontoFinal(c.ToString()))
             {
                 return new DOT(c.ToString(), line);
-            }
-            else if (IsLexemaEqualsToAspas(c.ToString()))
-            {
-                return new DQUOTE(c.ToString(), line);
             }
             else if (IsLexemaEqualsToAbreParenteses(c.ToString()))
             {
@@ -312,6 +331,11 @@ namespace LLEx
         private bool IsCharMultiplicationOperator(char c)
         {
             return IsCharTimes(c) || IsCharSlash(c) || IsCharMod(c);
+        }
+
+        private bool IsCharQuotationMark(char c)
+        {
+            return c.CompareTo('\"') == 0;
         }
 
         private bool IsLexemaEqualsToSumOperator(char c)
