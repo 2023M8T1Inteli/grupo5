@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LLEx": {
+      "commandName": "Project",
+      "commandLineArgs": "-t Program.cgn -o Output.llex"
+    }
+  }
+}
