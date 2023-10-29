@@ -5,6 +5,6 @@ verdades =
 se entao inicio
 ses = verdades
 programas = ler()
-x = ler_varios("alguma string")
+x = ler_varios("alguma string", 8098)
 fim
 fim.

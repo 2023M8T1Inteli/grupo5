@@ -176,6 +176,17 @@ namespace LLEx
                 }
 
             }
+            else if (IsCharNumeric(c))
+            {
+                c = this.src.Peek();
+                while (IsCharNumeric(c))
+                {
+                    this.lexema.Append(c);
+                    c = this.src.Peek();
+                }
+                this.src.GoBack();
+                return new INTEGER(this.lexema.ToString(), line);
+            }
             else if (IsCharRelationalOperator(c))
             {
                 c = this.src.Peek();
@@ -336,6 +347,11 @@ namespace LLEx
         private bool IsCharQuotationMark(char c)
         {
             return c.CompareTo('\"') == 0;
+        }
+
+        private bool IsCharNumeric(char c)
+        {
+            return (int)c > 47 && (int)c < 58;
         }
 
         private bool IsLexemaEqualsToSumOperator(char c)
