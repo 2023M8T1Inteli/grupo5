@@ -8,7 +8,7 @@ Logo abixo, temos uma análise da proposta de valor do nosso produto.
 
 ## 2 TAM, SAM e SOM
 
-O estudo abaixo busca estimar o valor de mercado possível para um tapete sensorial integrado, um produto desenvolvido para proporcionar terapia assistiva a pessoas com leves desordens neurológicas na Associação de Assistência à Criança Deficiênte (AACD). Vamos explorar os conceitos de Total Addressable Market (TAM), Service Addressable Market (SAM) e Service Obtainable Market (SOM) com base nos dados disponíveis.
+O estudo abaixo busca estimar o valor de mercado possível para um tapete sensorial integrado, um produto desenvolvido para proporcionar terapia assistiva a pessoas com leves desordens neurológicas na Associação de Assistência à Criança Deficiente (AACD). Vamos explorar os conceitos de Total Addressable Market (TAM), Service Addressable Market (SAM) e Service Obtainable Market (SOM) com base nos dados disponíveis.
 
 ### 2.1 TAM
 
@@ -21,7 +21,7 @@ Para calcular o SAM iremos nos basear no artigo Epidemiological characteristics 
 
 ### 2.3 SOM
 
-Por fim, para calcular a fatia de mercado que poderemos, de fato, alcançar podemos estimar, de forma mais conservadora, uma porção de 2% do mercado brasileiro. Diremos que essa estimativa será conservadora pelo fato de terem poucos concorrentes fornecendo soluções para este mercado, mesmo que exista um potencial público alvo grande. Sendo assim, temos um valor total de R$2,9 milhões. 
+Por fim, para calcular a fatia de mercado que poderemos alcançar, de fato, podemos estimar, de forma mais conservadora, uma porção de 2% do mercado brasileiro. Diremos que essa estimativa será conservadora pelo fato de terem poucos concorrentes fornecendo soluções para este mercado, mesmo que exista um potencial público alvo grande. Sendo assim, temos um valor total de R$2,9 milhões. 
 
 ### 2.4 Conclusão
 A análise do mercado para o Tapete Sensorial revela um grande potencial devido à alta demanda por terapia assistiva para pessoas com paralisia cerebral. Dados demográficos, capacidade operacional, estratégias de marketing e recursos financeiros são fatores críticos para determinar o SOM que podemos alcançar. A implementação bem-sucedida do produto pode beneficiar tanto os pacientes quanto a empresa, que busca sua missão de fornecer assistência de qualidade a pessoas com deficiência física. 
@@ -38,12 +38,12 @@ A seguir, acompanhe a explicação sobre cada atributo; qual a ação que ele re
 
 ### Preço
 
-A avaliação do preço baseou-se nos valores encontrados nos sites de cada produto de tecnologia assistiva. As notas atribuídas a este atributo foram as seguintes: O Grupo 5 recebeu nota 0, pois isenta a AACD de pagar pela tecnologia assistiva. O Teclado Inteligente Multifuncional TiX recebeu nota 6 devido ao custo de R$4.680 para um tratamento de 24 meses. O GregMaker obteve nota 3, pois tem um custo de R$500 para o mesmo período.Levando em conta aqui que quanto maior a nota mais caro é o produto.
+A avaliação do preço baseou-se nos valores encontrados nos sites de cada produto de tecnologia assistiva. As notas atribuídas a este atributo foram as seguintes: O Grupo 5 recebeu nota 0, pois isenta a AACD de pagar pela tecnologia assistiva. O Teclado Inteligente Multifuncional TiX recebeu nota 6 devido ao custo de R$4.680 para um tratamento de 24 meses. O GregMaker obteve nota 3, pois tem um custo de R$500 para o mesmo período. Levando em conta que quanto maior a nota mais caro é o produto.
 
 
 ### Versatilidade
 
-A avaliação da versatilidade levou em consideração a capacidade de cada produto ser adaptado para executar tarefas específicas determinadas por um Terapeuta Ocupacional (T.O.). As notas atribuídas para este atributo foram as seguintes: O Grupo 5 recebeu nota 7, pois oferece programação em blocos de histórias terapêuticas. O Teclado Inteligente Multifuncional TiX recebeu nota 4, pois possui poucas oportunidades de programação, mas ainda é adaptável para uso versátil dentro de um computador. O GregMaker obteve nota 9 devido à sua alta capacidade de programação, permitindo versatilidade tátil quase infinita e sua utilização como base para outros projetos.
+A avaliação da versatilidade levou em consideração a capacidade de cada produto ser adaptado para executar tarefas específicas determinadas por um Terapeuta Ocupacional (T.O.). As notas atribuídas para este atributo foram as seguintes: O Grupo 5 recebeu nota 7, pois oferece programação em blocos de histórias terapêuticas. O Teclado Inteligente Multifuncional TiX recebeu nota 4, pois possui poucas oportunidades de programação, mas ainda é adaptável para uso versátil dentro de um computador. O GregMaker obteve nota 9 devido a sua alta capacidade de programação, permitindo versatilidade tátil quase infinita e sua utilização como base para outros projetos.
 
 ### Tecnologia
 
@@ -62,7 +62,7 @@ A avaliação da comodidade levou em consideração o affordance do produto, ou 
 
 ### Praticidade
 
-A avaliação da praticidade considerou a facilidade de instalação e uso do produto. As notas atribuídas para este atributo foram as seguintes: O Grupo 5 obteve nota 7, uma vez que requer programação prévia e espaço adicional para alocar o produto. O Teclado Inteligente Multifuncional TiX recebeu nota 10, pois é fácil de ser usado e pode ser utilizado em diferentes sistemas e ambientes, sendo plug-and-play. O GregMaker obteve nota 6, uma vez que depende de uma configuração e preparação maiores em relação aos outros produtos para alcançar os mesmos níveis de estímulos.
+A avaliação da praticidade considerou a facilidade de instalação e uso do produto. As notas atribuídas para este atributo foram as seguintes: O Grupo 5 obteve nota 7, uma vez que requer programação prévia e espaço adicional para alocar o produto. O Teclado Inteligente Multifuncional TiX recebeu nota 10, pois é fácil de ser usado e pode ser utilizado em diferentes sistemas e ambientes, sendo plug-and-play. O GregMaker obteve nota 6, uma vez que depende de configuração e preparação maiores em relação aos outros produtos para alcançar os mesmos níveis de estímulos.
 
 
 ### Acessibilidade
@@ -75,25 +75,25 @@ A avaliação da acessibilidade considerou a quantidade de recursos de estímulo
 A avaliação da Interface Digital levou em consideração o sistema que suporta o uso do produto. As notas atribuídas para este atributo foram as seguintes: O Grupo 5 obteve nota 10, uma vez que é o único a fornecer uma interface digital programável de gestão para o Terapeuta Ocupacional, além de estímulos visuais para a criança através de um display. Tanto o Teclado Inteligente Multifuncional TiX quanto o GregMaker receberam nota 0, uma vez que não oferecem esse recurso, que é um dos principais diferenciais do produto do Grupo 5.
 
 
-Com base na avaliação e em sua descrição previamente realizada. A seguir, é possível avaliar a comparação e seus atributos de forma visual, através de um gráfico de linhas.
+A seguir, é possível avaliar a comparação e seus atributos de forma visual, através de um gráfico de linhas.
 
 <img src="./img/grafico_oceano.png">
 
 ### Aumentar:
 
-* Conforto: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 10) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
+* Conforto: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 10) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou este atributo.
 
-* Tecnologia: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
+* Tecnologia: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou este atributo.
 
-* Acessibilidade: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou neste atributo.
+* Acessibilidade: Uma vez que o Grupo 5 recebeu a maior pontuação (nota 9) nesse atributo, ele se destacou acima dos outros dois produtos, por isso aumentou este atributo.
   
 ### Eliminar:
 
-* Preço: Levando em consideração que o Grupo 5 recebeu pontuação (nota 0) nula neste atributo, se entende que ele eliminou os custos de desenvolvimento da solução, se tornando gratuita.
+* Preço: Levando em consideração que o Grupo 5 recebeu pontuação (nota 0) nula neste atributo, entende-se que ele eliminou os custos de desenvolvimento da solução, tornando-a gratuita.
 
 ### Criar:
 
-* Interface Digital: O Grupo 5 possui uma interface digital altamente avaliada (nota 10). No entanto, o TiX e o GregMaker não oferecem esse recurso. Logo o Grupo 5 inovou dentro da categoria de produtos de Tecnologia Assistiva Táteis. Deve-se considerar expandir e aprimorar ainda mais a interface digital, tornando-a uma característica única e valiosa do produto.
+* Interface Digital: O Grupo 5 possui uma interface digital altamente avaliada (nota 10). No entanto, o TiX e o GregMaker não oferecem esse recurso. Logo, o Grupo 5 inovou dentro da categoria de produtos de Tecnologia Assistiva Táteis. Deve-se considerar, expandir e aprimorar ainda mais a interface digital, tornando-a uma característica única e valiosa do produto.
 
 ### Reduzir:
 
@@ -123,11 +123,11 @@ Em resumo, a escolha entre esses produtos depende das prioridades e necessidades
 
 **Ameaça 009:** O projeto em questão é bastante complexo e tem diferentes etapas de desenvolvimento, por isso, é muito provável que alguma entrega seja atrasada. Para mitigar isso, iremos adotar a metodologia Scrum para sermos transparentes com relação aos prazos. 
 
-**Ameaça 010:** Por seu uma plataforma que exige a construção de uma lógica e o envio desta lógica para o hardware do tapete, esse sistema pode ser complexo para quem já tem alguma dificuldade com meios eletrônicos. Para mitigar isso adotaremos as heurísticas de Nielsen na construção de uma boa UX e, além disso, podemos produzir vídeos educacionais. 
+**Ameaça 010:** Por seu uma plataforma que exige a construção de uma lógica e o envio desta lógica para o hardware do tapete, esse sistema pode ser complexo para quem já tem alguma dificuldade com meios eletrônicos. Para mitigar isso, adotaremos as heurísticas de Nielsen na construção de uma boa UX e, além disso, podemos produzir vídeos educacionais. 
 
-**Ameaça 011:** Por trabalharmos com dados sigilosos na área da saúde, estamos sujeitos a mudanças na regulamentação. Por isso, vale à pena observar quais novas leis nessa área estão sendo votadas e quando o processo estiver perto de ser vigorado, atualizar o sistema para essa nova adequação. 
+**Ameaça 011:** Por trabalharmos com dados sigilosos na área da saúde, estamos sujeitos a mudanças na regulamentação. Por isso, vale a pena observar quais novas leis nessa área estão sendo votadas e quando o processo estiver perto de ser vigorado, atualizar o sistema para essa nova adequação. 
 
-**Ameaça 012:** Como iremos desenvolver um MVP, cabe a AACD decidir se uma equipe técnica irá  dar continuidade no desenvolvimento deste produto. Para facilitar, iremos documentar todo o código e utilizar de microsserviços para garantir a atualização componentizada do produto. 
+**Ameaça 012:** Como iremos desenvolver um MVP, cabe a AACD decidir se uma equipe técnica irá dar continuidade ao desenvolvimento deste produto. Para facilitar, iremos documentar todo o código e utilizar de microsserviços para garantir a atualização componentizada do produto. 
 
 **Ameaça 013:** A possibilidade de testarmos o produto com o usuário final é quase que nula, por conta da legislação e práticas da AACD. Por isso, iremos enviar o protótipo para a terapeuta e pedir que ela forneça um feedback da sua utilização com a criança.
 
@@ -158,8 +158,8 @@ Iniciando pelo escopo do desenvolvimento, abordamos 6 conceitos principais, incl
 | Custo Total | Soma de todos os custos | R$ 34.024,49 |
 
 #### Considerações Adicionais
-É importante ressaltar que, a receita gerada pelo projeto em um ano não foi estimada nesta análise, pois está fora do escopo do projeto e depende de fatores externos. Recomendamos uma análise adicional para estimar a receita gerada pelo projeto e avaliar seu impacto financeiro no longo prazo. Entretanto, podemos estimar que, este projeto pode gerar resultados e consequentemente trazer investimentos para a instituição da AACD através de outros patrocínios e doações.
+É importante ressaltar que a receita gerada pelo projeto em um ano não foi estimada nesta análise, pois está fora do escopo do projeto e depende de fatores externos. Recomendamos uma análise adicional para estimar a receita gerada pelo projeto e avaliar seu impacto financeiro no longo prazo. Entretanto, podemos estimar que este projeto pode gerar resultados e consequentemente trazer investimentos para a instituição da AACD através de outros patrocínios e doações.
 
-Além disso, a disponibilidade em caixa da empresa para o custeio do projeto não foi fornecida pela AACD. Entretanto, nesse caso, essa informação não inviabiliza a realização do projeto justamente pois se trata de uma doação realizada pela instituição através de um produto desenvolvido pelo Grupo 5.
+Além disso, a disponibilidade em caixa da empresa para o custeio do projeto não foi fornecida pela AACD. Entretanto, nesse caso, essa informação não inviabiliza a realização do projeto, justamente pois se trata de uma doação realizada pela instituição através de um produto desenvolvido pelo Grupo 5.
 
-Por fim, é importante notar que, a análise financeira é somente uma estimativa de gastos, necessária para avaliar a viabilidade do projeto.
+Por fim, é importante notar que a análise financeira é somente uma estimativa de gastos, necessária para avaliar a viabilidade do projeto.
