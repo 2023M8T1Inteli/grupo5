@@ -4,7 +4,7 @@
 
 Logo abixo, temos uma análise da proposta de valor do nosso produto.
 
-![Canva](../artefatos/img/Canva2.png)
+![Canva](./img/Canva2.png)
 
 ## 2 TAM, SAM e SOM
 
