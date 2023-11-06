@@ -43,6 +43,11 @@ namespace LLEx
             sw.Write(output);
             sw.Dispose();
             sw.Close();
+
+            Parser parser = new Parse("Está esperando um List<Tokens>")
+            SyntaxTree syntaxTree = parser.Parse();
+            PrintSyntaxTree(syntaxTree);
+
         }
     }
 }
