@@ -40,7 +40,7 @@ namespace LLEx
 
             new Tokenizer(source, out output);
 
-            StreamWriter sw = File.CreateText("Output.llex");
+            StreamWriter sw = File.CreateText("Output.xml");
             sw.Write(output);
             sw.Dispose();
             sw.Close();
