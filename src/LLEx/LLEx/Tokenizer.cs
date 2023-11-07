@@ -27,7 +27,7 @@ namespace LLEx
 
             while((token = ReadToken()) != null)
             {
-                output.AppendLine($"\t<{token.Name} line={token.Line}>{token.Value}</{token.Name}>");
+                output.AppendLine($"\t<{token.Name} line=\"{token.Line}\">{token.Value}</{token.Name}>");
             }
 
             // Ending with tag </tokens>.
