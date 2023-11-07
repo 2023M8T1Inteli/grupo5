@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace LLEx
@@ -44,10 +45,18 @@ namespace LLEx
             sw.Dispose();
             sw.Close();
 
-            Parser parser = new Parse("Está esperando um List<Tokens>")
-            SyntaxTree syntaxTree = parser.Parse();
-            PrintSyntaxTree(syntaxTree);
+            Parser parser = new Parser("../net6.0/Output.xml");
 
+            SyntaxTree syntaxTree = parser.Parse();
+
+            SaveSyntaxTreeAsXml(syntaxTree, "../net6.0/parsedSyntaxTree.xml");
+
+
+        }
+        public static void SaveSyntaxTreeAsXml(SyntaxTree syntaxTree, string path)
+        {
+            XmlDocument xmlDoc = syntaxTree.ToXmlDocument();
+            xmlDoc.Save(path);
         }
     }
 }

@@ -1,17 +1,57 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
+
 
 namespace LLEx
 {
     public class Parser
     {
         private List<Token> tokens;
+        private XmlDocument xmlDoc;
         private int currentTokenIndex;
 
-        public Parser(List<Token> tokens)
+
+        public class Token
         {
-            this.tokens = tokens;
-            this.currentTokenIndex = 0;
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public int Line { get; set; }
+
+            public Token(string name, string value, int line)
+            {
+                Name = name;
+                Value = value;
+                Line = line;
+            }
+        }
+
+        public Parser(string xmlFilePath)
+        {
+            xmlDoc = new XmlDocument();
+            xmlDoc.Load(xmlFilePath);
+            tokens = ParseTokens(xmlDoc.DocumentElement);
+            currentTokenIndex = 0;
+        }
+
+        private List<Token> ParseTokens(XmlNode node)
+        {
+            List<Token> tokenList = new List<Token>();
+
+            // Percorra os elementos XML e extraia os tokens
+            foreach (XmlNode childNode in node.ChildNodes)
+            {
+                if (childNode.NodeType == XmlNodeType.Element)
+                {
+                    string tokenName = childNode.Name;
+                    string tokenValue = childNode.InnerText;
+                    int tokenLine = int.Parse(childNode.Attributes["line"].Value);
+                    Token token = new Token(tokenName, tokenValue, tokenLine);
+                    tokenList.Add(token);
+                }
+            }
+
+            return tokenList;
         }
 
         public SyntaxTree Parse()

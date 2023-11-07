@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace LLEx
 {
@@ -12,24 +13,14 @@ namespace LLEx
             Root = root;
         }
 
-        public void Print()
+        public XmlDocument ToXmlDocument()
         {
-            PrintTree(Root, "");
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlElement rootElement = Root.ToXmlElement(xmlDoc);
+            xmlDoc.AppendChild(rootElement);
+            return xmlDoc;
         }
 
-        private void PrintTree(SyntaxNode node, string indent)
-        {
-            Console.WriteLine(indent + node.Name);
-            foreach (var child in node.Children)
-            {
-                PrintTree(child, indent + "  ");
-            }
-        }
-
-        public void PrintSyntaxTree(SyntaxTree syntaxTree)
-        {
-            PrintSyntaxNode(syntaxTree.Root, "");
-        }
     }
 
 }

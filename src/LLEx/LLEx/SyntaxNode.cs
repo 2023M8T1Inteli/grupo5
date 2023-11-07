@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace LLEx
 {
@@ -25,13 +26,20 @@ namespace LLEx
             Children.Add(child);
         }
 
-        private void PrintSyntaxNode(SyntaxNode node, string indent)
+        public XmlElement ToXmlElement(XmlDocument xmlDoc)
         {
-            Console.WriteLine(indent + node.Name + (string.IsNullOrEmpty(node.Value) ? "" : $" ({node.Value})"));
-            foreach (var child in node.Children)
+            XmlElement xmlElement = xmlDoc.CreateElement(string.IsNullOrEmpty(Name) ? "Node" : Name);
+            if (!string.IsNullOrEmpty(Value))
             {
-                PrintSyntaxNode(child, indent + "  ");
+                xmlElement.InnerText = Value;
             }
+
+            foreach (SyntaxNode child in Children)
+            {
+                xmlElement.AppendChild(child.ToXmlElement(xmlDoc));
+            }
+
+            return xmlElement;
         }
 
     }
