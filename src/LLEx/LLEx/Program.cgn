@@ -1,10 +1,11 @@
-programa :
+programa "alimentos":
 inicio
-programas = verdade
-verdades = 
-se entao inicio
-ses = verdades
-programas = ler()
-x = ler_varios("alguma string", 8098)
+quadrante = ler()
+se quadrante == 1 entao
+inicio
+mostrar(1)
+fim senao
+inicio
+tocar(2)
 fim
 fim.

@@ -38,7 +38,6 @@ namespace LLEx
         {
             List<Token> tokenList = new List<Token>();
 
-            // Percorra os elementos XML e extraia os tokens
             foreach (XmlNode childNode in node.ChildNodes)
             {
                 if (childNode.NodeType == XmlNodeType.Element)
@@ -432,7 +431,7 @@ namespace LLEx
                 }
                 else
                 {
-                    throw new Exception($"Expected one of: {string.Join(", ", expectedTokenTypes)}, but found {currentToken.Name}");
+                    throw new Exception($"Expected one of: {string.Join(", ", expectedTokenTypes)}, but found {currentToken.Name} on line {currentToken.Line}");
                 }
             }
             else
@@ -446,7 +445,7 @@ namespace LLEx
             if (currentTokenIndex < tokens.Count)
             {
                 Token currentToken = tokens[currentTokenIndex];
-                return Array.Exists(expectedTokenTypes, t => t == currentToken.Name);
+                return Array.Exists(expectedTokenTypes, t => t == currentToken.Name);   
             }
             return false;
         }
@@ -460,6 +459,15 @@ namespace LLEx
             }
             return false;
         }
+        private Token NextToken()
+        {
+            if (currentTokenIndex < tokens.Count - 1)
+            {
+                return tokens[currentTokenIndex + 1];
+            }
+            return null; 
+        }
+
     }
 
 
