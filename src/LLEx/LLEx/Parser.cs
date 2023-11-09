@@ -64,6 +64,7 @@ namespace LLEx
             Match("COLON");
             SyntaxNode block = ParseBlock();
 
+
             SyntaxNode programNode = new SyntaxNode("program");
             programNode.AddAttributes("string", programString);
             programNode.AddAttributes("blockNode", block);
@@ -245,7 +246,7 @@ namespace LLEx
 
             if (IsCurrentTokenValue("mostrar"))
             {
-                Match("mostrar");
+                MatchValue("mostrar");
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
@@ -254,7 +255,7 @@ namespace LLEx
             }
             else if (IsCurrentTokenValue("tocar"))
             {
-                Match("tocar");
+                MatchValue("tocar");
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
@@ -263,7 +264,7 @@ namespace LLEx
             }
             else if (IsCurrentToken("esperar"))
             {
-                Match("esperar");
+                MatchValue("esperar");
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
@@ -273,7 +274,7 @@ namespace LLEx
             else if (IsCurrentToken("mostrar_tocar"))
             {
                 List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
-                Match("mostrar_tocar");
+                MatchValue("mostrar_tocar");
                 Match("LPAR");
                 while (tokens[currentTokenIndex].Name != "RPAR"){
                     Boolean fisrtExpression = true;
@@ -499,21 +500,12 @@ namespace LLEx
             return false;
         }
 
-        private Token NextToken()
-        {
-            if (currentTokenIndex < tokens.Count - 1)
-            {
-                return tokens[currentTokenIndex + 1];
-            }
-            return null; 
-        }
-
         private bool IsCurrentTokenValue(params string[] expectedTokenTypes)
         {
-            Token currentToken = tokens[currentTokenIndex];
             if (currentTokenIndex < tokens.Count)
             {
-                return Array.Exists(expectedTokenTypes, value => value == currentToken.Value);
+                Token currentToken = tokens[currentTokenIndex];
+                return Array.Exists(expectedTokenTypes, t => t == currentToken.Value);
             }
             return false;
         }
