@@ -63,6 +63,7 @@ namespace LLEx
             Match("DQUOTE");
             Match("COLON");
             SyntaxNode block = ParseBlock();
+            Match("DOT");
 
 
             SyntaxNode programNode = new SyntaxNode("program");
