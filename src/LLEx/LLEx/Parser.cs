@@ -305,7 +305,7 @@ namespace LLEx
 
             if (IsCurrentTokenValue("==", "<>", ">", "<", ">=", "<="))
             {
-                string relop = Match("==", "<>", ">", "<", ">=", "<=").Value;
+                string relop = MatchValue("==", "<>", ">", "<", ">=", "<=").Value;
                 SyntaxNode sumExpression2 = ParseSumExpression();
 
                 expression.AddAttributes("sumExpressionNode",sumExpression1);
@@ -499,15 +499,6 @@ namespace LLEx
             return false;
         }
 
-        private bool IsCurrentTokenValue(params string[] possibleTokenTypes)
-        {
-            if (currentTokenIndex < tokens.Count)
-            {
-                Token currentToken = tokens[currentTokenIndex];
-                return Array.Exists(possibleTokenTypes, t => t == currentToken.Value);
-            }
-            return false;
-        }
         private Token NextToken()
         {
             if (currentTokenIndex < tokens.Count - 1)
@@ -516,8 +507,16 @@ namespace LLEx
             }
             return null; 
         }
-        
 
+        private bool IsCurrentTokenValue(params string[] expectedTokenTypes)
+        {
+            Token currentToken = tokens[currentTokenIndex];
+            if (currentTokenIndex < tokens.Count)
+            {
+                return Array.Exists(expectedTokenTypes, value => value == currentToken.Value);
+            }
+            return false;
+        }
 
     }
 

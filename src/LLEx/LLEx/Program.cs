@@ -55,8 +55,8 @@ namespace LLEx
         }
         public static void SaveSyntaxTreeAsXml(SyntaxTree syntaxTree, string path)
         {
-            XmlDocument xmlDoc = syntaxTree.ToXmlDocument();
-            xmlDoc.Save(path);
+            //XmlDocument xmlDoc = syntaxTree.ToXmlDocument();
+            //xmlDoc.Save(path);
         }
     }
 }
