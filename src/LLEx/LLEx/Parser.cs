@@ -67,7 +67,6 @@ namespace LLEx
             Match("DQUOTE");
             Match("COLON");
             SyntaxNode block = ParseBlock();
-            Match("DOT");
 
             SyntaxNode programNode = new SyntaxNode("Program");
             programNode.AddChild(new SyntaxNode("PROGRAMA"));
@@ -76,7 +75,6 @@ namespace LLEx
             programNode.AddChild(new SyntaxNode("DQUOTE"));
             programNode.AddChild(new SyntaxNode("COLON"));
             programNode.AddChild(block);
-            programNode.AddChild(new SyntaxNode("DOT"));
 
             return programNode;
         }
@@ -101,7 +99,7 @@ namespace LLEx
 
             while (currentTokenIndex < tokens.Count)
             {
-                if (IsCurrentTokenIn("ID", "SE", "ENQUANTO", "mostrar", "tocar", "esperar", "mostrar_tocar"))
+                if (IsCurrentTokenIn("ID", "SE", "ENQUANTO", "mostrar", "tocar"))
                 {
                     SyntaxNode statement = ParseStatement();
                     statementList.AddChild(statement);
@@ -146,7 +144,16 @@ namespace LLEx
             string id = Match("ID").Value;
             Match("ASSIGN");
 
-            SyntaxNode expression = IsCurrentToken("ler", "ler_varios") ? ParseInputStatement() : ParseExpression();
+            bool isInput = IsCurrentTokenValue("ler", "ler_varios");
+            SyntaxNode expression;
+            if (isInput)
+            {
+                expression = ParseInputStatement();
+            }
+            else
+            {
+                expression = ParseExpression();
+            }
 
             assignStatement.AddChild(new SyntaxNode("ID", id));
             assignStatement.AddChild(new SyntaxNode("ASSIGN"));
@@ -155,19 +162,22 @@ namespace LLEx
             return assignStatement;
         }
 
+
         private SyntaxNode ParseInputStatement()
         {
             SyntaxNode inputStatement = new SyntaxNode("InputStatement");
+            bool isInput = IsCurrentTokenValue("ler");
 
-            if (IsCurrentToken("ler"))
+
+            if (isInput)
             {
-                Match("ler");
+                MatchValue("ler");
                 Match("LPAR");
                 Match("RPAR");
             }
-            else if (IsCurrentToken("ler_varios"))
+            else
             {
-                Match("ler_varios");
+                MatchValue("ler_varios");
                 Match("LPAR");
                 SyntaxNode sumExpression1 = ParseSumExpression();
                 Match("COMMA");
@@ -219,6 +229,7 @@ namespace LLEx
             return whileStatement;
         }
 
+        //O código abaixo estará errado também, porque os nomes são valores e não nomes.
         private SyntaxNode ParseCommandStatement()
         {
             SyntaxNode commandStatement = new SyntaxNode("CommandStatement");
@@ -440,6 +451,28 @@ namespace LLEx
             }
         }
 
+        private Token MatchValue(params string[] expectedTokenValues)
+        {
+            if (currentTokenIndex < tokens.Count)
+            {
+                Token currentToken = tokens[currentTokenIndex];
+                if (Array.Exists(expectedTokenValues, value => value == currentToken.Value))
+                {
+                    currentTokenIndex++;
+                    return currentToken;
+                }
+                else
+                {
+                    throw new Exception($"Expected one of: {string.Join(", ", expectedTokenValues)}, but found {currentToken.Value} on line {currentToken.Line}");
+                }
+            }
+            else
+            {
+                throw new Exception("Unexpected end of input.");
+            }
+        }
+
+
         private bool IsCurrentToken(params string[] expectedTokenTypes)
         {
             if (currentTokenIndex < tokens.Count)
@@ -467,6 +500,16 @@ namespace LLEx
             }
             return null; 
         }
+        private bool IsCurrentTokenValue(params string[] expectedTokenValues)
+        {
+            if (currentTokenIndex < tokens.Count)
+            {
+                Token currentToken = tokens[currentTokenIndex];
+                return Array.Exists(expectedTokenValues, value => value == currentToken.Value);
+            }
+            return false;
+        }
+
 
     }
 
