@@ -44,9 +44,9 @@ export default function Therapies() {
 						<User name='Maria Luiza' username='marialuiza'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
-						<a className='cursor-pointer w-10 h-10'><Image src={Trash} alt='Excluir' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Pen} alt='Editar' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Play} alt='Executar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Play} alt='Executar' /></a>
 					</TableItem>
 				</div>
 				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0]'>
@@ -61,9 +61,9 @@ export default function Therapies() {
 						<User name='João Pedro' username='joaopedro'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
-						<a className='cursor-pointer w-10 h-10'><Image src={Trash} alt='Excluir' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Pen} alt='Editar' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Play} alt='Executar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Play} alt='Executar' /></a>
 					</TableItem>
 				</div>
 			</div>
