@@ -5,7 +5,7 @@ import Subheading from './components/Subheading'
 import InputText from './components/InputText'
 import Button from './components/Button'
 
-export default function Home() {
+export default function Login() {
   return (
     <div className='flex items-start justify-between w-[100vw] h-[100vh] p-24 bg-[url("/red_boy_1.svg")] bg-no-repeat bg-[left_25%_top] bg-scal bg-[length:auto_90%]'>
 		<Image src={Logo} alt='Logotipo'/>
