@@ -47,9 +47,9 @@ namespace LLEx
 
             Parser parser = new Parser("../net6.0/Output.xml");
 
-            SyntaxTree syntaxTree = parser.Parse();
+            SyntaxNode SyntaxNode = parser.ParseProgram();
 
-            SaveSyntaxTreeAsXml(syntaxTree, "../net6.0/parsedSyntaxTree.xml");
+            // SaveSyntaxTreeAsXml(SyntaxNode, "../net6.0/parsedSyntaxTree.xml");
 
 
         }

@@ -18,21 +18,21 @@ namespace LLEx
             attributes[name] =value;
         }
 
-        public XmlElement ToXmlElement(XmlDocument xmlDoc)
-        {
-            XmlElement xmlElement = xmlDoc.CreateElement(string.IsNullOrEmpty(Name) ? "Node" : Name);
-            if (!string.IsNullOrEmpty(Value))
-            {
-                xmlElement.InnerText = Value;
-            }
+    //     static XmlElement ToXmlElement(XmlDocument xmlDoc, XmlElement parentElement, Dictionary<string, object> attributes)
+    // {
+    //     XmlElement xmlElement = xmlDoc.CreateElement("Node");
 
-            // foreach (SyntaxNode child in Children)
-            // {
-            //     xmlElement.AppendChild(child.ToXmlElement(xmlDoc));
-            // }
+    //     foreach (var attribute in attributes)
+    //     {
+    //         XmlElement attributeElement = xmlDoc.CreateElement(attribute.Key);
+    //         attributeElement.InnerText = attribute.Value.ToString();
+    //         xmlElement.AppendChild(attributeElement);
+    //     }
 
-            return xmlElement;
-        }
+    //     parentElement.AppendChild(xmlElement);
+
+    //     return xmlElement;
+    // }
 
     }
 }

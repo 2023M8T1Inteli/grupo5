@@ -55,13 +55,7 @@ namespace LLEx
             return tokenList;
         }
 
-        public SyntaxTree Parse()
-        {
-            SyntaxNode program = ParseProgram();
-            return new SyntaxTree(program);
-        }
-
-        private SyntaxNode ParseProgram()
+        public SyntaxNode ParseProgram()
         {
             Match("PROGRAMA");
             Match("DQUOTE");
@@ -522,6 +516,7 @@ namespace LLEx
             }
             return null; 
         }
+        
 
 
     }

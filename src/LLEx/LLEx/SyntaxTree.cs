@@ -13,13 +13,13 @@ namespace LLEx
             Root = root;
         }
 
-        public XmlDocument ToXmlDocument()
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            XmlElement rootElement = Root.ToXmlElement(xmlDoc);
-            xmlDoc.AppendChild(rootElement);
-            return xmlDoc;
-        }
+        // public XmlDocument ToXmlDocument()
+        // {
+        //     XmlDocument xmlDoc = new XmlDocument();
+        //     XmlElement rootElement = Root.ToXmlElement(xmlDoc);
+        //     xmlDoc.AppendChild(rootElement);
+        //     return xmlDoc;
+        // }
 
     }
 
