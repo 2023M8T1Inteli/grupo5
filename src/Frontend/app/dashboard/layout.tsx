@@ -8,6 +8,7 @@ import Stethoscope from '../../public/stethoscope.svg'
 import Heart from '../../public/heart.svg'
 import Calendar from '../../public/calendar.svg'
 import MenuItem from "../components/MenuItem"
+import LogoutButton from "../components/LogoutButton"
 
 const openSans = Open_Sans({ subsets: ['latin'] })
 
@@ -33,6 +34,7 @@ export default function DashboardLayout({
 						<MenuItem icon={Calendar} text='Agenda' href='/dashboard/calendar'/>
 					</div>
 				</div>
+				<LogoutButton/>
 			</aside>
 			{children}
 		</div>
