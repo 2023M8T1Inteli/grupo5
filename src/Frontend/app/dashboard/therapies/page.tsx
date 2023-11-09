@@ -36,12 +36,29 @@ export default function Therapies() {
 					<TableItem className='w-64'>Terapia 1</TableItem>
 					<TableItem className='w-44'>10/10/2021</TableItem>
 					<TableItem className='w-44'>
-						<User role='administrador'/>
+						<User name='Ana Carolina' username='anacarolina'/>
 					</TableItem>
 					<TableItem className='w-44'>10/10/2021</TableItem>
 					<TableItem className='w-40'>10</TableItem>
 					<TableItem className='w-52'>
-						<User role='paciente'/>
+						<User name='Maria Luiza' username='marialuiza'/>
+					</TableItem>
+					<TableItem className='w-40 flex justify-end'>
+						<a className='cursor-pointer w-10 h-10'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10'><Image src={Play} alt='Executar' /></a>
+					</TableItem>
+				</div>
+				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0]'>
+					<TableItem className='w-64'>Terapia 2</TableItem>
+					<TableItem className='w-44'>22/03/2023</TableItem>
+					<TableItem className='w-44'>
+						<User name='Carol Braga' username='carolbraga'/>
+					</TableItem>
+					<TableItem className='w-44'>05/11/2023</TableItem>
+					<TableItem className='w-40'>344</TableItem>
+					<TableItem className='w-52'>
+						<User name='João Pedro' username='joaopedro'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
 						<a className='cursor-pointer w-10 h-10'><Image src={Trash} alt='Excluir' /></a>
