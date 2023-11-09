@@ -142,7 +142,16 @@ namespace LLEx
             string id = Match("ID").Value;
             Match("ASSIGN");
 
-            SyntaxNode expression = IsCurrentToken("ler", "ler_varios") ? ParseInputStatement() : ParseExpression();
+            bool isInput = IsCurrentTokenValue("ler", "ler_varios");
+            SyntaxNode expression;
+            if (isInput)
+            {
+                expression = ParseInputStatement();
+            }
+            else
+            {
+                expression = ParseExpression();
+            }
 
             assignStatement.AddAttributes("idNode",new SyntaxNodeLeaf("ID", id));
             assignStatement.AddAttributes("assignNode", new SyntaxNodeLeaf("ASSIGN", "="));
@@ -151,13 +160,16 @@ namespace LLEx
             return assignStatement;
         }
 
+
         private SyntaxNode ParseInputStatement()
         {
-            SyntaxNode inputStatement = new SyntaxNode("inputStatement");
+            SyntaxNode inputStatement = new SyntaxNode("InputStatement");
+            bool isInput = IsCurrentTokenValue("ler");
 
-            if (IsCurrentTokenValue("ler"))
+
+            if (isInput)
             {
-                Match("ler");
+                MatchValue("ler");
                 Match("LPAR");
                 Match("RPAR");
 
@@ -232,6 +244,7 @@ namespace LLEx
             return whileStatement;
         }
 
+        //O código abaixo estará errado também, porque os nomes são valores e não nomes.
         private SyntaxNode ParseCommandStatement()
         {
             SyntaxNode commandStatement = new SyntaxNode("commandStatement");
@@ -460,6 +473,28 @@ namespace LLEx
             }
         }
 
+        private Token MatchValue(params string[] expectedTokenValues)
+        {
+            if (currentTokenIndex < tokens.Count)
+            {
+                Token currentToken = tokens[currentTokenIndex];
+                if (Array.Exists(expectedTokenValues, value => value == currentToken.Value))
+                {
+                    currentTokenIndex++;
+                    return currentToken;
+                }
+                else
+                {
+                    throw new Exception($"Expected one of: {string.Join(", ", expectedTokenValues)}, but found {currentToken.Value} on line {currentToken.Line}");
+                }
+            }
+            else
+            {
+                throw new Exception("Unexpected end of input.");
+            }
+        }
+
+
         private bool IsCurrentToken(params string[] expectedTokenTypes)
         {
             if (currentTokenIndex < tokens.Count)
@@ -487,6 +522,7 @@ namespace LLEx
             }
             return null; 
         }
+
 
     }
 
