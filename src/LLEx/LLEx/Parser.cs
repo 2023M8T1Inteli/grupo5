@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using System.Xml;
+using LLEx.Tokens;
 
 
 namespace LLEx
@@ -67,44 +69,37 @@ namespace LLEx
             Match("DQUOTE");
             Match("COLON");
             SyntaxNode block = ParseBlock();
-            Match("DOT");
 
-            SyntaxNode programNode = new SyntaxNode("Program");
-            programNode.AddChild(new SyntaxNode("PROGRAMA"));
-            programNode.AddChild(new SyntaxNode("DQUOTE"));
-            programNode.AddChild(new SyntaxNode("STRING", programString));
-            programNode.AddChild(new SyntaxNode("DQUOTE"));
-            programNode.AddChild(new SyntaxNode("COLON"));
-            programNode.AddChild(block);
-            programNode.AddChild(new SyntaxNode("DOT"));
+            SyntaxNode programNode = new SyntaxNode("program");
+            programNode.AddAttributes("string", programString);
+            programNode.AddAttributes("blockNode", block);
 
             return programNode;
         }
 
         private SyntaxNode ParseBlock()
         {
+            SyntaxNode blockNode = new SyntaxNode("block");
+
             Match("LBLOCK");
             SyntaxNode statementList = ParseStatementList();
             Match("RBLOCK");
 
-            SyntaxNode blockNode = new SyntaxNode("Block");
-            blockNode.AddChild(new SyntaxNode("LBLOCK"));
-            blockNode.AddChild(statementList);
-            blockNode.AddChild(new SyntaxNode("RBLOCK"));
+            blockNode.AddAttributes("statementListNode", statementList);
 
             return blockNode;
         }
 
         private SyntaxNode ParseStatementList()
         {
-            SyntaxNode statementList = new SyntaxNode("StatementList");
-
-            while (currentTokenIndex < tokens.Count)
+            SyntaxNode statementList = new SyntaxNode("statementList");
+            
+            while (tokens[currentTokenIndex].Name != "RBLOCK")
             {
-                if (IsCurrentTokenIn("ID", "SE", "ENQUANTO", "mostrar", "tocar", "esperar", "mostrar_tocar"))
+                if (IsCurrentToken("ID", "SE", "ENQUANTO") || IsCurrentTokenValue("mostrar", "tocar", "esperar", "mostrar_tocar"))
                 {
                     SyntaxNode statement = ParseStatement();
-                    statementList.AddChild(statement);
+                    statementList.AddAttributes("statementNode", statement);
                 }
                 else
                 {
@@ -131,7 +126,7 @@ namespace LLEx
             {
                 statement = ParseWhileStatement();
             }
-            else if (IsCurrentToken("mostrar", "tocar", "esperar", "mostrar_tocar"))
+            else
             {
                 statement = ParseCommandStatement();
             }
@@ -141,43 +136,57 @@ namespace LLEx
 
         private SyntaxNode ParseAssignStatement()
         {
-            SyntaxNode assignStatement = new SyntaxNode("AssignStatement");
+            SyntaxNode assignStatement = new SyntaxNode("assignStatement");
 
+      
             string id = Match("ID").Value;
             Match("ASSIGN");
 
             SyntaxNode expression = IsCurrentToken("ler", "ler_varios") ? ParseInputStatement() : ParseExpression();
 
-            assignStatement.AddChild(new SyntaxNode("ID", id));
-            assignStatement.AddChild(new SyntaxNode("ASSIGN"));
-            assignStatement.AddChild(expression);
+            assignStatement.AddAttributes("idNode",new SyntaxNodeLeaf("ID", id));
+            assignStatement.AddAttributes("assignNode", new SyntaxNodeLeaf("ASSIGN", "="));
+            assignStatement.AddAttributes("expressionAssingNode", expression);
 
             return assignStatement;
         }
 
         private SyntaxNode ParseInputStatement()
         {
-            SyntaxNode inputStatement = new SyntaxNode("InputStatement");
+            SyntaxNode inputStatement = new SyntaxNode("inputStatement");
 
-            if (IsCurrentToken("ler"))
+            if (IsCurrentTokenValue("ler"))
             {
                 Match("ler");
                 Match("LPAR");
                 Match("RPAR");
+
+                inputStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","ler"));
+                
             }
-            else if (IsCurrentToken("ler_varios"))
+            else if (IsCurrentTokenValue("ler_varios"))
             {
+                List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
                 Match("ler_varios");
                 Match("LPAR");
-                SyntaxNode sumExpression1 = ParseSumExpression();
-                Match("COMMA");
-                SyntaxNode sumExpression2 = ParseSumExpression();
-                Match("COMMA");
-                SyntaxNode sumExpression3 = ParseSumExpression();
-                Match("RPAR");
-                inputStatement.AddChild(sumExpression1);
-                inputStatement.AddChild(sumExpression2);
-                inputStatement.AddChild(sumExpression3);
+                while (tokens[currentTokenIndex].Name != "RPAR"){
+                    Boolean fisrtExpression = true;
+                    if(fisrtExpression){
+                        sumExpressions.Add(ParseSumExpression());
+                        fisrtExpression = false;
+                    }
+                    Match("COMMA");
+                    sumExpressions.Add(ParseSumExpression());
+                    
+                }
+                
+
+                inputStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","ler_varios"));
+                for (int i = 0; i < sumExpressions.Count; i++)
+                {
+                    SyntaxNode sumExpression = sumExpressions[i];
+                    inputStatement.AddAttributes("sumExpressionNode", sumExpression);
+                }
             }
 
             return inputStatement;
@@ -185,20 +194,23 @@ namespace LLEx
 
         private SyntaxNode ParseIfStatement()
         {
-            SyntaxNode ifStatement = new SyntaxNode("IfStatement");
+            SyntaxNode ifStatement = new SyntaxNode("ifStatement");
 
             Match("SE");
             SyntaxNode expression = ParseExpression();
             Match("ENTAO");
-            SyntaxNode trueBlock = ParseBlock();
-            ifStatement.AddChild(expression);
-            ifStatement.AddChild(trueBlock);
+            SyntaxNode parseBlock = ParseBlock();
+            
+            
+            ifStatement.AddAttributes("nodeExpressionSeNode", expression);
+            ifStatement.AddAttributes("parseBlockEntaoNode",parseBlock);
 
             if (IsCurrentToken("SENAO"))
             {
                 Match("SENAO");
                 SyntaxNode elseBlock = ParseBlock();
-                ifStatement.AddChild(elseBlock);
+                ifStatement.AddAttributes("parseBlockSenaoNode",parseBlock);
+                
             }
 
             return ifStatement;
@@ -206,38 +218,41 @@ namespace LLEx
 
         private SyntaxNode ParseWhileStatement()
         {
-            SyntaxNode whileStatement = new SyntaxNode("WhileStatement");
+            SyntaxNode whileStatement = new SyntaxNode("whileStatement");
 
             Match("ENQUANTO");
             SyntaxNode expression = ParseExpression();
             Match("FACA");
             SyntaxNode block = ParseBlock();
 
-            whileStatement.AddChild(expression);
-            whileStatement.AddChild(block);
+            
+            whileStatement.AddAttributes("expressionEnqauntoNode", expression);
+            whileStatement.AddAttributes("parseBlockFacaNode",block);
 
             return whileStatement;
         }
 
         private SyntaxNode ParseCommandStatement()
         {
-            SyntaxNode commandStatement = new SyntaxNode("CommandStatement");
+            SyntaxNode commandStatement = new SyntaxNode("commandStatement");
 
-            if (IsCurrentToken("mostrar"))
+            if (IsCurrentTokenValue("mostrar"))
             {
                 Match("mostrar");
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
-                commandStatement.AddChild(sumExpression);
+                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","mostrar"));
+                commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
-            else if (IsCurrentToken("tocar"))
+            else if (IsCurrentTokenValue("tocar"))
             {
                 Match("tocar");
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
-                commandStatement.AddChild(sumExpression);
+                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","tocar"));
+                commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             else if (IsCurrentToken("esperar"))
             {
@@ -245,18 +260,31 @@ namespace LLEx
                 Match("LPAR");
                 SyntaxNode sumExpression = ParseSumExpression();
                 Match("RPAR");
-                commandStatement.AddChild(sumExpression);
+                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","esperar"));
+                commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             else if (IsCurrentToken("mostrar_tocar"))
             {
+                List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
                 Match("mostrar_tocar");
                 Match("LPAR");
-                SyntaxNode sumExpression1 = ParseSumExpression();
-                Match("COMMA");
-                SyntaxNode sumExpression2 = ParseSumExpression();
-                Match("RPAR");
-                commandStatement.AddChild(sumExpression1);
-                commandStatement.AddChild(sumExpression2);
+                while (tokens[currentTokenIndex].Name != "RPAR"){
+                    Boolean fisrtExpression = true;
+                    if(fisrtExpression){
+                        sumExpressions.Add(ParseSumExpression());
+                        fisrtExpression = false;
+                    }
+                    Match("COMMA");
+                    sumExpressions.Add(ParseSumExpression());
+                    
+                }
+                
+                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO","tocar"));
+                for (int i = 0; i < sumExpressions.Count; i++)
+                {
+                    SyntaxNode sumExpression = sumExpressions[i];
+                    commandStatement.AddAttributes("sumExpressionNode", sumExpression);
+                }
             }
 
             return commandStatement;
@@ -264,22 +292,22 @@ namespace LLEx
 
         private SyntaxNode ParseExpression()
         {
-            SyntaxNode expression = new SyntaxNode("Expression");
+            SyntaxNode expression = new SyntaxNode("expression");
 
             SyntaxNode sumExpression1 = ParseSumExpression();
 
-            if (IsCurrentToken("==", "<>", ">", "<", ">=", "<="))
+            if (IsCurrentTokenValue("==", "<>", ">", "<", ">=", "<="))
             {
                 string relop = Match("==", "<>", ">", "<", ">=", "<=").Value;
                 SyntaxNode sumExpression2 = ParseSumExpression();
 
-                expression.AddChild(sumExpression1);
-                expression.AddChild(new SyntaxNode("RELOP", relop));
-                expression.AddChild(sumExpression2);
+                expression.AddAttributes("sumExpressionNode",sumExpression1);
+                expression.AddAttributes("oprelNode",new SyntaxNodeLeaf("OPREL", relop));
+                expression.AddAttributes("sumExpressionNode",sumExpression2);
             }
             else
             {
-                expression.AddChild(sumExpression1);
+                expression.AddAttributes("sumExpressionNode",sumExpression1);
             }
 
             return expression;
@@ -287,20 +315,20 @@ namespace LLEx
 
         private SyntaxNode ParseSumExpression()
         {
-            SyntaxNode sumExpression = new SyntaxNode("SumExpression");
+            SyntaxNode sumExpression = new SyntaxNode("sumExpression");
 
             SyntaxNode multTerm1 = ParseMultTerm();
             SyntaxNode sumExpression2 = ParseSumExpression2();
 
-            sumExpression.AddChild(multTerm1);
-            sumExpression.AddChild(sumExpression2);
+            sumExpression.AddAttributes("multTermNode",multTerm1);
+            sumExpression.AddAttributes("sumExpressionNode", sumExpression2);
 
             return sumExpression;
         }
 
         private SyntaxNode ParseSumExpression2()
         {
-            if (IsCurrentToken("+", "-", "ou"))
+            if (IsCurrentTokenValue("+", "-", "ou"))
             {
                 SyntaxNode sumExpression2 = new SyntaxNode("SumExpression2");
 
@@ -308,9 +336,9 @@ namespace LLEx
                 SyntaxNode multTerm = ParseMultTerm();
                 SyntaxNode nextSumExpression2 = ParseSumExpression2();
 
-                sumExpression2.AddChild(new SyntaxNode("OP", op));
-                sumExpression2.AddChild(multTerm);
-                sumExpression2.AddChild(nextSumExpression2);
+                sumExpression2.AddAttributes("opsumNode",new SyntaxNodeLeaf("OPSUM", op));
+                sumExpression2.AddAttributes("multTermNode", multTerm);
+                sumExpression2.AddAttributes("sumExpression2Node", nextSumExpression2);
 
                 return sumExpression2;
             }
@@ -320,13 +348,13 @@ namespace LLEx
 
         private SyntaxNode ParseMultTerm()
         {
-            SyntaxNode multTerm = new SyntaxNode("MultTerm");
+            SyntaxNode multTerm = new SyntaxNode("multTerm");
 
             SyntaxNode powerTerm = ParsePowerTerm();
             SyntaxNode multTerm2 = ParseMultTerm2();
 
-            multTerm.AddChild(powerTerm);
-            multTerm.AddChild(multTerm2);
+            multTerm.AddAttributes("powerTermNode",powerTerm);
+            multTerm.AddAttributes("multTerm2Node",multTerm2);
 
             return multTerm;
         }
@@ -335,15 +363,15 @@ namespace LLEx
         {
             if (IsCurrentToken("*", "/", "%", "e"))
             {
-                SyntaxNode multTerm2 = new SyntaxNode("MultTerm2");
+                SyntaxNode multTerm2 = new SyntaxNode("multTerm2");
 
                 string op = Match("*", "/", "%", "e").Value;
                 SyntaxNode powerTerm = ParsePowerTerm();
                 SyntaxNode nextMultTerm2 = ParseMultTerm2();
 
-                multTerm2.AddChild(new SyntaxNode("OP", op));
-                multTerm2.AddChild(powerTerm);
-                multTerm2.AddChild(nextMultTerm2);
+                multTerm2.AddAttributes("opmulNode",new SyntaxNodeLeaf("OPMUL", op));
+                multTerm2.AddAttributes("powerTermNode",powerTerm);
+                multTerm2.AddAttributes("nextMultTerm2Node",nextMultTerm2);
 
                 return multTerm2;
             }
@@ -353,7 +381,7 @@ namespace LLEx
 
         private SyntaxNode ParsePowerTerm()
         {
-            SyntaxNode powerTerm = new SyntaxNode("PowerTerm");
+            SyntaxNode powerTerm = new SyntaxNode("powerTerm");
 
             SyntaxNode factor = ParseFactor();
 
@@ -362,43 +390,42 @@ namespace LLEx
                 Match("^");
                 SyntaxNode nextPowerTerm = ParsePowerTerm();
 
-                powerTerm.AddChild(factor);
-                powerTerm.AddChild(new SyntaxNode("OP", "^"));
-                powerTerm.AddChild(nextPowerTerm);
+                powerTerm.AddAttributes("factorNode",factor);
+                powerTerm.AddAttributes("oppowNode",new SyntaxNodeLeaf("OPPOW", "^"));
+                powerTerm.AddAttributes("nextPowerTermNode",nextPowerTerm);
 
                 return powerTerm;
             }
 
-            powerTerm.AddChild(factor);
+            powerTerm.AddAttributes("factorNode",factor);
 
             return powerTerm;
         }
 
         private SyntaxNode ParseFactor()
         {
-            SyntaxNode factor = new SyntaxNode("Factor");
+            SyntaxNode factor = new SyntaxNode("factor");
 
             if (IsCurrentToken("ID"))
             {
-                factor.AddChild(new SyntaxNode("ID", Match("ID").Value));
+                factor.AddAttributes("idNode",new SyntaxNodeLeaf("ID", Match("ID").Value));
             }
             else if (IsCurrentToken("INTEGER"))
             {
-                factor.AddChild(new SyntaxNode("INTEGER", Match("INTEGER").Value));
+                factor.AddAttributes("integerNode",new SyntaxNodeLeaf("INTEGER", Match("INTEGER").Value));
             }
             else if (IsCurrentToken("verdade", "falso"))
             {
-                factor.AddChild(new SyntaxNode("BOOLEAN", Match("verdade", "falso").Value));
+                factor.AddAttributes("booleanNode",new SyntaxNodeLeaf("BOOLEAN", Match("BOOLEAN").Value));
             }
             else if (IsCurrentToken("+", "-"))
             {
-                factor.AddChild(new SyntaxNode("OP", Match("+", "-").Value));
-                factor.AddChild(ParseFactor());
+                factor.AddAttributes("opsumNode",new SyntaxNodeLeaf("OPSUM", Match("+", "-").Value));
+                factor.AddAttributes("factorNode",ParseFactor());
             }
             else if (IsCurrentToken("NAO"))
             {
-                factor.AddChild(new SyntaxNode("NAO"));
-                factor.AddChild(ParseBoolean());
+                factor.AddAttributes("booleanNaoNode", new SyntaxNodeLeaf("BOOLEAN", Match("verdade", "falso").Value));
             }
             else if (IsCurrentToken("LPAR"))
             {
@@ -406,17 +433,10 @@ namespace LLEx
                 SyntaxNode expression = ParseExpression();
                 Match("RPAR");
 
-                factor.AddChild(new SyntaxNode("LPAR"));
-                factor.AddChild(expression);
-                factor.AddChild(new SyntaxNode("RPAR"));
+                factor.AddAttributes("expressionNode",expression);
             }
 
             return factor;
-        }
-
-        private SyntaxNode ParseBoolean()
-        {
-            return new SyntaxNode("BOOLEAN", Match("verdade", "falso").Value);
         }
 
         private Token Match(params string[] expectedTokenTypes)
@@ -450,12 +470,12 @@ namespace LLEx
             return false;
         }
 
-        private bool IsCurrentTokenIn(params string[] possibleTokenTypes)
+        private bool IsCurrentTokenValue(params string[] possibleTokenTypes)
         {
             if (currentTokenIndex < tokens.Count)
             {
                 Token currentToken = tokens[currentTokenIndex];
-                return Array.Exists(possibleTokenTypes, t => t == currentToken.Name);
+                return Array.Exists(possibleTokenTypes, t => t == currentToken.Value);
             }
             return false;
         }

@@ -7,23 +7,15 @@ namespace LLEx
     public class SyntaxNode
     {
         public string Name { get; }
-        public string Value { get; set; }
-        public List<SyntaxNode> Children { get; } = new List<SyntaxNode>();
-
+        Dictionary<string, object> attributes = new Dictionary<string, object>();
         public SyntaxNode(string name)
         {
             Name = name;
         }
 
-        public SyntaxNode(string name, string value)
+        public void AddAttributes(string name, object value)
         {
-            Name = name;
-            Value = value;
-        }
-
-        public void AddChild(SyntaxNode child)
-        {
-            Children.Add(child);
+            attributes[name] =value;
         }
 
         public XmlElement ToXmlElement(XmlDocument xmlDoc)
@@ -34,10 +26,10 @@ namespace LLEx
                 xmlElement.InnerText = Value;
             }
 
-            foreach (SyntaxNode child in Children)
-            {
-                xmlElement.AppendChild(child.ToXmlElement(xmlDoc));
-            }
+            // foreach (SyntaxNode child in Children)
+            // {
+            //     xmlElement.AppendChild(child.ToXmlElement(xmlDoc));
+            // }
 
             return xmlElement;
         }
