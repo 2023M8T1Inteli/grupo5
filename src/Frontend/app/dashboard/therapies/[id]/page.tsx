@@ -21,7 +21,7 @@ import Board15 from '@/public/board-15.svg'
 import Board16 from '@/public/board-16.svg'
 import Board17 from '@/public/board-17.svg'
 import Board18 from '@/public/board-18.svg'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import PuzzleItem from "@/app/components/PuzzleItem";
 import Se from '@/public/se.svg'
@@ -40,7 +40,6 @@ export default function Terapy() {
 	const [therapyName, setTherapyName] = useState("Terapia 1");
 	const [isEditing, setIsEditing] = useState(false);
 	const [droppedItems, setDroppedItems] = useState<Array<{icon: any, commandName: string, pairableItems: string[]}>>([]);
-	const [lastDroppedItem, setLastDroppedItem] = useState<{icon: any, commandName: string, pairableItems: string[]} | null>(null);
 
 
 	const handleQuadrantClick = (index : number) => {
@@ -67,7 +66,7 @@ export default function Terapy() {
 		event.preventDefault(); // Necessary to allow drop.
 	};
 
-	const handleDrop = (event: React.DragEvent) => {
+	const handleDrop = async (event: React.DragEvent) => {
 		event.preventDefault();
 		const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 		
@@ -79,10 +78,33 @@ export default function Terapy() {
 		}
 
 		setDroppedItems(prevItems => [...prevItems, data]);
-			
 	};
-	
-	
+
+	let rawCode : string;
+
+	useEffect(() => {
+		rawCode = `programa "${therapyName}":\n`
+		rawCode += 'inicio\n'
+		rawCode += 'quadrante = ler()\n'
+
+		droppedItems.forEach((item, index) => {
+			item.commandName === 'Se' && (rawCode += 'se ')
+			item.commandName === 'Apertar' && (rawCode += `quadrante == ${activeQuadrant} entao inicio\n`)
+			item.commandName === 'Mostrar imagem' && (rawCode += `mostrar()`)
+			item.commandName === 'E' && (rawCode += `\n`)
+			item.commandName === 'Tocar som' && (rawCode += `tocar()`)
+			item.commandName === 'E fim' && (rawCode += `\nfim\n`)
+		})
+
+		rawCode += 'fim.\n'
+
+		if(droppedItems.some(e => e.commandName === 'E fim')) {
+			console.log(rawCode);
+		}
+
+
+
+	}, [therapyName, droppedItems])
 	
 
 	const boardIcons = [Board1, Board2, Board3, Board4, Board5, Board6, Board7, Board8, Board9, Board10, Board11, Board12, Board13, Board14, Board15, Board16, Board17, Board18];
@@ -141,11 +163,11 @@ export default function Terapy() {
 					<div className='flex justify-start items-center px-12 py-3 w-full h-[30%] border-b-2 border-[#EFEFEF] gap-12'>
 							<PuzzleItem icon={Se} commandName='Se' pairableItems={['Apertar']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
 							<PuzzleItem icon={Apertar} commandName='Apertar' pairableItems={['Mostrar imagem', 'Tocar som']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
-							<PuzzleItem icon={MostrarImagem} commandName='Mostrar imagem' pairableItems={['E', 'E ir para', 'E fim da terapia']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
-							<PuzzleItem icon={TocarSom} commandName='Tocar som' pairableItems={['E', 'E ir para', 'E fim da terapia']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
+							<PuzzleItem icon={MostrarImagem} commandName='Mostrar imagem' pairableItems={['E', 'E ir para', 'E fim']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
+							<PuzzleItem icon={TocarSom} commandName='Tocar som' pairableItems={['E', 'E ir para', 'E fim']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
 							<PuzzleItem icon={E} commandName='E' pairableItems={['Mostrar imagem', 'Tocar som']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
 							<PuzzleItem icon={EIrPara} commandName='E ir para' pairableItems={['Quadrante']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
-							<PuzzleItem icon={EFimDaTerapia} commandName='E fim da terapia' pairableItems={['']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
+							<PuzzleItem icon={EFimDaTerapia} commandName='E fim' pairableItems={['']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
 							<PuzzleItem icon={Quadrante} commandName='Quadrante' pairableItems={['']} lastDroppedItem={droppedItems[droppedItems.length - 1] || null} />
 					</div>
 					<div id='o' className='w-full h-[70%] flex justify-center items-center gap-8' onDragOver={handleDragOver} onDrop={handleDrop}>
