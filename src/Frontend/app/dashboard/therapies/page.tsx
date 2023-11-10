@@ -32,21 +32,38 @@ export default function Therapies() {
 					<TableHeadItem className='w-40'>Nº de execuções</TableHeadItem>
 					<TableHeadItem className='w-52'>Último paciente a executar</TableHeadItem>
 				</div>
-				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0]'>
+				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0] border-solid border-b border-[#EAECF0]'>
 					<TableItem className='w-64'>Terapia 1</TableItem>
 					<TableItem className='w-44'>10/10/2021</TableItem>
 					<TableItem className='w-44'>
-						<User role='administrador'/>
+						<User name='Ana Carolina' username='anacarolina'/>
 					</TableItem>
 					<TableItem className='w-44'>10/10/2021</TableItem>
 					<TableItem className='w-40'>10</TableItem>
 					<TableItem className='w-52'>
-						<User role='paciente'/>
+						<User name='Maria Luiza' username='marialuiza'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
-						<a className='cursor-pointer w-10 h-10'><Image src={Trash} alt='Excluir' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Pen} alt='Editar' /></a>
-						<a className='cursor-pointer w-10 h-10'><Image src={Play} alt='Executar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300' href='/dashboard/therapies/dec7a9bd-e265-4100-a8e2-3cd9a881af3c'><Image src={Play} alt='Executar' /></a>
+					</TableItem>
+				</div>
+				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0] border-solid border-[#EAECF0]'>
+					<TableItem className='w-64'>Terapia 2</TableItem>
+					<TableItem className='w-44'>22/03/2023</TableItem>
+					<TableItem className='w-44'>
+						<User name='Carol Braga' username='carolbraga'/>
+					</TableItem>
+					<TableItem className='w-44'>05/11/2023</TableItem>
+					<TableItem className='w-40'>344</TableItem>
+					<TableItem className='w-52'>
+						<User name='João Pedro' username='joaopedro'/>
+					</TableItem>
+					<TableItem className='w-40 flex justify-end'>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Play} alt='Executar' /></a>
 					</TableItem>
 				</div>
 			</div>
