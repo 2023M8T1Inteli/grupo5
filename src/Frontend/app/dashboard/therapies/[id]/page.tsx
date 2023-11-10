@@ -135,7 +135,7 @@ export default function Terapy() {
 							<span onClick={handleNameClick}> {therapyName} </span>
 						)}
 					</div>
-					<Image className='hover:scale-125 duration-300 cursor-pointer' src={Trash} alt='Excluir' />
+					<Image className='hover:scale-125 duration-300 cursor-pointer w-auto h-auto' src={Trash} alt='Excluir' />
 				</div>
 				<div className='flex gap-8 items-center'>
 					<p>Última modificação agora</p>
