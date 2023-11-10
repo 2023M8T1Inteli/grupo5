@@ -44,9 +44,9 @@ export default function Therapies() {
 						<User name='Maria Luiza' username='marialuiza'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Trash} alt='Excluir' /></a>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Pen} alt='Editar' /></a>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center' href='/dashboard/therapies/dec7a9bd-e265-4100-a8e2-3cd9a881af3c'><Image src={Play} alt='Executar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300' href='/dashboard/therapies/dec7a9bd-e265-4100-a8e2-3cd9a881af3c'><Image src={Play} alt='Executar' /></a>
 					</TableItem>
 				</div>
 				<div className='bg-white w-full p-6 flex gap-6 hover:bg-[#EAECF0] border-solid border-[#EAECF0]'>
@@ -61,9 +61,9 @@ export default function Therapies() {
 						<User name='João Pedro' username='joaopedro'/>
 					</TableItem>
 					<TableItem className='w-40 flex justify-end'>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Trash} alt='Excluir' /></a>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Pen} alt='Editar' /></a>
-						<a className='cursor-pointer w-10 h-10 flex justify-center items-center'><Image src={Play} alt='Executar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Pen} alt='Editar' /></a>
+						<a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Play} alt='Executar' /></a>
 					</TableItem>
 				</div>
 			</div>
