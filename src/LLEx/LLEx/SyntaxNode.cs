@@ -4,18 +4,26 @@ using System.Xml;
 
 namespace LLEx
 {
+    // Represents a node in a syntax tree.
     public class SyntaxNode
     {
+        // The name of the syntax node.
         public string Name { get; }
-        Dictionary<string, object> attributes = new Dictionary<string, object>();
+
+        // Dictionary to store attributes associated with the syntax node.
+        private Dictionary<string, object> attributes = new Dictionary<string, object>();
+
+        // Constructor to initialize the SyntaxNode with a given name.
         public SyntaxNode(string name)
         {
             Name = name;
         }
 
-        public void AddAttributes(string name, object value)
+        // Method to add attributes to the syntax node.
+        public void AddAttributes(string attributeName, object attributeValue)
         {
-            attributes[name] =value;
+            // Add the attribute to the dictionary.
+            attributes[attributeName] = attributeValue;
         }
 
     //     static XmlElement ToXmlElement(XmlDocument xmlDoc, XmlElement parentElement, Dictionary<string, object> attributes)
