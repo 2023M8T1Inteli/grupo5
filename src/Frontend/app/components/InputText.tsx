@@ -24,11 +24,12 @@ const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeho
     <div className={'flex flex-col gap-2' + ' ' + className}>
       {label && (
         <div className='flex items-center justify-between'>
-          <label className='text-xl text-[#909090]'>{label}</label>
+          <label className='text-xl text-[#909090]' htmlFor={name}>{label}</label>
           <span className='text-sm text-[#909090] bg-[#f6f8fa] p-1 rounded'>{shortcut}</span>
         </div>
       )}
       <input
+	  	id={name}
         name={name}
         type={type}
         placeholder={placeholder}
