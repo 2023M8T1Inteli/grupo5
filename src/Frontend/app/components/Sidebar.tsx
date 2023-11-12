@@ -20,7 +20,7 @@ const menuItems = [
 
 export default function Sidebar() {
   return (
-    <aside className='flex flex-col justify-between w-72 border-r border-[#EFEFEF] h-[100vh] p-6'>
+    <aside className='flex flex-col justify-between w-[15%] border-r border-[#EFEFEF] h-[100vh] p-6'>
       <div className='flex flex-col gap-11'>
         <div className='flex gap-3 items-center'>
           <Image src={Logo} alt='Logotipo' width={36} height={36} className="m-3"/>

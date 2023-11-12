@@ -34,7 +34,7 @@ const ShortcutsList = () => (
 
 export default function Home() {
   return (
-    <div className='p-16 flex flex-col gap-16'>
+    <div className='p-16 flex flex-col gap-16 w-[85%]'>
       <div className='grid gap-2'>
         <Heading>Início</Heading>
         <Subheading>Confira a agenda do dia, cadastre novos pacientes e crie novas terapias</Subheading>
