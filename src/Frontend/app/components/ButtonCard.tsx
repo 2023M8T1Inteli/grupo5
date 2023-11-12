@@ -13,8 +13,8 @@ interface ButtonCardProps {
 const ButtonCard: React.FC<ButtonCardProps> = ({icon, text, onClick, className, disabled = false }) => {
   return (
     <div className='flex content-center'>
-        <button onClick={onClick} className={'w-[10rem] h-[10rem] bg-[#E7343F] rounded-xl mt-6 mr-8 text-1xl text-white font-normal' + ' ' + className} disabled={disabled}>
-            <div className='flex flex-col justify-center items-center'>
+        <button onClick={onClick} className={'w-[10rem] h-[10rem] bg-[#E7343F] rounded-xl flex flex-col justify-center items-center text-1xl text-white font-normal' + ' ' + className} disabled={disabled}>
+            <div className='flex flex-col gap-4 max-w-[110px] justify-center items-center'>
                 <Image src={icon} alt='icon'></Image> 
                 {text}
             </div>
