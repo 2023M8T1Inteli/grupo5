@@ -5,6 +5,7 @@ import Table from "@/app/components/Table";
 import { TherapyItem } from "@/app/components/TherapyItem";
 
 export interface ITherapy {
+	id: string;
 	name: string;
 	date: string;
 	createdBy: {
@@ -22,6 +23,7 @@ export interface ITherapy {
 export default function Therapies() {
     const therapies : ITherapy[] = [
         {
+			id: '3bbe2596-f302-41c8-9bba-784a6e2948c0',
             name: 'Terapia 1',
             date: '10/10/2021',
             createdBy: {

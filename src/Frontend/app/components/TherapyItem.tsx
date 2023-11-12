@@ -21,7 +21,7 @@ export function TherapyItem({therapy} : { therapy: ITherapy }) {
             </TableItem>
             <TableItem className='w-40 flex justify-end'>
                 <a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
-                <a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Pen} alt='Editar' /></a>
+                <a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300' href={`/dashboard/therapies/${therapy.id}`}><Image src={Pen} alt='Editar' /></a>
                 <a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Play} alt='Executar' /></a>
             </TableItem>
         </div>
