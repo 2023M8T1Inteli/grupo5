@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Image from 'next/image';
 
-interface ButtonCardProps {
+export interface ButtonCardProps {
   icon: any;
   text: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;

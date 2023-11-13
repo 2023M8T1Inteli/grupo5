@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-interface InputTextProps {
+export interface InputTextProps {
   label?: string;
   placeholder?: string;
   type?: string;

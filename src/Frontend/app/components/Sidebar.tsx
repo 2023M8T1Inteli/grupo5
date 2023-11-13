@@ -18,6 +18,9 @@ const menuItems = [
   {icon: Calendar, text: 'Agenda', href: '/dashboard/calendar'},
 ];
 
+export interface SidebarProps {
+}
+
 export default function Sidebar() {
   return (
     <aside className='flex flex-col justify-between w-[15%] border-r border-[#EFEFEF] h-[100vh] p-6'>
