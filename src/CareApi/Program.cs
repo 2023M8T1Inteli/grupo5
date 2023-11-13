@@ -6,7 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.Configure<CareApiDBSettings>(builder.Configuration.GetSection("CareApiDB"));
 builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<CodeQALService>();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
