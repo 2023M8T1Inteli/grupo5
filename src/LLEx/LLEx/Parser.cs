@@ -646,6 +646,15 @@ namespace LLEx
             }
             return false;
         }
+        // This method serializes a syntax tree (starting from 'rootNode') into an XML document, 
+        // by recursively converting each node and its attributes into XML elements.
+        public XmlDocument SerializeSyntaxTreeToXml(SyntaxNode rootNode)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            XmlElement rootElement = rootNode.ToXmlElement(xmlDoc);
+            xmlDoc.AppendChild(rootElement);
+            return xmlDoc;
+        }
 
     }
 

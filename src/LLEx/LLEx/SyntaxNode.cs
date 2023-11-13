@@ -25,22 +25,50 @@ namespace LLEx
             // Add the attribute to the dictionary.
             attributes[attributeName] = attributeValue;
         }
+        //Method: Converts the syntax node to an XML element.
 
-    //     static XmlElement ToXmlElement(XmlDocument xmlDoc, XmlElement parentElement, Dictionary<string, object> attributes)
-    // {
-    //     XmlElement xmlElement = xmlDoc.CreateElement("Node");
+        public XmlElement ToXmlElement(XmlDocument xmlDoc)
+        {
+            XmlElement element = xmlDoc.CreateElement(Name);
 
-    //     foreach (var attribute in attributes)
-    //     {
-    //         XmlElement attributeElement = xmlDoc.CreateElement(attribute.Key);
-    //         attributeElement.InnerText = attribute.Value.ToString();
-    //         xmlElement.AppendChild(attributeElement);
-    //     }
+            foreach (var attribute in attributes)
+            {
+                if (attribute.Value is SyntaxNode childNode)
+                {
+                    element.AppendChild(childNode.ToXmlElement(xmlDoc));
+                }
+                else if (attribute.Value is SyntaxNodeLeaf leafNode)
+                {
+                    XmlElement leafElement = xmlDoc.CreateElement(leafNode.Name);
+                    leafElement.InnerText = leafNode.Value;
+                    element.AppendChild(leafElement);
+                }
+                else
+                {
+                    XmlElement attrElement = xmlDoc.CreateElement(attribute.Key);
+                    attrElement.InnerText = attribute.Value.ToString();
+                    element.AppendChild(attrElement);
+                }
+            }
 
-    //     parentElement.AppendChild(xmlElement);
+            return element;
+        }
 
-    //     return xmlElement;
-    // }
+        //     static XmlElement ToXmlElement(XmlDocument xmlDoc, XmlElement parentElement, Dictionary<string, object> attributes)
+        // {
+        //     XmlElement xmlElement = xmlDoc.CreateElement("Node");
+
+        //     foreach (var attribute in attributes)
+        //     {
+        //         XmlElement attributeElement = xmlDoc.CreateElement(attribute.Key);
+        //         attributeElement.InnerText = attribute.Value.ToString();
+        //         xmlElement.AppendChild(attributeElement);
+        //     }
+
+        //     parentElement.AppendChild(xmlElement);
+
+        //     return xmlElement;
+        // }
 
     }
 }

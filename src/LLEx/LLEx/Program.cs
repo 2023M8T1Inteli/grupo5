@@ -40,7 +40,7 @@ namespace LLEx
 
             new Tokenizer(source, out output);
 
-            StreamWriter sw = File.CreateText("Output.xml");
+            StreamWriter sw = File.CreateText("Output.cgn");
             sw.Write(output);
             sw.Dispose();
             sw.Close();
@@ -49,14 +49,12 @@ namespace LLEx
 
             SyntaxNode SyntaxNode = parser.ParseProgram();
 
-            // SaveSyntaxTreeAsXml(SyntaxNode, "../net6.0/parsedSyntaxTree.xml");
+            XmlDocument syntaxTreeXml = parser.SerializeSyntaxTreeToXml(SyntaxNode);
+            syntaxTreeXml.Save("SyntaxTree.cgn");
+
 
 
         }
-        public static void SaveSyntaxTreeAsXml(SyntaxTree syntaxTree, string path)
-        {
-            //XmlDocument xmlDoc = syntaxTree.ToXmlDocument();
-            //xmlDoc.Save(path);
-        }
+
     }
 }
