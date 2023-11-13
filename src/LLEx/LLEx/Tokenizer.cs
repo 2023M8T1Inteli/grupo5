@@ -25,9 +25,9 @@ namespace LLEx
 
             Token? token;
 
-            while((token = ReadToken()) != null)
+            while ((token = ReadToken()) != null)
             {
-                output.AppendLine($"\t<{token.Name} line={token.Line}>{token.Value}</{token.Name}>");
+                output.AppendLine($"\t<{token.Name} line=\"{token.Line}\">{token.Value}</{token.Name}>");
             }
 
             // Ending with tag </tokens>.
@@ -47,7 +47,8 @@ namespace LLEx
 
             char c = this.src.Peek();
 
-            if (IsEndOfFile(c)) {
+            if (IsEndOfFile(c))
+            {
                 return null;
             }
 
@@ -82,11 +83,12 @@ namespace LLEx
                 do
                 {
                     c = this.src.Peek();
-                    
-                    if((IsCharAlphanumericOrUnderlineBool = IsCharAlphanumericOrUnderline(c)))
+
+                    if ((IsCharAlphanumericOrUnderlineBool = IsCharAlphanumericOrUnderline(c)))
                     {
                         this.lexema.Append(c);
-                    } else
+                    }
+                    else
                     {
                         this.src.GoBack();
                     }
@@ -195,12 +197,14 @@ namespace LLEx
                     this.lexema.Append(c);
                     return new OPREL(this.lexema.ToString(), line);
                 }
-                else if (IsLexemaEqualsToAtribuicao(c.ToString()))
+                else if (IsLexemaEqualsToAtribuicao(this.lexema.ToString()))
                 {
-                    return new ASSIGN(c.ToString(), line);
+                    this.src.GoBack();
+                    return new ASSIGN(this.lexema.ToString(), line);
                 }
                 else
                 {
+                    this.src.GoBack();
                     return new OPREL(this.lexema.ToString(), line);
                 }
 
@@ -255,7 +259,8 @@ namespace LLEx
             return c.CompareTo('\0') == 0;
         }
 
-        private bool IsCharAlphabetic(char c) {
+        private bool IsCharAlphabetic(char c)
+        {
             return IsCharAlphabeticUpperCase(c) || IsCharAlphabeticLowerCase(c);
         }
 

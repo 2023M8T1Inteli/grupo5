@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using System.Xml;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace LLEx
@@ -39,10 +40,21 @@ namespace LLEx
 
             new Tokenizer(source, out output);
 
-            StreamWriter sw = File.CreateText("Output.llex");
+            StreamWriter sw = File.CreateText("Output.cgn");
             sw.Write(output);
             sw.Dispose();
             sw.Close();
+
+            Parser parser = new Parser("../net6.0/Output.xml");
+
+            SyntaxNode SyntaxNode = parser.ParseProgram();
+
+            XmlDocument syntaxTreeXml = parser.SerializeSyntaxTreeToXml(SyntaxNode);
+            syntaxTreeXml.Save("SyntaxTree.cgn");
+
+
+
         }
+
     }
 }
