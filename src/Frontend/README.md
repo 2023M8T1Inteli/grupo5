@@ -42,22 +42,41 @@ O projeto possui a seguinte estrutura de pastas:
 
 ```
 .
-├── .next
-│   └── cache
+├── .eslintrc.json
+├── .gitignore
+├── .storybook
+│   ├── main.ts
+│   └── preview.ts
 ├── app
 │   ├── components
-│   └── dashboard
-│       ├── calendar
-│       ├── metrics
-│       ├── patients
-│       ├── therapies
-│       │   └── [id]
-│       └── therapists
-├── node_modules
-└── public
+│   ├── dashboard
+│   │   ├── calendar
+│   │   ├── metrics
+│   │   ├── patients
+│   │   ├── therapies
+│   │   │   └── [id]
+│   │   └── therapists
+│   ├── helpers
+│   └── hooks
+├── next-env.d.ts
+├── next.config.js
+├── package-lock.json
+├── package.json
+├── postcss.config.js
+├── public
+├── README.md
+├── stories
+├── tailwind.config.ts
+└── tsconfig.json
 ```
 
-- `.next`: Esta pasta é gerada automaticamente pelo Next.js e contém os arquivos compilados que serão usados em tempo de execução.
+### Descrição das Pastas e Arquivos
+
+- `.eslintrc.json`: Este arquivo contém as regras de linting para o projeto.
+
+- `.gitignore`: Este arquivo especifica quais arquivos ou pastas o Git deve ignorar.
+
+- `.storybook`: Esta pasta contém os arquivos de configuração para o Storybook.
 
 - `app`: Esta pasta contém toda a lógica principal da nossa aplicação. Dentro dela, temos:
 
@@ -65,9 +84,27 @@ O projeto possui a seguinte estrutura de pastas:
 
   - `dashboard`: Esta pasta contém todas as páginas e componentes específicos do dashboard, como `calendar`, `metrics`, `patients`, `therapies` e `therapists`.
 
-- `node_modules`: Esta pasta contém todos os pacotes do projeto instalados através do npm.
+  - `helpers`: Esta pasta contém funções utilitárias usadas em toda a aplicação.
+
+  - `hooks`: Esta pasta contém todos os hooks personalizados usados em toda a aplicação.
+
+- `next-env.d.ts`: Este arquivo contém as definições de tipo para o Next.js.
+
+- `next.config.js`: Este arquivo contém a configuração personalizada para o Next.js.
+
+- `package-lock.json` e `package.json`: Esses arquivos contêm informações sobre as dependências do projeto.
+
+- `postcss.config.js`: Este arquivo contém a configuração para o PostCSS, uma ferramenta para transformar CSS com plugins JavaScript.
 
 - `public`: Esta pasta contém todos os arquivos estáticos como imagens e ícones.
+
+- `README.md`: Este arquivo contém informações e instruções sobre o projeto.
+
+- `stories`: Esta pasta contém todas as histórias do Storybook para documentação de componentes.
+
+- `tailwind.config.ts`: Este arquivo contém a configuração para o Tailwind CSS, um framework de CSS utilitário.
+
+- `tsconfig.json`: Este arquivo contém a configuração para o TypeScript, um superconjunto de JavaScript que adiciona tipos estáticos.
 
 ## Como rodar
 
@@ -82,6 +119,31 @@ Para rodar localmente, siga os passos abaixo:
 4. Inicie o servidor usando `npm run dev`
 
 O aplicativo agora deve estar rodando em `http://localhost:3000`
+
+## Storybook
+
+No nosso projeto, utilizamos o Storybook para documentar e testar visualmente nossos componentes de forma isolada. O Storybook é uma ferramenta open source para desenvolver componentes de UI em isolamento. Ele permite que você navegue por uma biblioteca de componentes e visualize os diferentes estados de seus componentes. 
+
+Para iniciar o Storybook, siga os seguintes passos:
+
+1. Abra o terminal na raiz do projeto.
+2. Execute o comando `npm install` para garantir que todas as dependências estão instaladas.
+3. Execute o comando `npm run storybook` para iniciar o servidor do Storybook.
+4. Abra o navegador e visite `http://localhost:6006` para ver os componentes documentados.
+
+## Código Limpo e Legível
+
+Em nosso projeto, optamos por escrever código limpo e legível em vez de depender de comentários extensivos. Acreditamos que um bom código deve ser autoexplicativo.
+
+Aqui estão algumas razões pelas quais preferimos essa abordagem:
+
+- **Manutenibilidade**: Códigos limpos e bem escritos são mais fáceis de manter. Se o código precisa de comentários para ser entendido, pode ser um sinal de que ele é muito complexo e precisa ser refatorado.
+
+- **Evitar redundâncias**: Comentários que simplesmente repetem o que o código está fazendo podem ser desnecessários e podem até tornar o código mais difícil de entender.
+
+- **Evitar informações desatualizadas**: À medida que o código evolui, os comentários podem rapidamente se tornar desatualizados ou imprecisos. Um código bem escrito minimiza esse risco.
+
+Isso não significa que evitamos completamente os comentários. Usamos comentários quando acreditamos que eles adicionam valor significativo, como explicar a razão por trás de uma decisão de design específica ou esclarecer um algoritmo complexo. No entanto, nosso objetivo principal é escrever código que seja compreensível por si só.
 
 ## Visualização do Projeto
 
