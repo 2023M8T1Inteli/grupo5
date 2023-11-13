@@ -1,5 +1,10 @@
 'use client'
 
+export interface UserProps {
+	name: string;
+	username: string;
+}
+
 export default function User(props : { name: string, username: string }) {
 
 	const initials = props.name.split(' ').map((word) => word[0]).join('')

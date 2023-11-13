@@ -1,6 +1,6 @@
 import Heading from '@/app/components/Heading';
 import Subheading from '../components/Subheading';
-import NextPatients from '../components/NextPatients';
+import NextPatient from '../components/NextPatient';
 import ButtonCard from '../components/ButtonCard';
 import Heart from '@/public/whiteheart.svg'
 import Profile from '@/public/profile_white.svg'
@@ -19,7 +19,7 @@ const shortcutsData = [
 const PatientsList = () => (
   <div className='flex flex-col gap-4'>
     {patientsData.map(patient => (
-      <NextPatients key={patient.name} {...patient} />
+      <NextPatient key={patient.name} {...patient} />
     ))}
   </div>
 );

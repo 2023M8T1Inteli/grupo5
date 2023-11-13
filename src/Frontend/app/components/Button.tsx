@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-interface ButtonProps {
+export interface ButtonProps {
   text: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
@@ -15,7 +15,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 		<div className='flex flex-col gap-2'>
 			<button
 				onClick={onClick} 
-				className={'w-full h-24 bg-[#E7343F] rounded-xl text-2xl text-white font-normal' + ' ' + className} 
+				className={'w-full h-24 bg-[#E7343F] rounded-xl text-2xl text-white font-normal disabled:bg-[#DDD] disabled:cursor-not-allowed ' + className}
 				disabled={disabled}
 				ref={ref}
 				title={shortcut ? `Shortcut: ${shortcut}` : ''}
