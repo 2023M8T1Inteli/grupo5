@@ -15,7 +15,7 @@ namespace CareApi.Models
     {
         public string Name { get; set; } = null!;
         public string Codigo { get; set; } = null!;
-        public string ImagerUrl { get; set; } = null!;
+        public string ImageUrl { get; set; } = null!;
         public string SoundUrl { get; set; } = null!;
     }
 }
