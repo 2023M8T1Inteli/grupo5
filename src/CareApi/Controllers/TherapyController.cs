@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CareApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("/[controller]")]
     public class TherapyController : ControllerBase
     {
         private readonly TherapyService _therapyService;
@@ -22,7 +22,7 @@ namespace CareApi.Controllers
         {
             var therapy = await _therapyService.GetByNameAsync(name);
             if (therapy is null) { 
-            return NotFound();  
+                return NotFound();  
             }
             return therapy;
         }
@@ -37,7 +37,7 @@ namespace CareApi.Controllers
         [HttpPost("many")]
         public async Task<IActionResult> Post(List<Therapy> therapies)
         {
-            await _userService.CreateManyAsync(therapies);
+            await _therapyService.CreateManyAsync(therapies);
             return CreatedAtAction(nameof(Get), new object[] { therapies });
         }
 

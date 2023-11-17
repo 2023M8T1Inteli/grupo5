@@ -39,7 +39,7 @@ namespace CareApi.Services
             await _userCollection.ReplaceOneAsync(x => x.Crefito == crefito, user);
 
         public async Task RemoveByNameAsync(string name) =>
-            await _userCollection.DeleteOneAsync(x => x.Crefito == name);
+            await _userCollection.DeleteOneAsync(x => x.Name == name);
 
         public async Task RemoveByCrefito(string crefito) =>
             await _userCollection.DeleteOneAsync(x => x.Crefito == crefito);

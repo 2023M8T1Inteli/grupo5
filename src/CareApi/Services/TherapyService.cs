@@ -1,10 +1,6 @@
 ﻿using CareApi.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Management.Instrumentation;
-using System.Threading.Tasks;
 
 namespace CareApi.Services
 {

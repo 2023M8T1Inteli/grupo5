@@ -16,7 +16,7 @@ namespace CareApi.Controllers
         [HttpGet("all")]
         public async Task<List<User>> Get() =>
             await _userService.GetManyAsync();
-
+    
         [HttpGet("name/{name}")]
         public async Task<ActionResult<User>> GetByName(string name)
         {
@@ -71,7 +71,7 @@ namespace CareApi.Controllers
             updatedUser.Name = user.Name;
             await _userService.UpdateByCrefitoAsync(updatedUser, crefito);
             return NoContent();
-        }
+        }       
 
         [HttpDelete("name/{name}")]
         public async Task<IActionResult> DeleteByName(string name)
@@ -95,6 +95,7 @@ namespace CareApi.Controllers
             }
             await _userService.RemoveByCrefito(crefito);
             return NoContent();
+
         }
     }
 }
