@@ -8,5 +8,6 @@ namespace CareApi.Models
         public string DatabaseName { get; set; } = null!;
         public string UserCollectionName { get; set; } = null!;
         public string TherapyCollectionName { get; set; } = null!;
+        public string PacientCollectionName { get; set; } = null!;
     }
 }
