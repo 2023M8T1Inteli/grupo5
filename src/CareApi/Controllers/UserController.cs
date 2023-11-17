@@ -85,7 +85,7 @@ namespace CareApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("name/{crefito}")]
+        [HttpDelete("crefito/{crefito}")]
         public async Task<IActionResult> DeleteByCrefto(string crefito)
         {
             var user = await _userService.GetByCrefitoAsync(crefito);
