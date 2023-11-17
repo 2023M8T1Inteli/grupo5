@@ -35,13 +35,7 @@ namespace CareApi.Services
         public async Task UpdateByNameAsync(Pacient pacient, string name) =>
             await _pacientCollection.ReplaceOneAsync(x => x.Name == name, pacient);
 
-        public async Task UpdateByCifAsync(Pacient pacient, string cif) =>
-            await _pacientCollection.ReplaceOneAsync(x => x.Cif == cif, pacient);
-
         public async Task RemoveByNameAsync(string name) =>
             await _pacientCollection.DeleteOneAsync(x => x.Name == name);
-
-        public async Task RemoveByCifAsync(string cif) =>
-            await _pacientCollection.DeleteOneAsync(x => x.Cif == cif);
     }
 }
