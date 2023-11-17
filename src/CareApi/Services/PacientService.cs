@@ -18,7 +18,7 @@ namespace CareApi.Services
         }
 
         public async Task<List<Pacient>> GetManyAsync() =>
-            await _pacientCollection.Find(_ => true).toListAsync();
+            await _pacientCollection.Find(_ => true).ToListAsync();
 
         public async Task<Pacient> GetByNameAsync(string name) =>
             await _pacientCollection.Find(x => x.Name == name).FirstOrDefaultAsync();

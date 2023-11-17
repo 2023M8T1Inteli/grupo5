@@ -49,7 +49,7 @@ namespace CareApi.Controllers
             {
                 return NotFound();
             }
-            updatedTherapy.Name = therapy.name;
+            updatedTherapy.Name = therapy.Name;
             await _therapyService.UpdateByNameAsync(updatedTherapy, name);
             return NoContent();
         }
