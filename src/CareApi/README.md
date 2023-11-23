@@ -6,6 +6,8 @@ Esta pasta contém a API do projeto, construída com o framework open-source ASP
 dotnet run
 ```
 
+Ao rodar o comando e acessar a URL http://localhost:5087 (ambiente de desenvolvimento), a mensagem `API running` é impressa. A mensagem também é impressa ao rodar a aplicação pelo Visual Studio em um container Docker, porém com porta [32770](https://localhost:32770/).
+
 ## Banco de dados
 
 Por conta da aplicação ter diversas mudanças no banco de dados no decorrer de seu desenvolvimento, MongoDB foi escolhido por conta de sua estruturação orientada a documentos, o que facilita em um ambiente de crescimento de dados horizontal.

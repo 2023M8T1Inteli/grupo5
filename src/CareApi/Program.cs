@@ -40,4 +40,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => Results.Ok("API running"));
+
 app.Run();
