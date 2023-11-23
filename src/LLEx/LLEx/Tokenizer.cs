@@ -11,6 +11,8 @@ namespace LLEx
         private StringBuilder lexema;
         private int line = 1;
         private bool isString = false;
+        private bool isSimpleLineComment = false;
+        private bool isMultipleLineComment = false;
 
         public Tokenizer(Source src, out StringBuilder output)
         {
@@ -54,7 +56,50 @@ namespace LLEx
 
             this.lexema.Append(c);
 
-            if (IsLexemaEqualsToAspas(c.ToString()))
+            if (IsCharSlash(c))
+            {
+                // One line comment
+                c = this.src.Peek();
+                if (IsCharSlash(c))
+                {
+                    isSimpleLineComment = true;
+                }
+                while (isSimpleLineComment)
+                {
+                    c = this.src.Peek();
+                    if (IsCharNewLine(c))
+                    {
+                        isSimpleLineComment = false;
+                        this.line++;
+                        return ReadToken();
+                    }
+                }
+
+                // Multiple lines comment
+                if (IsCharTimes(c))
+                {
+                    isMultipleLineComment = true;
+
+                    while (isMultipleLineComment)
+                    {
+                        c = this.src.Peek();
+                        if (IsCharTimes(c))
+                        {
+                            c = this.src.Peek();
+                            if (IsCharSlash(c))
+                            {
+                                isMultipleLineComment = false;
+                                return ReadToken();
+                            }
+                        }
+                        if (IsCharNewLine(c))
+                        {
+                            this.line++;
+                        }
+                    }
+                }
+            }
+            else if (IsLexemaEqualsToAspas(c.ToString()))
             {
                 this.isString = !isString;
                 return new DQUOTE(c.ToString(), line);
