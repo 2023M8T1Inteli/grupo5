@@ -15,7 +15,8 @@ builder.Services.AddCors( options =>
 // Add services to the container.
 builder.Services.Configure<CareApiDBSettings>(builder.Configuration.GetSection("CareApiDB"));
 builder.Services.AddSingleton<UserService>();
-builder.Services.AddSingleton<CodeQALService>();
+builder.Services.AddSingleton<TherapyService>();
+builder.Services.AddSingleton<PacientService>();
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
