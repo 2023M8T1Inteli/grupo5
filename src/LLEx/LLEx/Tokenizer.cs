@@ -351,7 +351,7 @@ namespace LLEx
 
         private bool IsCharAlphanumericOrUnderline(char c)
         {
-            return IsCharAlphabetic(c) || IsCharUnderline(c);
+            return IsCharAlphabetic(c) || IsCharUnderline(c) || IsCharNumeric(c);
         }
 
         private bool IsCharSpaceOrReturnOrTab(char c)
