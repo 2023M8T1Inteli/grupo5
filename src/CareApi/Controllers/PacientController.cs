@@ -65,6 +65,19 @@ namespace CareApi.Controllers
             return NoContent();
         }
 
+        [HttpPut("cif/{cif}")]
+        public async Task<IActionResult> UpdateByCif(Pacient updatedPacient, string cif)
+        {
+            var pacient = await _pacientService.GetByNameAsync(cif);
+            if (pacient is null)
+            {
+                return NotFound();
+            }
+            updatedPacient.Cif = pacient.Cif;
+            await _pacientService.UpdateByCifAsync(updatedPacient, cif);
+            return NoContent();
+        }
+
         [HttpDelete("name/{name}")]
         public async Task<IActionResult> DeleteByName(string name)
         {
@@ -74,6 +87,18 @@ namespace CareApi.Controllers
                 return NotFound();
             }
             await _pacientService.RemoveByNameAsync(name);
+            return NoContent();
+        }
+
+        [HttpDelete("cif/{cif}")]
+        public async Task<IActionResult> DeleteByCif(string cif)
+        {
+            var pacient = await _pacientService.GetByCifAsync(cif);
+            if (pacient is null)
+            {
+                return NotFound();
+            }
+            await _pacientService.RemoveByCifAsync(cif);
             return NoContent();
         }
     }
