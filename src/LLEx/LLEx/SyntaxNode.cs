@@ -19,6 +19,17 @@ namespace LLEx
             Name = name;
         }
 
+        public override string ToString(){
+            return "Teste";
+        }
+
+        public object getAttributes(string name){
+            if(attributes.ContainsKey(name)){
+                return attributes[name];
+            }
+            return null;
+        }
+
         // Method to add attributes to the syntax node.
         public void AddAttributes(string attributeName, object attributeValue)
         {
