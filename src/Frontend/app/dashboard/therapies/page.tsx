@@ -51,7 +51,6 @@ export default function Therapies() {
 		{name: 'Última execução', spacing: '44'},
 		{name: 'Nº de execuções', spacing: '40'},
 		{name: 'Último paciente a executar', spacing: '52'},
-		{name: '', spacing: '40'}
 	];
 
 	const fields = [
