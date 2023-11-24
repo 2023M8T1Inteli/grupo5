@@ -47,7 +47,8 @@ export default function Agenda() {
 	]
 
 	const events : any = {
-		'2023-11-24': [{ id: 1, name: 'Maria Eduarda', hour: '13:30', data: 'Hoje, 16 de março de 2023' }],
+		'2023-11-06': [{ id: 1, name: 'João Paulo', hour: '14:00', data: '10 de novembro de 2023' }],
+		'2023-11-24': [{ id: 1, name: 'Maria Eduarda', hour: '13:30', data: 'Hoje, 24 de novembro de 2023' }],
 	  };
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());

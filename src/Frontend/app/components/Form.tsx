@@ -12,7 +12,7 @@ export interface Field {
 }
 
 interface FormProps {
-  fields: Field[]
+  fields?: Field[]
   buttonText: string
   onSubmit: (data: any) => void
   cancelText?: string
@@ -48,7 +48,7 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
 
 	  return (
 		<form className="flex flex-col gap-4 w-full h-full" onSubmit={handleSubmit(onSubmit)}>
-		  {fields.map((field, index) => (
+		  {fields && fields.map((field, index) => (
 			<div className='w-full h-full' key={index}>
 			  <InputText 
 				ref={(el) => inputsRef.current[index] = el}

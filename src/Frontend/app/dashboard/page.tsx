@@ -6,9 +6,9 @@ import Heart from '@/public/whiteheart.svg'
 import Profile from '@/public/profile_white.svg'
 
 const patientsData = [
-  { name: 'Ana Júlia', hour: '13:30', data: 'Hoje, 16 de março de 2023' },
-  { name: 'Pedro Henrique', hour: '15:00', data: 'Hoje, 16 de março de 2023' },
-  { name: 'Maria Luiza', hour: '16:30', data: 'Hoje, 16 de março de 2023' },
+  { name: 'Ana Júlia', hour: '13:30', data: 'Hoje, 24 de novembro de 2023' },
+  { name: 'Pedro Henrique', hour: '15:00', data: 'Hoje, 24 de novembro de 2023' },
+  { name: 'Maria Luiza', hour: '16:30', data: 'Hoje, 24 de novembro de 2023' },
 ];
 
 const shortcutsData = [
