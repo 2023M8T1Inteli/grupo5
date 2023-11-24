@@ -19,7 +19,7 @@ interface DonutChartProps {
 }
 
 const DonutChart: React.FC<DonutChartProps> = ({ data }) => {
-  return <Doughnut data={data} />;
+  return <Doughnut data={data} options={{cutout: '70%', plugins: {legend: {position: 'left'}}}}/>;
 };
 
 export default DonutChart;

@@ -27,12 +27,12 @@ export default function Metrics() {
 						<Subheading>Acompanhe métricas sobre os pacientes aqui</Subheading>
 					</div>
 				</div>
-				<div className='flex flex-col gap-8'>
+				<div className='flex flex-col gap-16'>
 					<div className='flex flex-col gap-4'>
 						<SectionTitle>Tempo médio por terapia</SectionTitle>
 						<SectionData>50 minutos e 20 segundos</SectionData>
 					</div>
-					<div className='flex flex-col gap-8'>
+					<div className='flex flex-col gap-4'>
 						<SectionTitle>Erros e acertos</SectionTitle>
 						<div className="w-72">
 							<DonutChart data={data}/>
