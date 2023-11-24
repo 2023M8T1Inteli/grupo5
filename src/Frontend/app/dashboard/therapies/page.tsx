@@ -62,7 +62,7 @@ export default function Therapies() {
 		},
 	  ]
 
-	const [modalVisibility, setModalVisibility] = useState(true);
+	const [modalVisibility, setModalVisibility] = useState(false);
 
 	const openModal = () => {
 		setModalVisibility(true);
