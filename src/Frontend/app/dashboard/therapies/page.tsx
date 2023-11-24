@@ -79,28 +79,28 @@ export default function Therapies() {
     return (
         <div className='w-[85%]'>
 			<div className='flex flex-col p-16  gap-16'>
-            <div className='flex justify-between items-center'>
-                <div className='flex flex-col gap-2'>
-                    <Heading>Terapias</Heading>
-                    <Subheading>Gerencie as terapias disponíveis</Subheading>
-                </div>
-                <div className='w-48'>
-                    <ButtonMin text='Criar terapia' onClick={openModal} />	
-                </div>
-            </div>
+				<div className='flex justify-between items-center'>
+					<div className='flex flex-col gap-2'>
+						<Heading>Terapias</Heading>
+						<Subheading>Gerencie as terapias disponíveis</Subheading>
+					</div>
+					<div className='w-48'>
+						<ButtonMin text='Criar terapia' onClick={openModal} />	
+					</div>
+				</div>
 
-            <Table headers={headers}>
-                {therapies.map((therapy, index) => (
-                    <TherapyItem key={index} therapy={therapy} />
-                ))}
-            </Table>
-        </div>
-		{modalVisibility && (
-			<Modal>
-				<FormHeading>Criar nova terapia</FormHeading>
-				<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
-			</Modal>
-		)}
+				<Table headers={headers}>
+					{therapies.map((therapy, index) => (
+						<TherapyItem key={index} therapy={therapy} />
+					))}
+				</Table>
+        	</div>
+			{modalVisibility && (
+				<Modal>
+					<FormHeading>Criar nova terapia</FormHeading>
+					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
+				</Modal>
+			)}
 		</div>
     );
 }
