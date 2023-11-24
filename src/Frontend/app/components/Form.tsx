@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import InputText from './InputText'
 import Button from './Button'
 
-interface Field {
+export interface Field {
   label: string
   name: string
   placeholder: string
