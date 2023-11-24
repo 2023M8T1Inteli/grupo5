@@ -1,8 +1,13 @@
+'use client';
 import ButtonMin from "@/app/components/ButtonMin";
+import Form from "@/app/components/Form";
+import FormHeading from "@/app/components/FormHeading";
 import Heading from "@/app/components/Heading";
+import Modal from "@/app/components/Modal";
 import Subheading from "@/app/components/Subheading";
 import Table from "@/app/components/Table";
 import { TherapyItem } from "@/app/components/TherapyItem";
+import { useState } from "react";
 
 export interface ITherapy {
 	id: string;
@@ -49,15 +54,38 @@ export default function Therapies() {
 		{name: '', spacing: '40'}
 	];
 
+	const fields = [
+		{ 
+		  label: 'Nome da terapia', 
+		  name: 'therapy-name',
+		  placeholder: 'Digite o nome da terapia',
+		},
+	  ]
+
+	const [modalVisibility, setModalVisibility] = useState(true);
+
+	const openModal = () => {
+		setModalVisibility(true);
+	}
+
+	const onSubmit = (data: any) => {
+		setModalVisibility(false);
+	}
+
+	const onCancel = () => {
+		setModalVisibility(false);
+	}
+
     return (
-        <div className='flex flex-col p-16 w-[85%] gap-16'>
+        <div className='w-[85%]'>
+			<div className='flex flex-col p-16  gap-16'>
             <div className='flex justify-between items-center'>
                 <div className='flex flex-col gap-2'>
                     <Heading>Terapias</Heading>
                     <Subheading>Gerencie as terapias disponíveis</Subheading>
                 </div>
                 <div className='w-48'>
-                    <ButtonMin text='Criar terapia'/>	
+                    <ButtonMin text='Criar terapia' onClick={openModal} />	
                 </div>
             </div>
 
@@ -67,5 +95,12 @@ export default function Therapies() {
                 ))}
             </Table>
         </div>
+		{modalVisibility && (
+			<Modal>
+				<FormHeading>Criar nova terapia</FormHeading>
+				<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
+			</Modal>
+		)}
+		</div>
     );
 }

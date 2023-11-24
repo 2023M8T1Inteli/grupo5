@@ -15,9 +15,11 @@ interface FormProps {
   fields: Field[]
   buttonText: string
   onSubmit: (data: any) => void
+  cancelText?: string
+  onCancel ?: () => void
 }
 
-const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit }) => {
+const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, onCancel }) => {
 	const { register, handleSubmit, formState: { errors }, unregister } = useForm()
 	
 	const inputsRef = useRef<Array<HTMLInputElement | null>>([])
@@ -45,9 +47,9 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit }) => {
 	  }, [])
 
 	  return (
-		<form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+		<form className="flex flex-col gap-4 w-full h-full" onSubmit={handleSubmit(onSubmit)}>
 		  {fields.map((field, index) => (
-			<div key={index}>
+			<div className='w-full h-full' key={index}>
 			  <InputText 
 				ref={(el) => inputsRef.current[index] = el}
 				shortcut={`Alt+${index + 1}`}
@@ -60,6 +62,7 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit }) => {
 			</div>
 		  ))}
 		  <Button ref={buttonRef} text={buttonText} shortcut='Alt+Enter'/>
+		  {cancelText && <Button text={cancelText} onClick={onCancel} shortcut='Esc' style='cancel'/>}
 		</form>
 	  )
 }
