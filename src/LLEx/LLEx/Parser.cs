@@ -356,12 +356,13 @@ namespace LLEx
 
                 
                 // Add attributes for the "mostrar_tocar" command
+                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",mostrar_tocar.Value, mostrar_tocar.Line));
                 commandStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
                 Match("COMMA");
                 commandStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
                 Match("COMMA");
                 commandStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());
-                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",mostrar_tocar.Value, mostrar_tocar.Line));
+
                 
             }
 
@@ -387,13 +388,13 @@ namespace LLEx
 
                 // Add attributes for the expression with a relational operator
                 expression.AddAttributes("left",sumExpression1);
-                expression.AddAttributes("root",new SyntaxNodeLeaf("OPREL", relop.Value, relop.Line));
+                expression.AddAttributes("comparetor",new SyntaxNodeLeaf("OPREL", relop.Value, relop.Line));
                 expression.AddAttributes("right",sumExpression2);
             }
             else
             {
                 // Add attributes for the expression without a relational operator
-                expression.AddAttributes("root",sumExpression1);
+                expression.AddAttributes("expression",sumExpression1);
             }
 
             return expression;
