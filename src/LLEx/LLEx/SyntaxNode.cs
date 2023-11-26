@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 
 namespace LLEx
@@ -19,13 +20,11 @@ namespace LLEx
             Name = name;
         }
 
-        public override string ToString(){
-            return "Teste";
-        }
-
-        public object getAttributes(string name){
-            if(attributes.ContainsKey(name)){
-                return attributes[name];
+        public object GetAttribute(string attributeName)
+        {
+            if (attributes.ContainsKey(attributeName))
+            {
+                return attributes[attributeName];
             }
             return null;
         }
@@ -36,8 +35,47 @@ namespace LLEx
             // Add the attribute to the dictionary.
             attributes[attributeName] = attributeValue;
         }
-        //Method: Converts the syntax node to an XML element.
 
+        // Converts the syntax node to a string representation.
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            ToStringRecursive(this, stringBuilder, 0);
+            return stringBuilder.ToString();
+        }
+
+        // Recursive helper method for building the string representation with indentation
+        private void ToStringRecursive(SyntaxNode node, StringBuilder stringBuilder, int indentationLevel)
+        {
+            // Append indentation based on the depth of the node
+            stringBuilder.Append(new string(' ', indentationLevel * 2));
+
+            // Append the node name
+            stringBuilder.AppendLine(node.Name);
+
+            // Iterate through attributes and recursively build the string for child nodes
+            foreach (var attribute in node.attributes)
+            {
+                if (attribute.Value is SyntaxNode childNode)
+                {
+                    stringBuilder.Append(new string(' ', (indentationLevel + 1) * 2));
+                    stringBuilder.AppendLine($"Chave: {attribute.Key}");
+                    ToStringRecursive(childNode, stringBuilder, indentationLevel + 1);
+                }
+                else if (attribute.Value is SyntaxNodeLeaf leafNode)
+                {
+                    stringBuilder.Append(new string(' ', (indentationLevel + 1) * 2));
+                    stringBuilder.AppendLine($"Chave: {attribute.Key} |     {leafNode.Name}: {leafNode.Value} | Linha: {leafNode.Line}");
+                }
+                else
+                {
+                    stringBuilder.Append(new string(' ', (indentationLevel + 1) * 2));
+                    stringBuilder.AppendLine($"{attribute.Key}: {attribute.Value}");
+                }
+            }
+        }
+
+        // Converts the syntax node to an XML element.
         public XmlElement ToXmlElement(XmlDocument xmlDoc)
         {
             XmlElement element = xmlDoc.CreateElement(Name);
@@ -64,22 +102,5 @@ namespace LLEx
 
             return element;
         }
-
-        //     static XmlElement ToXmlElement(XmlDocument xmlDoc, XmlElement parentElement, Dictionary<string, object> attributes)
-        // {
-        //     XmlElement xmlElement = xmlDoc.CreateElement("Node");
-
-        //     foreach (var attribute in attributes)
-        //     {
-        //         XmlElement attributeElement = xmlDoc.CreateElement(attribute.Key);
-        //         attributeElement.InnerText = attribute.Value.ToString();
-        //         xmlElement.AppendChild(attributeElement);
-        //     }
-
-        //     parentElement.AppendChild(xmlElement);
-
-        //     return xmlElement;
-        // }
-
     }
 }

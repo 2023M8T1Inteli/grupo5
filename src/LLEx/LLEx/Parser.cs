@@ -116,6 +116,8 @@ namespace LLEx
             return blockNode;
         }
 
+        int count = 0;
+
         // Method to parse a list of statements
         private SyntaxNode ParseStatementList()
         {
@@ -134,6 +136,7 @@ namespace LLEx
                     statementList.AddAttributes("statementNode", statement);
                     SyntaxNode next = ParseStatementList();
                     statementList.AddAttributes("nextNode", next);
+                    count++;
                 }
                 else
                 {
@@ -210,7 +213,7 @@ namespace LLEx
         private SyntaxNode ParseInputStatement()
         {   
             // Create a syntax node for the input statement
-            SyntaxNode inputStatement = new SyntaxNode("InputStatement");
+            SyntaxNode inputStatement = new SyntaxNode("inputStatement");
             bool isInput = IsCurrentTokenValue("ler");
 
             // Determine if it is a single input or multiple inputs
@@ -229,16 +232,17 @@ namespace LLEx
             {
                 // Parse the multiple input statement
                 List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
-                Token ler_varios = Match("ler_varios");
+                Token ler_varios = MatchValue("ler_varios");
                 Match("LPAR");
 
                 // Add attributes for the multiple input statement
-                inputStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
-                Match("COMMA");
-                inputStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
-                Match("COMMA");
-                inputStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
                 inputStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",ler_varios.Value, ler_varios.Line));
+                inputStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
+                Match("COMMA");
+                inputStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
+                Match("COMMA");
+                inputStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());
+                Match("RPAR");
 
             }
 
@@ -295,7 +299,7 @@ namespace LLEx
             SyntaxNode block = ParseBlock();
 
             // Add attributes for the while statement
-            whileStatement.AddAttributes("expressionEnqauntoNode", expression);
+            whileStatement.AddAttributes("expressionEnquantoNode", expression);
             whileStatement.AddAttributes("parseBlockFacaNode",block);
 
             return whileStatement;
@@ -354,11 +358,11 @@ namespace LLEx
 
                 
                 // Add attributes for the "mostrar_tocar" command
-                commandStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
+                commandStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
                 Match("COMMA");
-                commandStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
+                commandStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
                 Match("COMMA");
-                commandStatement.AddAttributes("sumExpressionNode", ParseSumExpression());
+                commandStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());
                 commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",mostrar_tocar.Value, mostrar_tocar.Line));
                 
             }
@@ -384,9 +388,9 @@ namespace LLEx
                 SyntaxNode sumExpression2 = ParseSumExpression();
 
                 // Add attributes for the expression with a relational operator
-                expression.AddAttributes("sumExpressionNode",sumExpression1);
+                expression.AddAttributes("sumExpressionNode1",sumExpression1);
                 expression.AddAttributes("oprelNode",new SyntaxNodeLeaf("OPREL", relop.Value, relop.Line));
-                expression.AddAttributes("sumExpressionNode",sumExpression2);
+                expression.AddAttributes("sumExpressionNode2",sumExpression2);
             }
             else
             {
