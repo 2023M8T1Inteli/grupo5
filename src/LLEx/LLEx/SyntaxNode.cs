@@ -58,8 +58,7 @@ namespace LLEx
             {
                 if (attribute.Value is SyntaxNode childNode)
                 {
-                    stringBuilder.Append(new string(' ', (indentationLevel + 1) * 2));
-                    stringBuilder.AppendLine($"Chave: {attribute.Key}");
+        
                     ToStringRecursive(childNode, stringBuilder, indentationLevel + 1);
                 }
                 else if (attribute.Value is SyntaxNodeLeaf leafNode)

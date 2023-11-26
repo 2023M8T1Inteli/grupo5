@@ -60,7 +60,7 @@ namespace LLEx
             {
                 // One line comment
                 c = this.src.Peek();
-                if (IsCharSlash(c))
+                if (IsCharSlash(c) )
                 {
                     isSimpleLineComment = true;
                 }
