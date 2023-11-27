@@ -47,7 +47,6 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
 		}
 	  }, [])
 
-	  handle
 
 	// Add error to formState if validation fails
 	useEffect(() => {
