@@ -8,10 +8,11 @@ export interface ButtonProps {
   disabled?: boolean;
   shortcut?: string;
   style?: 'primary' | 'cancel';
+  type?: 'submit' | 'reset' | 'button';
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(	
-  ({ text, onClick, className, disabled = false, shortcut, style='primary' }, ref) => {
+  ({ text, onClick, className, disabled = false, shortcut, style='primary', type='button' }, ref) => {
 
 	const styleClasses = {
 		primary: 'bg-[#E7343F] text-white',
@@ -21,6 +22,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
 		<div className='flex flex-col gap-2'>
 			<button
+				type={type}
 				onClick={onClick} 
 				className={'w-full h-24 font-bold rounded-xl text-lg disabled:bg-[#DDD] disabled:cursor-not-allowed ' + styleClasses[style] + ' ' + className}
 				disabled={disabled}

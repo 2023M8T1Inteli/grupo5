@@ -54,8 +54,6 @@ export default function Terapy() {
 		setModalVisibility(false);
 	}
 
-	const fields : Field[] = []
-
 	const onClickTrashIcon = () => {
 		openModal();
 	};
@@ -75,7 +73,7 @@ export default function Terapy() {
 			{modalVisibility && (
 				<Modal>
 					<FormHeading>Tem certeza que deseja excluir?</FormHeading>
-					<Form fields={fields} buttonText="Excluir" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
+					<Form buttonText="Excluir" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
 				</Modal>
 			)}
 		</div>

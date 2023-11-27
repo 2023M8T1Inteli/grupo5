@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { FieldError, Merge } from 'react-hook-form';
 
 export interface InputTextProps {
   label?: string;
@@ -11,9 +12,10 @@ export interface InputTextProps {
   shortcut?: string;
   onUnregister?: () => void;
   name?: string;
+  error?: FieldError | Merge<FieldError, { message: string }>;
 }
 
-const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeholder, type = 'text', value, onChange, className, shortcut, onUnregister, name }, ref) => {
+const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeholder, type = 'text', value, onChange, className, shortcut, onUnregister, name, error }, ref) => {
   useEffect(() => {
     return () => {
       onUnregister?.();
@@ -38,6 +40,7 @@ const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeho
         ref={ref}
         className='w-full h-24 rounded-xl border-[1px] border-solid border-[#E6E6EB] p-8 text-2xl font-normal'
       />
+	  {error && <span className="text-red-500 text-sm">{error.message}</span>} {/* Display error message */}
     </div>
   );
 });

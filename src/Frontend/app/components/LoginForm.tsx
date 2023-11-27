@@ -1,20 +1,24 @@
 'use client'
-import Form from "./Form"
+import Form, { Field } from "./Form"
 
 export default function LoginForm() {
-	const fields = [
+	const fields : Field[] = [
 		{ 
 		  label: 'Endereço de e-mail', 
 		  name: 'email',
 		  placeholder: 'Digite seu e-mail', 
-		  validation: { required: 'O email é obrigatório', pattern: { value: /^\S+@\S+$/i, message: 'Email inválido' } } 
+		  required: true,
+		  pattern: /^[^@]+@[^@]+\.[^@]+$/,
+		  type: 'email',
 		},
 		{ 
 		  label: 'Senha', 
 		  name: 'password',
 		  placeholder: 'Digite sua senha', 
 		  type: 'password',
-		  validation: { required: 'A senha é obrigatória' } 
+		  required: true,
+		  minLength: 8,
+		  maxLength: 16,
 		}
 	  ]
 
