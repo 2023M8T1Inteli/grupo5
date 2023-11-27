@@ -9,6 +9,7 @@ import Form, { Field } from '@/app/components/Form';
 import Calendar from "@/app/components/Calendar";
 import { format } from 'date-fns';
 import NextPatient from "@/app/components/NextPatient";
+import { InputSelectProps } from "@/app/components/InputSelect";
 
 export default function Agenda() {
 	const [modalVisibility, setModalVisibility] = useState(false);
@@ -25,24 +26,34 @@ export default function Agenda() {
 		setModalVisibility(false);
 	}
 
-	const fields : Field[] = [
+	const fields : Field[] | InputSelectProps[] = [
 		{
 			label: 'Paciente',
 			name: 'patient',
-			placeholder: 'Digite o nome do paciente',
-			type: 'text',
+			placeholder: 'Selecione um paciente',
+			type: 'select',
+			required: true,
+			options: [
+				{ value: '1', label: 'João Paulo' },
+				{ value: '2', label: 'Maria Eduarda' },
+				{ value: '3', label: 'José Carlos' },
+				{ value: '4', label: 'Ana Maria' },
+				{ value: '5', label: 'Pedro Henrique' },
+			]
 		},
 		{
 			label: 'Data',
 			name: 'date',
 			placeholder: 'Digite a data do atendimento',
 			type: 'date',
+			required: true,
 		},
 		{
 			label: 'Horário',
 			name: 'hour',
 			placeholder: 'Digite o horário do atendimento',
 			type: 'time',
+			required: true,
 		},
 	]
 

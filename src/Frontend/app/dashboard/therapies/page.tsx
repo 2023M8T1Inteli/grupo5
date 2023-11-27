@@ -1,6 +1,6 @@
 'use client';
 import ButtonMin from "@/app/components/ButtonMin";
-import Form from "@/app/components/Form";
+import Form, { Field } from "@/app/components/Form";
 import FormHeading from "@/app/components/FormHeading";
 import Heading from "@/app/components/Heading";
 import Modal from "@/app/components/Modal";
@@ -53,11 +53,13 @@ export default function Therapies() {
 		{name: 'Último paciente a executar', spacing: '52'},
 	];
 
-	const fields = [
+	const fields : Field[] = [
 		{ 
 		  label: 'Nome da terapia', 
 		  name: 'therapy-name',
 		  placeholder: 'Digite o nome da terapia',
+		  type: 'text',
+		  required: true,
 		},
 	  ]
 

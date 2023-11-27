@@ -7,7 +7,7 @@ import Subheading from "@/app/components/Subheading";
 import Table from "@/app/components/Table";
 import { TherapistItem } from "@/app/components/TherapistItem";
 import { useState } from "react";
-import Form from '@/app/components/Form';
+import Form, { Field } from '@/app/components/Form';
 
 export interface ITherapist {
 	id: string;
@@ -54,16 +54,21 @@ export default function Therapists() {
 		setModalVisibility(false);
 	}
 
-	const fields = [
+	const fields : Field[] = [
 		{ 
 		  label: 'Nome completo', 
 		  name: 'full-name',
 		  placeholder: 'Digite o nome completo do terapeuta',
+		  minLength: 5,
+		  maxLength: 100,
+		  required: true,
 		},
 		{
 		  label: 'E-mail',
 		  name: 'email',
 		  placeholder: 'Digite o e-mail do terapeuta',
+		  type: 'email',
+		  required: true,
 		},
 	  ]
 

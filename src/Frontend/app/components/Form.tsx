@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import InputText from './InputText';
 import Button from './Button';
+import InputSelect from './InputSelect';
 
 export interface Field {
   label: string;
@@ -13,6 +14,7 @@ export interface Field {
   pattern?: RegExp;
   minLength?: number;
   maxLength?: number;
+  options?: { value: string | number; label: string }[];
 }
 
 interface FormProps {
@@ -28,7 +30,7 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
     mode: 'all',
   });
 
-  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+  const inputsRef = useRef<Array<HTMLInputElement | HTMLSelectElement | null>>([]);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -63,7 +65,8 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
     <form className="flex flex-col gap-4 w-full h-full" onSubmit={handleSubmit(onSubmit)}>
       {fields && fields.map((field, index) => (
         <div className='w-full h-full' key={field.name}>
-          <InputText
+          {field.type !== 'select' && (
+			<InputText
             label={field.label}
             placeholder={field.placeholder}
             type={field.type || 'text'}
@@ -80,6 +83,22 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
 			  }}
             error={errors[field.name]}
           />
+		  )}
+		  {field.type === 'select' && (
+			<InputSelect
+			label={field.label}
+			options={field.options || []}
+			shortcut={`Alt+${index + 1}`}
+			{...register(field.name, {
+			  required: field.required ? 'Este campo é obrigatório' : false,
+			})}
+			ref={(e) => {
+			  inputsRef.current[index] = e;
+			  register(field.name).ref(e);
+			}}
+			error={errors[field.name]}
+		  />
+		  )}
         </div>
       ))}
       <Button type='submit' ref={buttonRef} text={buttonText} shortcut='Alt+Enter' disabled={Object.keys(errors).length > 0} />
