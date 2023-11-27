@@ -9,6 +9,7 @@ export interface Field {
   placeholder: string
   type?: string
   validation?: Record<string, any>
+  value?: string
 }
 
 interface FormProps {
@@ -20,7 +21,7 @@ interface FormProps {
 }
 
 const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, onCancel }) => {
-	const { register, handleSubmit, formState: { errors }, unregister } = useForm()
+	const { register, handleSubmit, formState, unregister } = useForm()
 	
 	const inputsRef = useRef<Array<HTMLInputElement | null>>([])
 	const buttonRef = useRef<HTMLButtonElement | null>(null)
@@ -46,6 +47,21 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
 		}
 	  }, [])
 
+	  handle
+
+	// Add error to formState if validation fails
+	useEffect(() => {
+		if (fields) {
+		  fields.forEach((field) => {
+			if (field.validation) {
+			  register(field.name, field.validation)
+			} else {
+			  register(field.name)
+			}
+		  })
+		}
+	}, [fields, register])					
+
 	  return (
 		<form className="flex flex-col gap-4 w-full h-full" onSubmit={handleSubmit(onSubmit)}>
 		  {fields && fields.map((field, index) => (
@@ -57,8 +73,9 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
 				placeholder={field.placeholder} 
 				type={field.type || 'text'}
 				name={field.name}
+				value={field.value}
 				/>
-			  {errors[field.name] && <p className="text-red-500"> {errors[field.name]?.message?.toString()} </p>}
+			  {formState.errors && <p className="text-red-500"> {formState.errors[field.name]?.message?.toString()} </p>}
 			</div>
 		  ))}
 		  <Button ref={buttonRef} text={buttonText} shortcut='Alt+Enter'/>
