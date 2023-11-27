@@ -194,7 +194,7 @@ namespace LLEx
             if (isInput)
             {
                 SyntaxNode inputStatement = ParseInputStatement();
-                assignStatement.AddAttributes("inputStatemenNode", inputStatement);
+                assignStatement.AddAttributes("inputStatementNode", inputStatement);
             }
             else
             {   
@@ -223,7 +223,7 @@ namespace LLEx
                 Match("RPAR");
 
                 // Add attributes for the single input statement
-                inputStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",ler.Value, ler.Line));
+                inputStatement.AddAttributes("comandoNode",ler.Value);
                 
             }
             else if (IsCurrentTokenValue("ler_varios"))
@@ -234,7 +234,7 @@ namespace LLEx
                 Match("LPAR");
 
                 // Add attributes for the multiple input statement
-                inputStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",ler_varios.Value, ler_varios.Line));
+                inputStatement.AddAttributes("comandoNode",ler_varios.Value);
                 inputStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
                 Match("COMMA");
                 inputStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
@@ -263,8 +263,8 @@ namespace LLEx
             SyntaxNode parseBlock = ParseBlock();
             
             // Add attributes for the if statement
-            ifStatement.AddAttributes("nodeExpressionSeNode", expression);
-            ifStatement.AddAttributes("parseBlockEntaoNode",parseBlock);
+            ifStatement.AddAttributes("expressionNode", expression);
+            ifStatement.AddAttributes("blockNode",parseBlock);
 
             // Check if there is an "SENAO" (ELSE) block
             if (IsCurrentToken("SENAO"))
@@ -274,7 +274,7 @@ namespace LLEx
                 // Parse the block of statements inside the "SENAO" block
                 SyntaxNode elseBlock = ParseBlock();
                 // Add attributes for the else block
-                ifStatement.AddAttributes("parseBlockSenaoNode",parseBlock);
+                ifStatement.AddAttributes("blockNode",parseBlock);
                 
             }
 
@@ -297,8 +297,8 @@ namespace LLEx
             SyntaxNode block = ParseBlock();
 
             // Add attributes for the while statement
-            whileStatement.AddAttributes("expressionEnquantoNode", expression);
-            whileStatement.AddAttributes("parseBlockFacaNode",block);
+            whileStatement.AddAttributes("expressionNode", expression);
+            whileStatement.AddAttributes("blockNode",block);
 
             return whileStatement;
         }
@@ -319,7 +319,7 @@ namespace LLEx
                 Match("RPAR");
 
                 // Add attributes for the "mostrar" command
-                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",mostrar.Value, mostrar.Line));
+                commandStatement.AddAttributes("comandoNode",mostrar.Value);
                 commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             else if (IsCurrentTokenValue("tocar"))
@@ -331,7 +331,7 @@ namespace LLEx
                 Match("RPAR");
 
                 // Add attributes for the "tocar" command
-                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",tocar.Value, tocar.Line));
+                commandStatement.AddAttributes("comandoNode",tocar.Value);
                 commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             else if (IsCurrentToken("esperar"))
@@ -343,7 +343,7 @@ namespace LLEx
                 Match("RPAR");
 
                 // Add attributes for the "esperar" command
-                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",esperar.Value, esperar.Line));
+                commandStatement.AddAttributes("comandoNode",esperar.Value);
                 commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             
@@ -356,7 +356,7 @@ namespace LLEx
 
                 
                 // Add attributes for the "mostrar_tocar" command
-                commandStatement.AddAttributes("comandoNode",new SyntaxNodeLeaf("COMANDO",mostrar_tocar.Value, mostrar_tocar.Line));
+                commandStatement.AddAttributes("comandoNode", mostrar_tocar.Value);
                 commandStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
                 Match("COMMA");
                 commandStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
@@ -388,13 +388,13 @@ namespace LLEx
 
                 // Add attributes for the expression with a relational operator
                 expression.AddAttributes("left",sumExpression1);
-                expression.AddAttributes("comparetor",new SyntaxNodeLeaf("OPREL", relop.Value, relop.Line));
+                expression.AddAttributes("comparator", relop.Value);
                 expression.AddAttributes("right",sumExpression2);
             }
             else
             {
                 // Add attributes for the expression without a relational operator
-                expression.AddAttributes("expression",sumExpression1);
+                expression.AddAttributes("expressionNode",sumExpression1);
             }
 
             return expression;
@@ -425,7 +425,7 @@ namespace LLEx
                 SyntaxNode node = new SyntaxNode("sumExpression");
 
                 // Add the operator, multiplication term, and the rest of the sum expression as attributes to the node
-                node.AddAttributes("operator",new SyntaxNodeLeaf("OPSUM", op.Value, op.Line));
+                node.AddAttributes("operator", op.Value);
                 node.AddAttributes("left", left);
                 node.AddAttributes("right", right);
 
@@ -462,7 +462,7 @@ namespace LLEx
                 SyntaxNode node = new SyntaxNode("multTerm");
 
                 // Add the operator, power term, and the rest of the multiplication term as attributes to the node
-                node.AddAttributes("operator",new SyntaxNodeLeaf("OPMUL", op.Value, op.Line));
+                node.AddAttributes("operator", op.Value);
                 node.AddAttributes("left",left);
                 node.AddAttributes("right",right);
 
@@ -493,7 +493,7 @@ namespace LLEx
                 SyntaxNode node = new SyntaxNode("powerTerm");
 
                 // Add the factor, exponentiation operator, and the next power term as attributes to the node
-                node.AddAttributes("operator",new SyntaxNodeLeaf("OPPOW", pow.Value, pow.Line));
+                node.AddAttributes("operator", pow.Value);
                 node.AddAttributes("left",left);
                 node.AddAttributes("right",right);
 
@@ -512,36 +512,39 @@ namespace LLEx
         {
             SyntaxNode factor = new SyntaxNode("factorNode");
 
+            string signal = "+";
+            if (IsCurrentToken("OPSUM"))
+                {
+                    signal = Match("OPSUM").Value;
+                }
+
+
             if (IsCurrentToken("ID"))
             {   
                 Token id = Match("ID");
                 // If the current token is an identifier (ID), add it as an attribute to the node
                 factor.AddAttributes("idNode",new SyntaxNodeLeaf("ID", id.Value, id.Line));
+                factor.AddAttributes("signal", signal);
             }
             else if (IsCurrentToken("INTEGER"))
             {   
                 Token inteiro = Match("INTEGER");
                 // If the current token is an integer, add it as an attribute to the node
                 factor.AddAttributes("integerNode",new SyntaxNodeLeaf("INTEGER", inteiro.Value, inteiro.Line));
+                factor.AddAttributes("signal", signal);
             }
             else if (IsCurrentTokenValue("verdade", "falso"))
             {
                 Token booleano = Match("BOOLEAN");
                 // If the current token is a boolean (verdade or falso), add it as an attribute to the node
                 factor.AddAttributes("booleanNode",new SyntaxNodeLeaf("BOOLEAN", booleano.Value, booleano.Line));
-            }
-            else if (IsCurrentTokenValue("+", "-"))
-            {   
-                Token sum = MatchValue("+", "-");
-                // If the current token is a unary plus or minus, add the operator and the next factor as attributes to the node
-                factor.AddAttributes("opsumNode",new SyntaxNodeLeaf("OPSUM", sum.Value, sum.Line));
-                factor.AddAttributes("factorNode",ParseFactor());
+                factor.AddAttributes("signal", signal);
             }
             else if (IsCurrentToken("NAO"))
             {   
                 Token booleano = MatchValue("verdade", "falso");
                 // If the current token is the logical NOT (NAO), add it as an attribute to the node
-                factor.AddAttributes("booleanNaoNode", new SyntaxNodeLeaf("BOOLEAN", booleano.Value, booleano.Line));
+                factor.AddAttributes("booleanNode", new SyntaxNodeLeaf("BOOLEAN", booleano.Value, booleano.Line));
             }
             else if (IsCurrentToken("LPAR"))
             {   
@@ -552,6 +555,7 @@ namespace LLEx
 
                 // Add the expression within parentheses as an attribute to the node  
                 factor.AddAttributes("expressionNode",expression);
+                factor.AddAttributes("signal", signal);
             }
 
             return factor;
