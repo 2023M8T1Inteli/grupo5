@@ -9,6 +9,7 @@ import { TherapistItem } from "@/app/components/TherapistItem";
 import { useState } from "react";
 import Form, { Field } from '@/app/components/Form';
 import { PatitentItem } from "@/app/components/PatientItem";
+import AddNewPatientModal from "@/app/components/AddNewPatientModal";
 
 export interface IPatient {
 	id: string;
@@ -46,25 +47,6 @@ export default function Patients() {
 		setModalVisibility(false);
 	}
 
-	const fields : Field[] = [
-		{ 
-		  label: 'Nome completo', 
-		  name: 'full-name',
-		  placeholder: 'Digite o nome completo do paciente',
-		  type: 'text',
-		  required: true,
-		  minLength: 5,
-		  maxLength: 100,
-		},
-		{
-		  label: 'Data de nascimento',
-		  name: 'date-of-birth',
-		  placeholder: 'Digite a data de nascimento do paciente',
-		  type: 'date',	
-		  required: true,
-		},
-	  ]
-
 	return(
 		<div className='w-[85%]'>
 			<div className='flex flex-col p-16  gap-16'>
@@ -85,10 +67,7 @@ export default function Patients() {
 				</Table>
         	</div>
 			{modalVisibility && (
-				<Modal>
-					<FormHeading>Adicionar novo paciente</FormHeading>
-					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
-				</Modal>
+				<AddNewPatientModal onCancel={onCancel} onSubmit={onSubmit} />
 			)}
 		</div>
 	)

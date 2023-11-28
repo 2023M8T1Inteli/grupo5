@@ -1,4 +1,5 @@
 'use client';
+import AddNewTherapyModal from "@/app/components/AddNewTherapyModal";
 import ButtonMin from "@/app/components/ButtonMin";
 import Form, { Field } from "@/app/components/Form";
 import FormHeading from "@/app/components/FormHeading";
@@ -53,16 +54,6 @@ export default function Therapies() {
 		{name: 'Último paciente a executar', spacing: '52'},
 	];
 
-	const fields : Field[] = [
-		{ 
-		  label: 'Nome da terapia', 
-		  name: 'therapy-name',
-		  placeholder: 'Digite o nome da terapia',
-		  type: 'text',
-		  required: true,
-		},
-	  ]
-
 	const [modalVisibility, setModalVisibility] = useState(false);
 
 	const openModal = () => {
@@ -97,10 +88,7 @@ export default function Therapies() {
 				</Table>
         	</div>
 			{modalVisibility && (
-				<Modal>
-					<FormHeading>Criar nova terapia</FormHeading>
-					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
-				</Modal>
+				<AddNewTherapyModal onCancel={onCancel} onSubmit={onSubmit} />
 			)}
 		</div>
     );

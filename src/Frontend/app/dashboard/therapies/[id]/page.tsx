@@ -22,6 +22,7 @@ import Modal from '@/app/components/Modal';
 import FormHeading from '@/app/components/FormHeading';
 import { Field } from 'react-hook-form';
 import Form from '@/app/components/Form';
+import DeleteTherapyModal from '@/app/components/DeleteTherapyModal';
 
 export default function Terapy() {
     const [activeQuadrant, setActiveQuadrant] = useState(0);
@@ -46,7 +47,7 @@ export default function Terapy() {
 		setModalVisibility(true);
 	}
 
-	const onSubmit = (data: any) => {
+	const onSubmit = () => {
 		setModalVisibility(false);
 	}
 
@@ -71,10 +72,7 @@ export default function Terapy() {
 				</div>
         	</div>
 			{modalVisibility && (
-				<Modal>
-					<FormHeading>Tem certeza que deseja excluir?</FormHeading>
-					<Form buttonText="Excluir" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
-				</Modal>
+				<DeleteTherapyModal onSubmit={onSubmit} onCancel={onCancel} />
 			)}
 		</div>
     )
