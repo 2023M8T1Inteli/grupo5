@@ -274,7 +274,7 @@ namespace LLEx
                 // Parse the block of statements inside the "SENAO" block
                 SyntaxNode elseBlock = ParseBlock();
                 // Add attributes for the else block
-                ifStatement.AddAttributes("blockNode",parseBlock);
+                ifStatement.AddAttributes("ifNotBlockNode",parseBlock);
                 
             }
 
@@ -394,7 +394,7 @@ namespace LLEx
             else
             {
                 // Add attributes for the expression without a relational operator
-                expression.AddAttributes("expressionNode",sumExpression1);
+                expression.AddAttributes("sumExpressionNode",sumExpression1);
             }
 
             return expression;

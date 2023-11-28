@@ -29,6 +29,10 @@ namespace LLEx
             return null;
         }
 
+        public bool VerifyKey(string key){
+            return attributes.ContainsKey(key);
+        }
+
         // Method to add attributes to the syntax node.
         public void AddAttributes(string attributeName, object attributeValue)
         {

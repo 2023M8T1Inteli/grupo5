@@ -56,6 +56,10 @@ namespace LLEx
             
             syntaxTreeXml.Save("SyntaxTree.cgn");
 
+            SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
+
+            semanticAnalyzer.AnalyzeSyntaxTree(syntaxNode);
+
 
 
         }

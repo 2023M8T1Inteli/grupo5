@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace LLEx
 {
@@ -26,8 +27,8 @@ namespace LLEx
 
         private void AnalyzeProgram(SyntaxNode programNode)
         {
-            SyntaxNode idNode = (SyntaxNode)programNode.GetAttribute("idNode");
-            AddVariableToSymbolTable(idNode.Name, VariableType.Int);
+            SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)programNode.GetAttribute("idNode");
+            AddVariableToSymbolTable(idNode.Name, VariableType.String, "ID", false);
 
             SyntaxNode blockNode = (SyntaxNode)programNode.GetAttribute("blockNode");
             AnalyzeBlock(blockNode);
@@ -56,25 +57,118 @@ namespace LLEx
 
         private void AnalyzeStatement(SyntaxNode statementNode)
         {
-            SyntaxNode expressionNode = (SyntaxNode)statementNode.GetAttribute("expressionNode");
+            
+            switch(statementNode.Name){
+                case "assignStatement":
+                    AnalyzeAssignStatement(statementNode);
+                    break;
 
-            if (expressionNode != null)
-            {
-                AnalyzeExpression(expressionNode);
+                case "ifStatement":
+                    AnalyzeIfStatement(statementNode);
+                    break;
+                
+                case "whileStatement":
+                    AnalyzeWhileStatement(statementNode);
+                    break;
+
+                case "commandStatement":
+                    AnalyzeCommandStatement(statementNode);
+                    break;
+
             }
+        }
+
+        private void AnalyzeAssignStatement(SyntaxNode assignStatementNode)
+        {
+            Token id;
+            if(assignStatementNode.VerifyKey("inputStatementNode")){
+                SyntaxNode inputStatementNode = (SyntaxNode)assignStatementNode.GetAttribute("inputStatementNode");
+                AnalyzeInputStatement(inputStatementNode);
+            }else{
+                SyntaxNode expressionNode = (SyntaxNode)assignStatementNode.GetAttribute("expressionNode");
+                AnalyzeExpression((SyntaxNode)assignStatementNode.GetAttribute("expressionNode"));
+            }
+
+            SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)assignStatementNode.GetAttribute("idNode");
+            AddVariableToSymbolTable(idNode.Name, VariableType.String, "ID", false);
+            
+        }
+
+        private void AnalyzeInputStatement(SyntaxNode inputStatementNode)
+        {
+            string func = (string)inputStatementNode.GetAttribute("comandoNode");
+
+            if(func == "ler_varios"){
+                SyntaxNode sumExpression1 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode1");
+                AnalyzeSumExpression(sumExpression1);
+                SyntaxNode sumExpression2 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode2");
+                AnalyzeSumExpression(sumExpression2);
+                SyntaxNode sumExpression3 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode3");
+                AnalyzeSumExpression(sumExpression3);
+            }
+
+            
+        }
+
+        private void AnalyzeIfStatement(SyntaxNode ifStatementNode)
+        {   
+            SyntaxNode expression = (SyntaxNode)ifStatementNode.GetAttribute("expressionNode");
+            AnalyzeExpression(expression);
+            SyntaxNode block = (SyntaxNode)ifStatementNode.GetAttribute("blockNode");
+            AnalyzeExpression(expression);
+            if(ifStatementNode.VerifyKey("ifNotBlockNode")){
+                SyntaxNode ifNotBlock = (SyntaxNode)ifStatementNode.GetAttribute("ifNotBlockNode");
+                AnalyzeExpression(ifNotBlock);
+            }
+        }
+
+        private void AnalyzeWhileStatement(SyntaxNode whileStatementNode)
+        {
+            SyntaxNode expression = (SyntaxNode)whileStatementNode.GetAttribute("expressionNode");
+            AnalyzeExpression(expression);
+            SyntaxNode block = (SyntaxNode)whileStatementNode.GetAttribute("blockNode");
+            AnalyzeExpression(expression);
+            
+        }
+
+        private void AnalyzeCommandStatement(SyntaxNode commandStatementNode)
+        {
+            string func = (string)commandStatementNode.GetAttribute("comandoNode");
+
+            if(func == "mostrar_tocar"){
+                SyntaxNode sumExpression1 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode1");
+                AnalyzeSumExpression(sumExpression1);
+                SyntaxNode sumExpression2 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode2");
+                AnalyzeSumExpression(sumExpression2);
+                SyntaxNode sumExpression3 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode3");
+                AnalyzeSumExpression(sumExpression3);
+            }else{
+                SyntaxNode sumExpression = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode");
+                AnalyzeSumExpression(sumExpression);
+            }
+            
         }
 
         private void AnalyzeExpression(SyntaxNode expressionNode)
         {
-            SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
-            string comparator = (string)expressionNode.GetAttribute("comparator");
-            SyntaxNode rightNode = (SyntaxNode)expressionNode.GetAttribute("right");
+            if (expressionNode.VerifyKey("sumExpressionNode")){
+                SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
+                
+            }else{
 
-            AnalyzeSumExpression(leftNode);
-            AnalyzeSumExpression(rightNode);
+                SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
+                string comparator = (string)expressionNode.GetAttribute("comparator");
+                SyntaxNode rightNode = (SyntaxNode)expressionNode.GetAttribute("right");
 
-            CheckVariableInitialization(leftNode);
-            CheckVariableInitialization(rightNode);
+                AnalyzeSumExpression(leftNode);
+                AnalyzeSumExpression(rightNode);
+
+                CheckVariableInitialization(leftNode);
+                CheckVariableInitialization(rightNode);
+
+            }
+            // AreSameType(id1, id2);
+
 
             // Adicione verificações de tipo aqui se necessário
             // Exemplo: Verificar se os tipos de leftNode e rightNode são compatíveis
@@ -82,6 +176,7 @@ namespace LLEx
 
         private void AnalyzeSumExpression(SyntaxNode sumExpressionNode)
         {
+
             SyntaxNode leftNode = (SyntaxNode)sumExpressionNode.GetAttribute("left");
             string operatorType = (string)sumExpressionNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)sumExpressionNode.GetAttribute("right");
@@ -147,9 +242,28 @@ namespace LLEx
             }
         }
 
+        public static bool AreSameType(VariableType type1, VariableType type2)
+        {
+            // Verifica se ambos os tipos são nulos
+            if (type1 == null && type2 == null)
+            {
+                return true;
+            }
+
+            // Verifica se pelo menos um dos tipos é nulo
+            if (type1 == null || type2 == null)
+            {
+                return false;
+            }
+
+            // Compara os tipos
+            return type1.Equals(type2);
+        }
+
+
         private void CheckVariableDeclaration(SyntaxNode idNode)
         {
-            string variableName = ((SyntaxNodeLeaf)idNode).Name;
+            string variableName = idNode.Name;
 
             if (!symbolTable.ContainsKey(variableName))
             {
@@ -157,7 +271,7 @@ namespace LLEx
             }
         }
 
-        private void CheckVariableInitialization(SyntaxNode expressionNode)
+        private void CheckVariableInitialization(object expressionNode)
         {
             if (expressionNode is SyntaxNodeLeaf idNode)
             {
@@ -191,7 +305,7 @@ namespace LLEx
             }
         }
 
-        private void AddVariableToSymbolTable(string variableName, VariableType variableType)
+        private void AddVariableToSymbolTable(string variableName, VariableType variableType, string token, bool used)
         {
             ScopeInfo currentScope = scopeStack.Peek();
 
@@ -201,7 +315,7 @@ namespace LLEx
             }
             else
             {
-                VariableInfo variableInfo = new VariableInfo(variableName, variableType);
+                VariableInfo variableInfo = new VariableInfo(variableName, variableType, token, used);
                 currentScope.SymbolTable.Add(variableName, variableInfo);
             }
         }
@@ -235,18 +349,23 @@ namespace LLEx
         {
             public string Name { get; }
             public VariableType Type { get; }
+            public string Token { get; }
+            public bool Used { get; }
 
-            public VariableInfo(string name, VariableType type)
+            public VariableInfo(string name, VariableType type, string token, bool used)
             {
                 Name = name;
                 Type = type;
+                Token = token;
+                Used = used;
             }
         }
 
-        private enum VariableType
+        public enum VariableType
         {
             Int,
-            Bool
+            Bool,
+            String
         }
     }
 }
