@@ -17,6 +17,8 @@ services:
       dockerfile: ./src/CareApi/Dockerfile
     ports:
       - "80:80"
+    depends_on:
+      - mongodb
 
   mongodb:
     image: mongo
