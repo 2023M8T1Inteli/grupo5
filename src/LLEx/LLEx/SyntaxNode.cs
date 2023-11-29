@@ -94,6 +94,8 @@ namespace LLEx
                     XmlElement leafElement = xmlDoc.CreateElement(leafNode.Name);
                     leafElement.InnerText = leafNode.Value;
                     element.AppendChild(leafElement);
+                }else if(attribute.Value == null){
+                    continue;
                 }
                 else
                 {

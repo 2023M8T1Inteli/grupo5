@@ -394,7 +394,9 @@ namespace LLEx
             else
             {
                 // Add attributes for the expression without a relational operator
-                expression.AddAttributes("sumExpressionNode",sumExpression1);
+                expression.AddAttributes("left",sumExpression1);
+                expression.AddAttributes("comparator",null);
+                expression.AddAttributes("right",null);
             }
 
             return expression;
@@ -525,6 +527,8 @@ namespace LLEx
                 // If the current token is an identifier (ID), add it as an attribute to the node
                 factor.AddAttributes("idNode",new SyntaxNodeLeaf("ID", id.Value, id.Line));
                 factor.AddAttributes("signal", signal);
+                factor.AddAttributes("left", null);
+                factor.AddAttributes("right", null);
             }
             else if (IsCurrentToken("INTEGER"))
             {   
@@ -532,6 +536,8 @@ namespace LLEx
                 // If the current token is an integer, add it as an attribute to the node
                 factor.AddAttributes("integerNode",new SyntaxNodeLeaf("INTEGER", inteiro.Value, inteiro.Line));
                 factor.AddAttributes("signal", signal);
+                factor.AddAttributes("left", null);
+                factor.AddAttributes("right", null);
             }
             else if (IsCurrentTokenValue("verdade", "falso"))
             {
@@ -539,12 +545,17 @@ namespace LLEx
                 // If the current token is a boolean (verdade or falso), add it as an attribute to the node
                 factor.AddAttributes("booleanNode",new SyntaxNodeLeaf("BOOLEAN", booleano.Value, booleano.Line));
                 factor.AddAttributes("signal", signal);
+                factor.AddAttributes("left", null);
+                factor.AddAttributes("right", null);
             }
             else if (IsCurrentToken("NAO"))
             {   
                 Token booleano = MatchValue("verdade", "falso");
                 // If the current token is the logical NOT (NAO), add it as an attribute to the node
                 factor.AddAttributes("booleanNode", new SyntaxNodeLeaf("BOOLEAN", booleano.Value, booleano.Line));
+                factor.AddAttributes("signal", signal);
+                factor.AddAttributes("left", null);
+                factor.AddAttributes("right", null);
             }
             else if (IsCurrentToken("LPAR"))
             {   
@@ -556,6 +567,8 @@ namespace LLEx
                 // Add the expression within parentheses as an attribute to the node  
                 factor.AddAttributes("expressionNode",expression);
                 factor.AddAttributes("signal", signal);
+                factor.AddAttributes("left", null);
+                factor.AddAttributes("right", null);
             }
 
             return factor;

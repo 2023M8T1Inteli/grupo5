@@ -28,7 +28,7 @@ namespace LLEx
         private void AnalyzeProgram(SyntaxNode programNode)
         {
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)programNode.GetAttribute("idNode");
-            AddVariableToSymbolTable(idNode.Name, VariableType.String, "ID", false);
+            AddVariableToSymbolTable(idNode.Value, "String", idNode.Name,idNode.Value, false);
 
             SyntaxNode blockNode = (SyntaxNode)programNode.GetAttribute("blockNode");
             AnalyzeBlock(blockNode);
@@ -47,7 +47,10 @@ namespace LLEx
             SyntaxNode statementNode = (SyntaxNode)statementListNode.GetAttribute("statementNode");
             SyntaxNode nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
 
-            AnalyzeStatement(statementNode);
+            if (nextNode != null)
+            {
+                AnalyzeStatement(statementNode);
+            }
 
             if (nextNode != null)
             {
@@ -81,6 +84,7 @@ namespace LLEx
         private void AnalyzeAssignStatement(SyntaxNode assignStatementNode)
         {
             Token id;
+            String valor = null;
             if(assignStatementNode.VerifyKey("inputStatementNode")){
                 SyntaxNode inputStatementNode = (SyntaxNode)assignStatementNode.GetAttribute("inputStatementNode");
                 AnalyzeInputStatement(inputStatementNode);
@@ -90,7 +94,7 @@ namespace LLEx
             }
 
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)assignStatementNode.GetAttribute("idNode");
-            AddVariableToSymbolTable(idNode.Name, VariableType.String, "ID", false);
+            AddVariableToSymbolTable(idNode.Value, "Inteiro", idNode.Name, valor, false);
             
         }
 
@@ -151,22 +155,22 @@ namespace LLEx
 
         private void AnalyzeExpression(SyntaxNode expressionNode)
         {
-            if (expressionNode.VerifyKey("sumExpressionNode")){
-                SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
-                
+        
+
+            SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
+            string comparator = (string)expressionNode.GetAttribute("comparator");
+            SyntaxNode rightNode = (SyntaxNode)expressionNode.GetAttribute("right");
+
+            if(expressionNode.Name != "expression"){
+                AnalyzeSumExpression(expressionNode);
             }else{
-
-                SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
-                string comparator = (string)expressionNode.GetAttribute("comparator");
-                SyntaxNode rightNode = (SyntaxNode)expressionNode.GetAttribute("right");
-
                 AnalyzeSumExpression(leftNode);
-                AnalyzeSumExpression(rightNode);
-
-                CheckVariableInitialization(leftNode);
-                CheckVariableInitialization(rightNode);
-
+                if(rightNode != null){
+                    AnalyzeSumExpression(rightNode);
+                }
             }
+
+            
             // AreSameType(id1, id2);
 
 
@@ -181,11 +185,13 @@ namespace LLEx
             string operatorType = (string)sumExpressionNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)sumExpressionNode.GetAttribute("right");
 
-            AnalyzeMultTerm(leftNode);
-            AnalyzeMultTerm(rightNode);
 
-            CheckVariableInitialization(leftNode);
-            CheckVariableInitialization(rightNode);
+            if(sumExpressionNode.Name != "sumExpression"){
+                AnalyzeMultTerm(sumExpressionNode);
+            }else{
+                AnalyzeMultTerm(leftNode);
+                AnalyzeMultTerm(rightNode);
+            }
 
             // Adicione verificações de tipo aqui se necessário
         }
@@ -196,11 +202,12 @@ namespace LLEx
             string operatorType = (string)multTermNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)multTermNode.GetAttribute("right");
 
-            AnalyzePowerTerm(leftNode);
-            AnalyzePowerTerm(rightNode);
-
-            CheckVariableInitialization(leftNode);
-            CheckVariableInitialization(rightNode);
+            if(multTermNode.Name != "multTerm"){
+                AnalyzePowerTerm(multTermNode);
+            }else{
+                AnalyzePowerTerm(leftNode);
+                AnalyzePowerTerm(rightNode);
+            }
 
             // Adicione verificações de tipo aqui se necessário
         }
@@ -211,25 +218,29 @@ namespace LLEx
             string operatorType = (string)powerTermNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)powerTermNode.GetAttribute("right");
 
-            AnalyzeFactor(leftNode);
-            AnalyzeFactor(rightNode);
 
-            CheckVariableInitialization(leftNode);
-            CheckVariableInitialization(rightNode);
+            if(powerTermNode.Name != "powerTerm"){
+                AnalyzeFactor(powerTermNode);
+            }else{
+                AnalyzeFactor(leftNode);
+                AnalyzeFactor(rightNode);
+
+            }
 
             // Adicione verificações de tipo aqui se necessário
         }
 
         private void AnalyzeFactor(SyntaxNode factorNode)
         {
-            SyntaxNode idNode = (SyntaxNode)factorNode.GetAttribute("idNode");
-            SyntaxNode integerNode = (SyntaxNode)factorNode.GetAttribute("integerNode");
-            SyntaxNode booleanNode = (SyntaxNode)factorNode.GetAttribute("booleanNode");
+            SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)factorNode.GetAttribute("idNode");
+            SyntaxNodeLeaf integerNode = (SyntaxNodeLeaf)factorNode.GetAttribute("integerNode");
+            SyntaxNodeLeaf booleanNode = (SyntaxNodeLeaf)factorNode.GetAttribute("booleanNode");
             string signal = (string)factorNode.GetAttribute("signal");
 
             if (idNode != null)
-            {
+            {   
                 CheckVariableDeclaration(idNode);
+                // CheckVariableInitialization(idNode);
                 // Adicione verificações de tipo aqui se necessário
             }
             else if (integerNode != null)
@@ -261,25 +272,27 @@ namespace LLEx
         }
 
 
-        private void CheckVariableDeclaration(SyntaxNode idNode)
+        private void CheckVariableDeclaration(SyntaxNodeLeaf idNode)
         {
-            string variableName = idNode.Name;
+            string variableName = idNode.Value;
 
-            if (!symbolTable.ContainsKey(variableName))
+            ScopeInfo currentScope = scopeStack.Peek();
+
+            if (!currentScope.SymbolTable.ContainsKey(variableName))
             {
                 AddError($"Erro semântico: Variável '{variableName}' não foi declarada.");
             }
         }
 
-        private void CheckVariableInitialization(object expressionNode)
+        private void CheckVariableInitialization(SyntaxNodeLeaf idNode)
         {
-            if (expressionNode is SyntaxNodeLeaf idNode)
+            string variableName = idNode.Value;
+
+            ScopeInfo currentScope = scopeStack.Peek();
+
+            if (currentScope.SymbolTable[variableName].Value != null)
             {
-                string variableName = idNode.Name;
-                if (!IsVariableInitialized(variableName))
-                {
-                    AddError($"Erro semântico: Variável '{variableName}' não foi inicializada.");
-                }
+                AddError($"Erro semântico: Variável '{variableName}' não foi inicializada.");
             }
         }
 
@@ -305,7 +318,7 @@ namespace LLEx
             }
         }
 
-        private void AddVariableToSymbolTable(string variableName, VariableType variableType, string token, bool used)
+        private void AddVariableToSymbolTable(string variableName, string variableType, string token, string value, bool used)
         {
             ScopeInfo currentScope = scopeStack.Peek();
 
@@ -315,7 +328,7 @@ namespace LLEx
             }
             else
             {
-                VariableInfo variableInfo = new VariableInfo(variableName, variableType, token, used);
+                VariableInfo variableInfo = new VariableInfo(variableName, variableType, token, value, used);
                 currentScope.SymbolTable.Add(variableName, variableInfo);
             }
         }
@@ -348,15 +361,18 @@ namespace LLEx
         private class VariableInfo
         {
             public string Name { get; }
-            public VariableType Type { get; }
+            public string Type { get; }
             public string Token { get; }
+
+            public string Value { get; }
             public bool Used { get; }
 
-            public VariableInfo(string name, VariableType type, string token, bool used)
+            public VariableInfo(string name, string type, string token, string value, bool used)
             {
                 Name = name;
                 Type = type;
                 Token = token;
+                Value = value;
                 Used = used;
             }
         }
