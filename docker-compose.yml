@@ -1,33 +1,29 @@
-version: '3.1'
-
-networks:
-  default:
-    driver:
-      bridge
-
+version: "3.8"
 services:
-  mongo:
-    container_name: mongo
+  frontend:
+    build:
+      context: .
+      dockerfile: ./src/frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:80
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./src/CareApi/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - mongodb
+
+  mongodb:
     image: mongo
-    restart: always
     ports:
-      - 27017:27017
-    networks:
-      - default
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-  mongo-express:
-    container_name: mongo-express
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    networks:
-      - default
-    environment:
-      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_WEB_USERNAME}
-      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_WEB_PASSWORD}
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/
+      - "27017:27017"
+    volumes:
+      - ./init-mongodb/init-db.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: "unless-stopped"
