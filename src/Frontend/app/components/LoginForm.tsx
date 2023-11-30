@@ -31,7 +31,6 @@ export default function LoginForm() {
 	const onSubmit = async (data: any) => {
 		console.log(data)
 		// TO-DO: implementar a lógica de login.
-
 		const promise = axios.post('https://dummyjson.com/auth/login', {
 			username: data.email,
 			password: data.password
@@ -53,16 +52,14 @@ export default function LoginForm() {
 			}, 2000)
 		})
 		.catch((error) => {
-			// Handle the error here, if needed
 			console.error('Login error:', error);
-		});
-		
+		});	
 	}
 
 	return (
 		<div>
 			<Form fields={fields} onSubmit={onSubmit} buttonText='Entrar' />
-			<ToastContainer />
+			<ToastContainer closeButton={false} />
 		</div>
 	)
 

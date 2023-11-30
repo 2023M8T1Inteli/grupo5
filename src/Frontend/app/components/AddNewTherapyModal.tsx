@@ -11,6 +11,8 @@ export default function AddNewTherapyModal({onSubmit, onCancel}: { onSubmit: (da
 		  placeholder: 'Digite o nome da terapia',
 		  type: 'text',
 		  required: true,
+		  minLength: 5,
+		  maxLength: 50,
 		},
 	  ]
 	
