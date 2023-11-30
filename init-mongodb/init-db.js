@@ -9,7 +9,6 @@ db.Pacient.insertMany([
     Name: "Joana",
     BirthDate: "1980-05-21",
     Disease: "Esclerose Múltipla",
-    Cif: "D004",
     Sessions: [
       {
         StartedAt: "2023-11-15T09:30:00",
@@ -56,45 +55,24 @@ db.Therapy.insertMany([
 
 db.User.insertMany([
   {
-    Name: "Maria",
-    BirthDate: "1985-04-23",
-    Desease: "Artrite Reumatoide",
-    Cif: "A001",
-    Sessions: [
-      {
-        StartedAt: "2023-11-11T09:00:00",
-        EndedAt: "2023-11-11T10:00:00",
-        TherapyName: "Fisioterapia",
-        Results: "Melhora da mobilidade",
-      },
-    ],
+    "Name": "João",
+    "Email": "joaosilva@example.com",
+    "Role": "Admin",
+    "Password": "senha123"
   },
+
   {
-    Name: "Roberto",
-    BirthDate: "1972-08-15",
-    Desease: "Lombalgia",
-    Cif: "B002",
-    Sessions: [
-      {
-        StartedAt: "2023-11-12T11:00:00",
-        EndedAt: "2023-11-12T12:00:00",
-        TherapyName: "Terapia Manual",
-        Results: "Redução da dor",
-      },
-    ],
+    "Name": "Maria",
+    "Email": "mariasouza@example.com",
+    "Role": "User",
+    "Password": "12345678"
   },
+
   {
-    Name: "Lucas",
-    BirthDate: "1990-01-05",
-    Desease: "Tendinite",
-    Cif: "C003",
-    Sessions: [
-      {
-        StartedAt: "2023-11-13T14:30:00",
-        EndedAt: "2023-11-13T15:30:00",
-        TherapyName: "Ultra-som Terapêutico",
-        Results: "Diminuição da inflamação",
-      },
-    ],
+    "Name": "Carlos",
+    "Email": "carlospereira@example.com",
+    "Role": "Manager",
+    "Password": "senhaSegura123"
   },
+
 ]);

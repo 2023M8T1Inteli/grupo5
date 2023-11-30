@@ -23,9 +23,6 @@ namespace CareApi.Services
         public async Task<Pacient> GetByNameAsync(string name) =>
             await _pacientCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
-        public async Task<Pacient> GetByCifAsync(string cif) =>
-            await _pacientCollection.Find(x => x.Cif == cif).FirstOrDefaultAsync();
-
         public async Task CreateOneAsync(Pacient pacient) =>
             await _pacientCollection.InsertOneAsync(pacient);
 
