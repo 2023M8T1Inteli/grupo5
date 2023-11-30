@@ -1,6 +1,6 @@
-import NextPatient from "../app/components/NextPatients";
+import NextPatient from "../app/components/NextPatient";
 import type { Meta, StoryObj } from "@storybook/react";
-import type { NextPatientProps } from "../app/components/NextPatients";
+import type { NextPatientProps } from "../app/components/NextPatient";
 
 export default {
   title: "Components/General/NextPatient",
