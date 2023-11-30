@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldError, FieldErrors, FieldValues, UseFormHandleSubmit, UseFormRegister, UseFormSetValue, UseFormTrigger, useForm } from 'react-hook-form';
 import InputText from './InputText';
 import Button from './Button';
 import InputSelect from './InputSelect';
@@ -23,12 +23,16 @@ interface FormProps {
   onSubmit: (data: any) => void;
   cancelText?: string;
   onCancel?: () => void;
+  register: UseFormRegister<FieldValues>;
+  handleSubmit: UseFormHandleSubmit<FieldValues>;
+  errors: FieldErrors<FieldValues>;
+  trigger: UseFormTrigger<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
+
 }
 
-const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, onCancel }) => {
-  const { register, handleSubmit, formState: { errors }, trigger } = useForm({
-    mode: 'all',
-  });
+const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, onCancel, register, handleSubmit, errors, trigger, setValue }) => {
+
 
   const inputsRef = useRef<Array<HTMLInputElement | HTMLSelectElement | null>>([]);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
