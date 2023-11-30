@@ -15,7 +15,7 @@ const ButtonCard: React.FC<ButtonCardProps> = ({icon, text, onClick, className, 
     <div className='flex content-center'>
         <button onClick={onClick} className={'w-[10rem] h-[10rem] bg-[#E7343F] rounded-xl flex flex-col justify-center items-center text-1xl text-white font-normal' + ' ' + className} disabled={disabled}>
             <div className='flex flex-col gap-4 max-w-[110px] justify-center items-center'>
-                <Image src={icon} alt='icon'></Image> 
+                
                 {text}
             </div>
             

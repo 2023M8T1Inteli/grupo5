@@ -1,8 +1,14 @@
+'use client';
+import AddNewTherapyModal from "@/app/components/AddNewTherapyModal";
 import ButtonMin from "@/app/components/ButtonMin";
+import Form, { Field } from "@/app/components/Form";
+import FormHeading from "@/app/components/FormHeading";
 import Heading from "@/app/components/Heading";
+import Modal from "@/app/components/Modal";
 import Subheading from "@/app/components/Subheading";
 import Table from "@/app/components/Table";
 import { TherapyItem } from "@/app/components/TherapyItem";
+import { useState } from "react";
 
 export interface ITherapy {
 	id: string;
@@ -46,26 +52,44 @@ export default function Therapies() {
 		{name: 'Última execução', spacing: '44'},
 		{name: 'Nº de execuções', spacing: '40'},
 		{name: 'Último paciente a executar', spacing: '52'},
-		{name: '', spacing: '40'}
 	];
 
-    return (
-        <div className='flex flex-col p-16 w-[85%] gap-16'>
-            <div className='flex justify-between items-center'>
-                <div className='flex flex-col gap-2'>
-                    <Heading>Terapias</Heading>
-                    <Subheading>Gerencie as terapias disponíveis</Subheading>
-                </div>
-                <div className='w-48'>
-                    <ButtonMin text='Criar terapia'/>	
-                </div>
-            </div>
+	const [modalVisibility, setModalVisibility] = useState(false);
 
-            <Table headers={headers}>
-                {therapies.map((therapy, index) => (
-                    <TherapyItem key={index} therapy={therapy} />
-                ))}
-            </Table>
-        </div>
+	const openModal = () => {
+		setModalVisibility(true);
+	}
+
+	const onSubmit = (data: any) => {
+		setModalVisibility(false);
+	}
+
+	const onCancel = () => {
+		setModalVisibility(false);
+	}
+
+    return (
+        <div className='w-[85%]'>
+			<div className='flex flex-col p-16  gap-16'>
+				<div className='flex justify-between items-center'>
+					<div className='flex flex-col gap-2'>
+						<Heading>Terapias</Heading>
+						<Subheading>Gerencie as terapias disponíveis</Subheading>
+					</div>
+					<div className='w-48'>
+						<ButtonMin text='Criar terapia' onClick={openModal} />	
+					</div>
+				</div>
+
+				<Table headers={headers}>
+					{therapies.map((therapy, index) => (
+						<TherapyItem key={index} therapy={therapy} />
+					))}
+				</Table>
+        	</div>
+			{modalVisibility && (
+				<AddNewTherapyModal onCancel={onCancel} onSubmit={onSubmit} />
+			)}
+		</div>
     );
 }

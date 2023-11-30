@@ -18,6 +18,11 @@ import DraggableItems from '@/app/components/DraggableItems';
 import * as Boards from '@/public/boards';
 import chunkArray from '@/app/helpers/chuckArray';
 import { commandNameMapping, generateRawCode } from '@/app/helpers/codeGenerator';
+import Modal from '@/app/components/Modal';
+import FormHeading from '@/app/components/FormHeading';
+import { Field } from 'react-hook-form';
+import Form from '@/app/components/Form';
+import DeleteTherapyModal from '@/app/components/DeleteTherapyModal';
 
 export default function Terapy() {
     const [activeQuadrant, setActiveQuadrant] = useState(0);
@@ -36,17 +41,40 @@ export default function Terapy() {
 	const boardIcons = Object.values(Boards);
     const chunkedBoardIcons = useMemo(() => chunkArray(boardIcons, 3), [boardIcons]);
 
+	const [modalVisibility, setModalVisibility] = useState(false);
+
+	const openModal = () => {
+		setModalVisibility(true);
+	}
+
+	const onSubmit = () => {
+		setModalVisibility(false);
+	}
+
+	const onCancel = () => {
+		setModalVisibility(false);
+	}
+
+	const onClickTrashIcon = () => {
+		openModal();
+	};
+
     return (
-        <div className='flex flex-col w-[85%] h-[100vh]'>
-            <TherapyHeader {...{ therapyName, isEditing, handleNameClick, handleNameChange, handleNameBlur, isToggleOn, handleToggleClick }} />
-            <div className='flex w-full h-[100%]'>
-                <div className='flex flex-col w-[78%] h-[100%]'>
-                    <DraggableItems droppedItems={droppedItems} />
-                    <DroppedItems {...{ droppedItems, handleDragOver, handleDrop }} />
-                </div>
-                <BoardIcons {...{ handleQuadrantClick, activeQuadrant, chunkedBoardIcons }} />
-            </div>
-        </div>
+        <div className='w-[85%]'>
+			<div className='flex flex-col h-[100vh]'>
+				<TherapyHeader {...{ therapyName, isEditing, handleNameClick, handleNameChange, handleNameBlur, isToggleOn, handleToggleClick, onClickTrashIcon }} />
+				<div className='flex w-full h-[100%]'>
+					<div className='flex flex-col w-[78%] h-[100%]'>
+						<DraggableItems droppedItems={droppedItems} />
+						<DroppedItems {...{ droppedItems, handleDragOver, handleDrop }} />
+					</div>
+					<BoardIcons {...{ handleQuadrantClick, activeQuadrant, chunkedBoardIcons }} />
+				</div>
+        	</div>
+			{modalVisibility && (
+				<DeleteTherapyModal onSubmit={onSubmit} onCancel={onCancel} />
+			)}
+		</div>
     )
 }
 
