@@ -12,6 +12,10 @@ Para o design e estilização, escolhemos o Tailwind CSS. Este framework de CSS 
 
 Para assegurar a qualidade do nosso código JavaScript, incorporamos o ESLint, uma ferramenta de linting de código aberto. Com o ESLint, podemos identificar e corrigir problemas no nosso código antes que eles se tornem questões mais graves. Isso aprimora a qualidade do nosso código e nos auxilia a manter um estilo de codificação consistente em todo o projeto.
 
+# Demonstração (parcial - 3ª sprint)
+
+https://youtu.be/13m9BhTAEB0
+
 # Sobre o Sistema
 
 O "Portal do Terapeuta" é uma aplicação desenvolvida para a AACD (Associação de Assistência à Criança Deficiente). Ele é uma ferramenta dedicada aos terapeutas, projetada para facilitar a organização e a execução de suas tarefas diárias.
