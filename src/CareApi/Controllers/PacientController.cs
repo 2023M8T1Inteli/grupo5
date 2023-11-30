@@ -27,17 +27,6 @@ namespace CareApi.Controllers
             return pacient;
         }
 
-        [HttpGet("cif/{cif}")]
-        public async Task<ActionResult<Pacient>> GetByCif(string cif)
-        {
-            var pacient = await _pacientService.GetByCifAsync(cif);
-            if (pacient is null)
-            {
-                return NotFound();
-            }
-            return pacient;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post(Pacient newPacient)
         {

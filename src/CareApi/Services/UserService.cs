@@ -23,9 +23,6 @@ namespace CareApi.Services
         public async Task<User> GetByNameAsync(string name) =>
             await _userCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
-        public async Task<User> GetByCrefitoAsync(string crefito) =>
-            await _userCollection.Find(x => x.Crefito == crefito).FirstOrDefaultAsync();
-
         public async Task CreateOneAsync(User user) =>
             await _userCollection.InsertOneAsync(user);
 
@@ -35,13 +32,7 @@ namespace CareApi.Services
         public async Task UpdateByNameAsync(User user, string name) =>
             await _userCollection.ReplaceOneAsync(x => x.Name == name, user);
 
-        public async Task UpdateByCrefitoAsync(User user, string crefito) =>
-            await _userCollection.ReplaceOneAsync(x => x.Crefito == crefito, user);
-
         public async Task RemoveByNameAsync(string name) =>
             await _userCollection.DeleteOneAsync(x => x.Name == name);
-
-        public async Task RemoveByCrefito(string crefito) =>
-            await _userCollection.DeleteOneAsync(x => x.Crefito == crefito);
     }
 }

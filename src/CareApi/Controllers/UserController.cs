@@ -25,14 +25,6 @@ namespace CareApi.Controllers
             return user;
         }
 
-        [HttpGet("crefito/{crefito}")]
-        public async Task<ActionResult<User>> GetByCrefito(string crefito)
-        {
-            var user = await _userService.GetByCrefitoAsync(crefito);
-            if (user is null) { return NotFound(); };
-            return user;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post(User newUser)
         {
@@ -58,20 +50,7 @@ namespace CareApi.Controllers
             updatedUser.Name = user.Name;
             await _userService.UpdateByNameAsync(updatedUser, name);
             return NoContent();
-        }
-
-        [HttpPut("crefito/{crefito}")]
-        public async Task<IActionResult> UpdateByCrefito(User updatedUser, string crefito)
-        {
-            var user = await _userService.GetByCrefitoAsync(crefito);
-            if (user is null)
-            {
-                return NotFound();
-            }
-            updatedUser.Name = user.Name;
-            await _userService.UpdateByCrefitoAsync(updatedUser, crefito);
-            return NoContent();
-        }       
+        }  
 
         [HttpDelete("name/{name}")]
         public async Task<IActionResult> DeleteByName(string name)
@@ -83,19 +62,6 @@ namespace CareApi.Controllers
             }
             await _userService.RemoveByNameAsync(name);
             return NoContent();
-        }
-
-        [HttpDelete("crefito/{crefito}")]
-        public async Task<IActionResult> DeleteByCrefto(string crefito)
-        {
-            var user = await _userService.GetByCrefitoAsync(crefito);
-            if (user is null)
-            {
-                return NotFound();
-            }
-            await _userService.RemoveByCrefito(crefito);
-            return NoContent();
-
         }
     }
 }
