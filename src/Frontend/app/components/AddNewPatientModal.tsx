@@ -2,6 +2,7 @@ import Modal from "./Modal"
 import FormHeading from "./FormHeading"
 import { Field } from "./Form"
 import Form from "./Form"
+import { useForm } from "react-hook-form";
 
 export default function AddNewPatientModal({onSubmit, onCancel}: { onSubmit: (data: any) => void; onCancel: () => void }) {
 	const fields : Field[] = [
@@ -23,10 +24,14 @@ export default function AddNewPatientModal({onSubmit, onCancel}: { onSubmit: (da
 		},
 	  ]
 
+	  const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
+		mode: 'all',
+	});
+
 	return(
 		<Modal>
 			<FormHeading>Adicionar novo paciente</FormHeading>
-			<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
+			<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel} register={register} handleSubmit={handleSubmit} errors={errors} trigger={trigger} setValue={setValue}/>
 		</Modal>
 	)
 }

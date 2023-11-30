@@ -33,7 +33,6 @@ interface FormProps {
 
 const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, onCancel, register, handleSubmit, errors, trigger, setValue }) => {
 
-
   const inputsRef = useRef<Array<HTMLInputElement | HTMLSelectElement | null>>([]);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);

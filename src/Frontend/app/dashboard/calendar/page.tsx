@@ -10,6 +10,7 @@ import Calendar from "@/app/components/Calendar";
 import { format } from 'date-fns';
 import NextPatient from "@/app/components/NextPatient";
 import { InputSelectProps } from "@/app/components/InputSelect";
+import { useForm } from "react-hook-form";
 
 export default function Agenda() {
 	const [modalVisibility, setModalVisibility] = useState(false);
@@ -26,7 +27,7 @@ export default function Agenda() {
 		setModalVisibility(false);
 	}
 
-	const fields : Field[] | InputSelectProps[] = [
+	const fields: Field[] | InputSelectProps[] = [
 		{
 			label: 'Paciente',
 			name: 'patient',
@@ -57,26 +58,28 @@ export default function Agenda() {
 		},
 	]
 
-	const events : any = {
+	const events: any = {
 		'2023-11-06': [{ id: 1, name: 'João Paulo', hour: '14:00', data: '10 de novembro de 2023' }],
 		'2023-11-24': [{ id: 1, name: 'Maria Eduarda', hour: '13:30', data: 'Hoje, 24 de novembro de 2023' }],
-	  };
+	};
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
 	const handleDateSelect = (date: Date) => {
 		setSelectedDate(date);
-	  };
-	
-	  // Function to get events for the selected date
-	  const getEventsForSelectedDate = () => {
+	};
+
+	// Function to get events for the selected date
+	const getEventsForSelectedDate = () => {
 		const formattedDate = format(selectedDate, 'yyyy-MM-dd');
 		return events[formattedDate];
-	  };
+	};
 
+	const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
+		mode: 'all',
+	});
 
-
-	return(
+	return (
 		<div className='w-[85%]'>
 			<div className='flex flex-col p-16  gap-10'>
 				<div className='flex justify-between items-center'>
@@ -85,7 +88,7 @@ export default function Agenda() {
 						<Subheading>Confira os seus atendimentos de forma organizada</Subheading>
 					</div>
 					<div className='w-48'>
-						<ButtonMin text='Adicionar novo' onClick={openModal} />	
+						<ButtonMin text='Adicionar novo' onClick={openModal} />
 					</div>
 				</div>
 				<div className='flex'>
@@ -93,17 +96,17 @@ export default function Agenda() {
 						<Calendar events={events} onDateSelect={handleDateSelect} />
 					</div>
 					<div className='flex flex-col'>
-						{getEventsForSelectedDate()?.map((event : any, index : any) => (
+						{getEventsForSelectedDate()?.map((event: any, index: any) => (
 							<NextPatient key={index} name={event.name} hour={event.hour} data={event.data} />
 						))}
 					</div>
 				</div>
 
-        	</div>
+			</div>
 			{modalVisibility && (
 				<Modal>
 					<FormHeading>Adicionar novo evento</FormHeading>
-					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel}/>
+					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel} register={register} handleSubmit={handleSubmit} errors={errors} trigger={trigger} setValue={setValue} />
 				</Modal>
 			)}
 		</div>
