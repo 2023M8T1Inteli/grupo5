@@ -3,6 +3,9 @@ import TableItem from './TableItem';
 import Trash from '@/public/trash.svg'
 import { ITherapist } from '../dashboard/therapists/page';
 import Tag from './Tag';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
 
 export function TherapistItem({therapist} : { therapist: ITherapist }) {
 
@@ -19,6 +22,23 @@ export function TherapistItem({therapist} : { therapist: ITherapist }) {
 		}
 	}
 
+	const deleteTherapist = () => {
+		const toastId = toast.loading('Excluindo terapeuta...');
+		axios.delete(`http://localhost:80/user/${therapist.id}`).then(() => {
+			toast.update(toastId, {
+				render: 'Terapeuta excluído com sucesso!',
+				type: 'success',
+				autoClose: 3000,
+			});
+		}).catch(() => {
+			toast.update(toastId, {
+				render: 'Erro ao excluir terapeuta!',
+				type: 'error',
+				autoClose: 3000,
+			});
+		});
+	}
+
     return (
         <div className='bg-white p-6 flex justify-between hover:bg-[#EAECF0] border-solid border-[#EAECF0]'>
 			<div className='flex'>
@@ -29,7 +49,7 @@ export function TherapistItem({therapist} : { therapist: ITherapist }) {
 				</TableItem>
 			</div>
             <TableItem className='flex justify-end'>
-                <button className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></button>
+                <button onClick={deleteTherapist} className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></button>
             </TableItem>
         </div>
     );
