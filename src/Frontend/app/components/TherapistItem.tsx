@@ -22,19 +22,21 @@ export function TherapistItem({therapist} : { therapist: ITherapist }) {
 		}
 	}
 
-	const deleteTherapist = () => {
+	const deleteTherapist = async () => {
 		const toastId = toast.loading('Excluindo terapeuta...');
-		axios.delete(`http://localhost:80/user/${therapist.id}`).then(() => {
+		axios.delete(`http://localhost:80/user/name/${therapist.name}`).then(() => {
 			toast.update(toastId, {
 				render: 'Terapeuta excluído com sucesso!',
 				type: 'success',
 				autoClose: 3000,
+				isLoading: false,
 			});
 		}).catch(() => {
 			toast.update(toastId, {
 				render: 'Erro ao excluir terapeuta!',
 				type: 'error',
 				autoClose: 3000,
+				isLoading: false,
 			});
 		});
 	}
