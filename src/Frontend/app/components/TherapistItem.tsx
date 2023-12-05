@@ -29,7 +29,7 @@ export function TherapistItem({therapist} : { therapist: ITherapist }) {
 				</TableItem>
 			</div>
             <TableItem className='flex justify-end'>
-                <a className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></a>
+                <button className='cursor-pointer w-10 h-10 flex justify-center items-center hover:scale-125 duration-300'><Image src={Trash} alt='Excluir' /></button>
             </TableItem>
         </div>
     );

@@ -6,9 +6,13 @@ import Modal from "@/app/components/Modal";
 import Subheading from "@/app/components/Subheading";
 import Table from "@/app/components/Table";
 import { TherapistItem } from "@/app/components/TherapistItem";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form, { Field } from '@/app/components/Form';
 import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface ITherapist {
 	id: string;
@@ -24,22 +28,21 @@ export default function Therapists() {
 		{ name: 'Cargo', spacing: '44' },
 	];
 
-	const therapists: ITherapist[] = [
-		{
-			id: '3bbe2596-f302-41c8-9bba-784a6e2948c0',
-			name: 'Ana Carolina',
-			email: 'carol@aacd.com.br',
-			role: 'admin'
-		},
-		{
-			id: '4ev496-f303-13a3-8aac-323n4b1645c9',
-			name: 'Juliana Silva',
-			email: 'juliana@aacd.com.br',
-			role: 'therapist'
-		},
+	const [therapists, setTherapists] = useState<ITherapist[]>([]);
 
-
-	];
+	useEffect(() => {
+		const therapists = axios.get('http://localhost:80/user/all').then(response => {
+			const therapists: ITherapist[] = response.data.map((therapist: any) : ITherapist => {
+				return {
+					id: uuidv4().toString(),
+					name: therapist.name,
+					email: therapist.email,
+					role: 'therapist'
+				}
+			});
+			setTherapists(therapists);
+		});
+	}, [therapists]);
 
 	const [modalVisibility, setModalVisibility] = useState(false);
 
@@ -47,8 +50,33 @@ export default function Therapists() {
 		setModalVisibility(true);
 	}
 
-	const onSubmit = (data: any) => {
-		setModalVisibility(false);
+	const onSubmit = async (data: any) => {
+		console.log(data);
+		const toastId = toast.loading('Adicionando terapeuta...');
+		try {
+			await axios.post('http://localhost:80/user/', {
+				name: data.fullName,
+				email: data.email,
+				password: '12345678',
+				role: 'therapist'
+			});
+
+			toast.update(toastId, {
+				render: 'Terapeuta adicionado com sucesso!',
+				type: 'success',
+				autoClose: 2000,
+				isLoading: false,
+			});
+
+			setModalVisibility(false);
+		} catch (error) {
+			toast.update(toastId, {
+				render: 'Erro ao adicionar terapeuta!',
+				type: 'error',
+				autoClose: 2000,
+				isLoading: false,
+			});
+		}
 	}
 
 	const onCancel = () => {
@@ -58,7 +86,7 @@ export default function Therapists() {
 	const fields: Field[] = [
 		{
 			label: 'Nome completo',
-			name: 'full-name',
+			name: 'fullName',
 			placeholder: 'Digite o nome completo do terapeuta',
 			minLength: 5,
 			maxLength: 100,
@@ -70,6 +98,7 @@ export default function Therapists() {
 			placeholder: 'Digite o e-mail do terapeuta',
 			type: 'email',
 			required: true,
+			pattern: /^[^@]+@[^@]+\.[^@]+$/
 		},
 	]
 	const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
@@ -100,6 +129,7 @@ export default function Therapists() {
 					<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel} register={register} handleSubmit={handleSubmit} errors={errors} trigger={trigger} setValue={setValue} />
 				</Modal>
 			)}
+			<ToastContainer closeButton={false} />
 		</div>
 	)
 }
