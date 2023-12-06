@@ -1,4 +1,5 @@
-﻿using CareApi.Models;
+﻿using CareApi.Dtos;
+using CareApi.Models;
 using CareApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,20 @@ namespace CareApi.Controllers
         public UserController(UserService userService) =>
             _userService = userService;
 
+        /// <summary>
+        /// Creates a new user.
+        /// </summary>
+        /// <param name="createUserDto">The user data transfer object.</param>
+        /// <returns>A newly created user.</returns>
+        /// <response code="201">Returns the newly created user</response>
+        /// <response code="400">If the item is null</response>  
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateUserDto user)
+        {
+            var newUser = await _userService.CreateOneAsync(user);
+            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, new { id = newUser.Id, name = newUser.Name, email = newUser.Email, role = newUser.Role });
+        }
+
         [HttpGet("all")]
         public async Task<List<User>> Get() =>
             await _userService.GetManyAsync();
@@ -23,13 +38,6 @@ namespace CareApi.Controllers
             var user = await _userService.GetByNameAsync(name);
             if (user is null) { return NotFound(); };
             return user;
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post(User newUser)
-        {
-            await _userService.CreateOneAsync(newUser);
-            return CreatedAtAction(nameof(Get), new { name = newUser.Name }, newUser);
         }
 
         [HttpPost("many")]

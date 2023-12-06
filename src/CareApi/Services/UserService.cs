@@ -1,4 +1,5 @@
-﻿using CareApi.Models;
+﻿using CareApi.Dtos;
+using CareApi.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -23,8 +24,21 @@ namespace CareApi.Services
         public async Task<User> GetByNameAsync(string name) =>
             await _userCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
-        public async Task CreateOneAsync(User user) =>
+        public async Task<User> CreateOneAsync(CreateUserDto createUserDto)
+        {
+            var user = new User
+            {
+                Id = createUserDto.Id,
+                Name = createUserDto.Name,
+                Email = createUserDto.Email,
+                Role = createUserDto.Role
+            };
+
             await _userCollection.InsertOneAsync(user);
+
+            return user;
+        }
+             
 
         public async Task CreateManyAsync(List<User> users) =>
             await _userCollection.InsertManyAsync(users);
