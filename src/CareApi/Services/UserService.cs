@@ -132,5 +132,16 @@ namespace CareApi.Services
                 iterationCount: 100000,
                 numBytesRequested: 256 / 8));
         }
+
+        public bool VerifyPassword(string password, string storedHash)
+        {
+            return HashPassword(password) == storedHash;
+        }
+
+        public async Task<string> GetHashedPasswordByEmailAsync(string email)
+        {
+            var user = await _userCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
+            return user?.Password; // This will return null if the user is not found
+        }
     }
 }

@@ -3,6 +3,10 @@ using CareApi.Models;
 using CareApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using System.Security.Claims;
 
 namespace CareApi.Controllers
 {
@@ -12,9 +16,13 @@ namespace CareApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
+        private readonly IConfiguration _configuration;
 
-        public UserController(UserService userService) =>
+        public UserController(UserService userService, IConfiguration configuration)
+        {
             _userService = userService;
+            _configuration = configuration;
+        }
  
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserDto user)
@@ -84,6 +92,49 @@ namespace CareApi.Controllers
             }
 
             return Ok("Password has been reset successfully.");
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] Login login)
+        {
+            // Validate the incomnig request
+            if (login == null || string.IsNullOrEmpty(login.UserName) || string.IsNullOrEmpty(login.Password))
+            {
+                return BadRequest("Missing login details");
+            }
+
+            // Verify user credentials 
+            var user = await _userService.GetByNameAsync(login.UserName);
+            var userHash = await _userService.GetHashedPasswordByEmailAsync(login.UserName);
+            if (user is null || !_userService.VerifyPassword(login.Password, userHash))
+            {
+                return Unauthorized("Invalid credentials");
+            }
+
+            var token = GenerateJwtToken(user);
+
+            // Return the token
+            return Ok(new { Token = token });
+        }
+
+        private string GenerateJwtToken(User user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Name),
+                }),
+                Expires = DateTime.UtcNow.AddHours(3),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Issuer = _configuration["JwtSettings:Issuer"],
+                Audience = _configuration["JwtSettings:Audience"]
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
