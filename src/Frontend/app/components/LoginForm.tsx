@@ -60,10 +60,9 @@ export default function LoginForm() {
 			setTimeout(() => {
 				router.push('/dashboard');
 			}, 2000);
-		})
-			.catch((error) => {
+		}).catch((error) => {
 				console.error('Login error:', error);
-			});
+		});
 	}
 	return (
 		<div>
