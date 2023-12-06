@@ -1,9 +1,11 @@
 ﻿using CareApi.Dtos;
 using CareApi.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.ComponentModel;
+using System.Security.Cryptography;
 
 namespace CareApi.Services
 {
@@ -45,13 +47,27 @@ namespace CareApi.Services
                 Name = createUserDto.Name,
                 Email = createUserDto.Email,
                 Role = createUserDto.Role
+                // Não definir a senha aqui pois ela será configurada pelo usuário
             };
 
             await _userCollection.InsertOneAsync(user);
 
+            // Gerar e definir o token de redefinição de senha
+            var token = GeneratePasswordResetToken();
+            var expiration = DateTime.UtcNow.AddHours(1); // Token expira em 1 hora
+            var update = Builders<User>.Update
+                .Set(u => u.PasswordResetToken, token)
+                .Set(u => u.PasswordResetTokenExpiration, expiration);
+            await _userCollection.UpdateOneAsync(u => u.Email == user.Email, update);
+
+            // Enviar o e-mail com o link de redefinição de senha
+            var emailService = new MailgunEmailService();
+            await emailService.SendPasswordSetupEmailAsync(user.Email, token);
+
             return user;
         }
-             
+
+
 
         public async Task CreateManyAsync(List<User> users) =>
             await _userCollection.InsertManyAsync(users);
@@ -67,6 +83,54 @@ namespace CareApi.Services
         {
             var user = await _userCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
             return user != null;
+        }
+
+        public string GeneratePasswordResetToken()
+        {
+            var tokenData = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(tokenData);
+            }
+            return Convert.ToBase64String(tokenData);
+        }
+     
+
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
+            if (user == null || user.PasswordResetToken != token || user.PasswordResetTokenExpiration < DateTime.UtcNow)
+            {
+                return false;
+            }
+
+            // Hash the new password
+            var hashedNewPassword = HashPassword(newPassword);
+
+            var update = Builders<User>.Update
+                .Set(u => u.Password, hashedNewPassword)
+                .Unset(u => u.PasswordResetToken) // Remove the token after it's been used
+                .Unset(u => u.PasswordResetTokenExpiration);
+
+            var result = await _userCollection.UpdateOneAsync(u => u.Email == email, update);
+
+            return result.ModifiedCount == 1;
+        }
+
+        private string HashPassword(string password)
+        {
+            // Generate a random salt
+            byte[] salt = new byte[128 / 8];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(salt);
+            }
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password: password,
+                salt: salt,
+                prf: KeyDerivationPrf.HMACSHA256,
+                iterationCount: 100000,
+                numBytesRequested: 256 / 8));
         }
     }
 }

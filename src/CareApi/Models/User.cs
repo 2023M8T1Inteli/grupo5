@@ -15,5 +15,7 @@ namespace CareApi.Models
         public string Email { get; set; } = null!;
         public string? Role { get; set; } = null!;
         public string? Password { get; set; } = null!;
+        public string? PasswordResetToken { get; set; }
+        public DateTime? PasswordResetTokenExpiration { get; set; }
     }
 }
