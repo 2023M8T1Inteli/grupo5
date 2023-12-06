@@ -1,6 +1,11 @@
-﻿using CareApi.Models;
+﻿using CareApi.Dtos;
+using CareApi.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System.ComponentModel;
+using System.Security.Cryptography;
 
 namespace CareApi.Services
 {
@@ -17,13 +22,22 @@ namespace CareApi.Services
             _userCollection = mongoDatabase.GetCollection<User>(dbSettings.Value.UserCollectionName);
         }
 
-        public async Task<List<User>> GetManyAsync() =>
-            await _userCollection.Find(_ => true).ToListAsync();
+        public async Task<List<dynamic>> GetManyAsync()
+        {
+            var projection = Builders<User>.Projection.Exclude(u => u.Password);
+            var bsonUsers = await _userCollection.Find(_ => true)
+                                                 .Project(projection)
+                                                 .ToListAsync();
+
+            var users = bsonUsers.Select(bson => BsonSerializer.Deserialize<dynamic>(bson)).ToList();
+
+            return users;
+        }
+
+
 
         public async Task<User> GetByNameAsync(string name) =>
             await _userCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
-
-
 
         public async Task<User> CreateOneAsync(CreateUserDto createUserDto)
         {
@@ -38,6 +52,23 @@ namespace CareApi.Services
 
             await _userCollection.InsertOneAsync(user);
 
+            // Gerar e definir o token de redefinição de senha
+            var token = GeneratePasswordResetToken();
+            var expiration = DateTime.UtcNow.AddHours(1); // Token expira em 1 hora
+            var update = Builders<User>.Update
+                .Set(u => u.PasswordResetToken, token)
+                .Set(u => u.PasswordResetTokenExpiration, expiration);
+            await _userCollection.UpdateOneAsync(u => u.Email == user.Email, update);
+
+            // Enviar o e-mail com o link de redefinição de senha
+            var emailService = new MailgunEmailService();
+            await emailService.SendPasswordSetupEmailAsync(user.Email, token);
+
+            return user;
+        }
+
+
+
         public async Task CreateManyAsync(List<User> users) =>
             await _userCollection.InsertManyAsync(users);
 
@@ -49,7 +80,6 @@ namespace CareApi.Services
 
         public async Task RemoveByIdAsync(string id) =>
             await _userCollection.DeleteOneAsync(x => x.Id == id);
-
 
         public async Task<bool> CheckUserExistsByEmailAsync(string email)
         {
