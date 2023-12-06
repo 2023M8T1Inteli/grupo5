@@ -17,6 +17,9 @@ namespace CareApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserDto user)
         {
+            if (await _userService.CheckUserExistsByEmailAsync(user.Email)) { 
+                return Conflict("User already exists with that email");
+            }
             var newUser = await _userService.CreateOneAsync(user);
             return CreatedAtAction(nameof(Get), new { id = newUser.Id }, new { id = newUser.Id, name = newUser.Name, email = newUser.Email, role = newUser.Role });
         }

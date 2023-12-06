@@ -3,6 +3,7 @@ using CareApi.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using System.ComponentModel;
 
 namespace CareApi.Services
 {
@@ -60,5 +61,12 @@ namespace CareApi.Services
 
         public async Task RemoveByNameAsync(string name) =>
             await _userCollection.DeleteOneAsync(x => x.Name == name);
+
+
+        public async Task<bool> CheckUserExistsByEmailAsync(string email)
+        {
+            var user = await _userCollection.Find(u => u.Email == email).FirstOrDefaultAsync();
+            return user != null;
+        }
     }
 }
