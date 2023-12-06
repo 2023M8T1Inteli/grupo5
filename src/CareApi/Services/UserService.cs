@@ -1,6 +1,7 @@
 ﻿using CareApi.Dtos;
 using CareApi.Models;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace CareApi.Services
@@ -18,8 +19,19 @@ namespace CareApi.Services
             _userCollection = mongoDatabase.GetCollection<User>(dbSettings.Value.UserCollectionName);
         }
 
-        public async Task<List<User>> GetManyAsync() =>
-            await _userCollection.Find(_ => true).ToListAsync();
+        public async Task<List<dynamic>> GetManyAsync()
+        {
+            var projection = Builders<User>.Projection.Exclude(u => u.Password);
+            var bsonUsers = await _userCollection.Find(_ => true)
+                                                 .Project(projection)
+                                                 .ToListAsync();
+
+            var users = bsonUsers.Select(bson => BsonSerializer.Deserialize<dynamic>(bson)).ToList();
+
+            return users;
+        }
+
+
 
         public async Task<User> GetByNameAsync(string name) =>
             await _userCollection.Find(x => x.Name == name).FirstOrDefaultAsync();

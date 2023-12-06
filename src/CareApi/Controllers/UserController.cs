@@ -13,14 +13,7 @@ namespace CareApi.Controllers
 
         public UserController(UserService userService) =>
             _userService = userService;
-
-        /// <summary>
-        /// Creates a new user.
-        /// </summary>
-        /// <param name="createUserDto">The user data transfer object.</param>
-        /// <returns>A newly created user.</returns>
-        /// <response code="201">Returns the newly created user</response>
-        /// <response code="400">If the item is null</response>  
+ 
         [HttpPost]
         public async Task<IActionResult> Create(CreateUserDto user)
         {
@@ -29,9 +22,13 @@ namespace CareApi.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<List<User>> Get() =>
-            await _userService.GetManyAsync();
-    
+        public async Task<ActionResult<List<User>>> Get()
+        {
+            var users = await _userService.GetManyAsync();
+            return Ok(users);
+        }
+
+
         [HttpGet("name/{name}")]
         public async Task<ActionResult<User>> GetByName(string name)
         {
