@@ -6,11 +6,26 @@ using System.Threading.Tasks;
 public class MailgunEmailService
 {
     private readonly RestClient _client;
-    private readonly string _domain = "sandbox9ad8ff59c37e4dfc9471a5b03a8b97a3.mailgun.org";
-    private readonly string apiKey = "d730336df181d0414b23484ffbf49b26-0a688b4a-3df24469";
+    private readonly string? _domain;
+    private readonly string? apiKey;
 
     public MailgunEmailService()
     {
+
+        _domain = Environment.GetEnvironmentVariable("MAILGUN_DOMAIN");
+
+        if (_domain is null)
+        {
+            throw new ApplicationException("MAILGUN_DOMAIN environment variable not set");
+        }
+
+        apiKey = Environment.GetEnvironmentVariable("MAILGUN_API_KEY");
+
+        if (apiKey is null)
+        {
+            throw new ApplicationException("MAILGUN_API_KEY environment variable not set");
+        }
+
         var options = new RestClientOptions($"https://api.mailgun.net/v3/")
         {
             Authenticator = new HttpBasicAuthenticator("api", apiKey)
