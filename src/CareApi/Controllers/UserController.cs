@@ -31,13 +31,35 @@ namespace CareApi.Controllers
             return Ok(users);
         }
 
-
         [HttpGet("name/{name}")]
         public async Task<ActionResult<User>> GetByName(string name)
         {
             var user = await _userService.GetByNameAsync(name);
             if (user is null) { return NotFound(); };
             return user;
+        }
+
+        [HttpGet("id/{id}")]
+        public async Task<ActionResult<User>> GetById(string id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+            return user;
+        }
+
+        [HttpDelete("id/{id}")]
+        public async Task<IActionResult> DeleteById(string id)
+        {
+            var user = await _userService.GetByIdAsync(id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+            await _userService.RemoveByIdAsync(id);
+            return NoContent();
         }
 
         [HttpPost("many")]
@@ -60,21 +82,6 @@ namespace CareApi.Controllers
             return NoContent();
         }  
 
-<<<<<<< Updated upstream
-        [HttpDelete("name/{name}")]
-        public async Task<IActionResult> DeleteByName(string name)
-        {
-            var user = await _userService.GetByNameAsync(name);
-            if (user is null)
-            {
-                return NotFound();
-            }
-            await _userService.RemoveByNameAsync(name);
-            return NoContent();
-        }
-
-=======
->>>>>>> Stashed changes
         [HttpPost("activate")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
