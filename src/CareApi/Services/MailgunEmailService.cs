@@ -39,7 +39,7 @@ public class MailgunEmailService
         request.AddParameter("from", $"Portal do Terapeuta <noreply@{_domain}>");
         request.AddParameter("to", toEmail);
         request.AddParameter("subject", "Configuração de Senha");
-        request.AddParameter("text", $"Por favor, utilize o seguinte token para configurar sua senha: {token}");
+        request.AddParameter("text", $"Por favor, acesse o seguinte link para ativar a sua conta: http://localhost:3000/activate?email={toEmail}&token={token}");
 
         var response = await _client.ExecuteAsync(request);
         if (!response.IsSuccessful)
