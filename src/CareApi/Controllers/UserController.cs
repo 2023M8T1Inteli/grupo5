@@ -82,19 +82,6 @@ namespace CareApi.Controllers
             return NoContent();
         }  
 
-
-        [HttpPost("activate")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
-        {
-            var success = await _userService.ResetPasswordAsync(resetPasswordDto.Email, resetPasswordDto.Token, resetPasswordDto.NewPassword);
-            if (!success)
-            {
-                return BadRequest("Unable to reset password with provided token and email.");
-            }
-
-            return Ok("Password has been reset successfully.");
-        }
-
         [HttpPost("activate")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {

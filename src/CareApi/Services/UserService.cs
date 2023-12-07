@@ -94,9 +94,13 @@ namespace CareApi.Services
             {
                 rng.GetBytes(tokenData);
             }
-            return Convert.ToBase64String(tokenData);
+            string token = Convert.ToBase64String(tokenData)
+                .Replace('+', '-')
+                .Replace('/', '_')
+                .TrimEnd('=');
+            return token;
         }
-     
+
 
         public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
         {
