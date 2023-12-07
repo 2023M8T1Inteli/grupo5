@@ -60,6 +60,7 @@ namespace CareApi.Controllers
             return NoContent();
         }  
 
+<<<<<<< Updated upstream
         [HttpDelete("name/{name}")]
         public async Task<IActionResult> DeleteByName(string name)
         {
@@ -72,6 +73,8 @@ namespace CareApi.Controllers
             return NoContent();
         }
 
+=======
+>>>>>>> Stashed changes
         [HttpPost("activate")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
