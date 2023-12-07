@@ -399,3 +399,6 @@ FodyWeavers.xsd
 .vscode
 target
 *.pdf
+
+# Data generated from Docker-COmpose
+./init-mongodb/data

@@ -82,6 +82,7 @@ namespace CareApi.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpPost("activate")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
@@ -94,26 +95,32 @@ namespace CareApi.Controllers
             return Ok("Password has been reset successfully.");
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             // Validate the incomnig request
-            if (login == null || string.IsNullOrEmpty(login.UserName) || string.IsNullOrEmpty(login.Password))
+            if (login == null || string.IsNullOrEmpty(login.Email) || string.IsNullOrEmpty(login.Password))
             {
                 return BadRequest("Missing login details");
             }
 
-            // Verify user credentials 
-            var user = await _userService.GetByNameAsync(login.UserName);
-            var userHash = await _userService.GetHashedPasswordByEmailAsync(login.UserName);
-            if (user is null || !_userService.VerifyPassword(login.Password, userHash))
+            var user = await _userService.GetByEmailAsync(login.Email);
+            var userHash = await _userService.GetHashedPasswordByEmailAsync(login.Email);
+
+            if (user is null)
+            {
+                return BadRequest("User does no exist");
+            }
+
+            if (!_userService.VerifyPassword(login.Password, userHash))
             {
                 return Unauthorized("Invalid credentials");
             }
 
             var token = GenerateJwtToken(user);
 
-            // Return the token
+            //Return the token
             return Ok(new { Token = token });
         }
 
@@ -126,8 +133,9 @@ namespace CareApi.Controllers
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.Name),
+                    new Claim(ClaimTypes.Email, user.Email)
                 }),
-                Expires = DateTime.UtcNow.AddHours(3),
+                Expires = DateTime.UtcNow.AddHours(6),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                 Issuer = _configuration["JwtSettings:Issuer"],
                 Audience = _configuration["JwtSettings:Audience"]

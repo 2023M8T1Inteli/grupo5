@@ -39,6 +39,9 @@ namespace CareApi.Services
         public async Task<User> GetByNameAsync(string name) =>
             await _userCollection.Find(x => x.Name == name).FirstOrDefaultAsync();
 
+        public async Task<User> GetByEmailAsync(string email) =>
+            await _userCollection.Find(x => x.Email == email).FirstOrDefaultAsync();
+
         public async Task<User> CreateOneAsync(CreateUserDto createUserDto)
         {
             var user = new User
@@ -120,11 +123,8 @@ namespace CareApi.Services
         private string HashPassword(string password)
         {
             // Generate a random salt
-            byte[] salt = new byte[128 / 8];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(salt);
-            }
+            byte[] salt = new byte[] { 0x1a, 0x2b, 0x3c, 0x4d, 0x5e, 0x6f, 0x70, 0x81, 0x92, 0xa3, 0xb4, 0xc5, 0xd6, 0xe7, 0xf8, 0x09 };
+
             return Convert.ToBase64String(KeyDerivation.Pbkdf2(
                 password: password,
                 salt: salt,
