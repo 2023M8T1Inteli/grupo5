@@ -78,9 +78,11 @@ namespace CareApi.Services
         public async Task UpdateByNameAsync(User user, string name) =>
             await _userCollection.ReplaceOneAsync(x => x.Name == name, user);
 
-        public async Task RemoveByNameAsync(string name) =>
-            await _userCollection.DeleteOneAsync(x => x.Name == name);
+        public async Task<User> GetByIdAsync(string id) =>
+            await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+        public async Task RemoveByIdAsync(string id) =>
+            await _userCollection.DeleteOneAsync(x => x.Id == id);
 
         public async Task<bool> CheckUserExistsByEmailAsync(string email)
         {

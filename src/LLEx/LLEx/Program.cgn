@@ -1,11 +1,7 @@
-programa "alimentos":
+programa "teste semântico 2":
 inicio
-quadrante = ler()
-se quadrante == 1 entao 
-inicio
-mostrar(1)
-fim senao
-inicio
-tocar(2)
-fim
+x = 1
+y = 2
+mostrar(z)
+z = y
 fim.

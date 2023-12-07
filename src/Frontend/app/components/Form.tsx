@@ -15,6 +15,8 @@ export interface Field {
   minLength?: number;
   maxLength?: number;
   options?: { value: string | number; label: string }[];
+	disabled?: boolean;
+	defaultValue?: string;
 }
 
 interface FormProps {
@@ -74,6 +76,8 @@ const Form: React.FC<FormProps> = ({ fields, buttonText, onSubmit, cancelText, o
             placeholder={field.placeholder}
             type={field.type || 'text'}
             shortcut={`Alt+${index + 1}`}
+						disabled={field.disabled}
+						value={field.defaultValue}
             {...register(field.name, {
               required: field.required ? 'Este campo é obrigatório' : false,
               pattern: field.pattern ? { value: field.pattern, message: 'Formato inválido' } : undefined,

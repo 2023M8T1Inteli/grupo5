@@ -11,8 +11,8 @@ namespace LLEx
         private StringBuilder lexema;
         private int line = 1;
         private bool isString = false;
-        private bool isSimpleLineComment = false;
-        private bool isMultipleLineComment = false;
+        private bool isSimpleComment = false;
+        private bool isBlockComment = false;
 
         public Tokenizer(Source src, out StringBuilder output)
         {
@@ -58,29 +58,27 @@ namespace LLEx
 
             if (IsCharSlash(c))
             {
-                // One line comment
                 c = this.src.Peek();
-                if (IsCharSlash(c))
+                if (IsCharSlash(c) )
                 {
-                    isSimpleLineComment = true;
-                }
-                while (isSimpleLineComment)
-                {
-                    c = this.src.Peek();
-                    if (IsCharNewLine(c))
+                    isSimpleComment = true;
+                    while (isSimpleComment)
                     {
-                        isSimpleLineComment = false;
-                        this.line++;
-                        return ReadToken();
+                        c = this.src.Peek();
+                        if (IsCharNewLine(c))
+                        {
+                            isSimpleComment = false;
+                            this.line++;
+                            return ReadToken();
+                        }
                     }
                 }
 
-                // Multiple lines comment
                 if (IsCharTimes(c))
                 {
-                    isMultipleLineComment = true;
+                    isBlockComment = true;
 
-                    while (isMultipleLineComment)
+                    while (isBlockComment)
                     {
                         c = this.src.Peek();
                         if (IsCharTimes(c))
@@ -88,7 +86,7 @@ namespace LLEx
                             c = this.src.Peek();
                             if (IsCharSlash(c))
                             {
-                                isMultipleLineComment = false;
+                                isBlockComment = false;
                                 return ReadToken();
                             }
                         }
@@ -98,11 +96,15 @@ namespace LLEx
                         }
                     }
                 }
+
+                this.src.GoBack();
+                return new OPMUL(this.lexema.ToString(), line);
+
             }
-            else if (IsLexemaEqualsToAspas(c.ToString()))
+            if (IsLexemaEqualsToAspas(this.lexema.ToString()))
             {
                 this.isString = !isString;
-                return new DQUOTE(c.ToString(), line);
+                return new DQUOTE(this.lexema.ToString(), line);
             }
             else if (isString)
             {
@@ -256,35 +258,35 @@ namespace LLEx
             }
             else if (IsLexemaEqualsToSumOperator(c))
             {
-                return new OPSUM(c.ToString(), line);
+                return new OPSUM(this.lexema.ToString(), line);
             }
-            else if (IsCharMultiplicationOperator(c))
+            else if (IsLexemaEqualsToMulOperator(this.lexema.ToString()))
             {
-                return new OPMUL(c.ToString(), line);
+                return new OPMUL(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToPotencia(c.ToString()))
+            else if (IsLexemaEqualsToPotencia(this.lexema.ToString()))
             {
-                return new OPPOW(c.ToString(), line);
+                return new OPPOW(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToDoisPontos(c.ToString()))
+            else if (IsLexemaEqualsToDoisPontos(this.lexema.ToString()))
             {
-                return new COLON(c.ToString(), line);
+                return new COLON(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToVirgula(c.ToString()))
+            else if (IsLexemaEqualsToVirgula(this.lexema.ToString()))
             {
-                return new COMMA(c.ToString(), line);
+                return new COMMA(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToPontoFinal(c.ToString()))
+            else if (IsLexemaEqualsToPontoFinal(this.lexema.ToString()))
             {
-                return new DOT(c.ToString(), line);
+                return new DOT(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToAbreParenteses(c.ToString()))
+            else if (IsLexemaEqualsToAbreParenteses(this.lexema.ToString()))
             {
-                return new LPAR(c.ToString(), line);
+                return new LPAR(this.lexema.ToString(), line);
             }
-            else if (IsLexemaEqualsToFechaParenteses(c.ToString()))
+            else if (IsLexemaEqualsToFechaParenteses(this.lexema.ToString()))
             {
-                return new RPAR(c.ToString(), line);
+                return new RPAR(this.lexema.ToString(), line);
             }
             else if (IsCharNewLine(c))
             {
@@ -351,7 +353,7 @@ namespace LLEx
 
         private bool IsCharAlphanumericOrUnderline(char c)
         {
-            return IsCharAlphabetic(c) || IsCharUnderline(c);
+            return IsCharAlphabetic(c) || IsCharUnderline(c) || IsCharNumeric(c);
         }
 
         private bool IsCharSpaceOrReturnOrTab(char c)
@@ -389,11 +391,6 @@ namespace LLEx
             return c.CompareTo('%') == 0;
         }
 
-        private bool IsCharMultiplicationOperator(char c)
-        {
-            return IsCharTimes(c) || IsCharSlash(c) || IsCharMod(c);
-        }
-
         private bool IsCharQuotationMark(char c)
         {
             return c.CompareTo('\"') == 0;
@@ -402,6 +399,12 @@ namespace LLEx
         private bool IsCharNumeric(char c)
         {
             return (int)c > 47 && (int)c < 58;
+        }
+
+        private bool IsLexemaEqualsToMulOperator(string lexema)
+        {
+            char c = char.Parse(lexema);
+            return IsCharSlash(c) || IsCharMod(c) || IsCharTimes(c);
         }
 
         private bool IsLexemaEqualsToSumOperator(char c)

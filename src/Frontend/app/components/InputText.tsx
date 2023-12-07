@@ -13,9 +13,10 @@ export interface InputTextProps {
   onUnregister?: () => void;
   name?: string;
   error?: FieldError | Merge<FieldError, { message: string }>;
+	disabled?: boolean;
 }
 
-const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeholder, type = 'text', value, onChange, className, shortcut, onUnregister, name, error }, ref) => {
+const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeholder, type = 'text', value, onChange, className, shortcut, onUnregister, name, error, disabled }, ref) => {
   useEffect(() => {
     return () => {
       onUnregister?.();
@@ -38,7 +39,8 @@ const InputText = forwardRef<HTMLInputElement, InputTextProps>(({ label, placeho
         value={value}
         onChange={onChange}
         ref={ref}
-        className='w-full h-24 rounded-xl border-[1px] border-solid border-[#E6E6EB] p-8 text-2xl font-normal'
+				disabled={disabled ? true : false}
+        className='w-full h-24 rounded-xl border-[1px] border-solid border-[#E6E6EB] p-8 text-2xl font-normal disabled:bg-[#F6F8FA] disabled:text-[#909090] disabled:cursor-not-allowed'
       />
 	  {error && <span className="text-red-500 text-sm">{error.message}</span>} {/* Display error message */}
     </div>
