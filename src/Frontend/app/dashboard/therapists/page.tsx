@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter } from "next/navigation";
 
 export interface ITherapist {
 	id: string;
@@ -28,21 +29,28 @@ export default function Therapists() {
 		{ name: 'Cargo', spacing: '44' },
 	];
 
+	const router = useRouter();
+
 	const [therapists, setTherapists] = useState<ITherapist[]>([]);
 
-	useEffect(() => {
-		const therapists = axios.get('http://localhost:80/user/all').then(response => {
+	function getTherapists() {
+		axios.get('http://localhost:80/user/all').then(response => {
+			console.log(response.data);
 			const therapists: ITherapist[] = response.data.map((therapist: any) : ITherapist => {
 				return {
-					id: uuidv4().toString(),
-					name: therapist.name,
-					email: therapist.email,
+					id: therapist._id,
+					name: therapist.Name,
+					email: therapist.Email,
 					role: 'therapist'
 				}
 			});
 			setTherapists(therapists);
 		});
-	}, [therapists]);
+	}
+
+	useEffect(() => {
+		getTherapists();
+	}, []);
 
 	const [modalVisibility, setModalVisibility] = useState(false);
 
@@ -51,14 +59,11 @@ export default function Therapists() {
 	}
 
 	const onSubmit = async (data: any) => {
-		console.log(data);
 		const toastId = toast.loading('Adicionando terapeuta...');
 		try {
 			await axios.post('http://localhost:80/user/', {
 				name: data.fullName,
-				email: data.email,
-				password: '12345678',
-				role: 'therapist'
+				email: data.email
 			});
 
 			toast.update(toastId, {
@@ -69,6 +74,9 @@ export default function Therapists() {
 			});
 
 			setModalVisibility(false);
+
+			getTherapists();
+
 		} catch (error) {
 			toast.update(toastId, {
 				render: 'Erro ao adicionar terapeuta!',
@@ -119,7 +127,7 @@ export default function Therapists() {
 
 				<Table headers={headers}>
 					{therapists.map((therapist, index) => (
-						<TherapistItem key={index} therapist={therapist} />
+						<TherapistItem key={index} therapist={therapist} onDelete={getTherapists}/>
 					))}
 				</Table>
 			</div>
