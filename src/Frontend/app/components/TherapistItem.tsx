@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
-export function TherapistItem({therapist} : { therapist: ITherapist }) {
+export function TherapistItem({therapist, onDelete} : { therapist: ITherapist, onDelete: () => void }) {
 
 	const tagStyle = {
 		'admin': {
@@ -24,13 +24,15 @@ export function TherapistItem({therapist} : { therapist: ITherapist }) {
 
 	const deleteTherapist = async () => {
 		const toastId = toast.loading('Excluindo terapeuta...');
-		axios.delete(`http://localhost:80/user/name/${therapist.name}`).then(() => {
+		axios.delete(`http://localhost:80/user/id/${therapist.id}`).then(() => {
 			toast.update(toastId, {
 				render: 'Terapeuta excluído com sucesso!',
 				type: 'success',
 				autoClose: 3000,
 				isLoading: false,
 			});
+
+			onDelete();
 		}).catch(() => {
 			toast.update(toastId, {
 				render: 'Erro ao excluir terapeuta!',
