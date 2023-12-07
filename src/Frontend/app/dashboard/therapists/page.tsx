@@ -41,7 +41,7 @@ export default function Therapists() {
 					id: therapist._id,
 					name: therapist.Name,
 					email: therapist.Email,
-					role: 'therapist'
+					role: therapist.Role
 				}
 			});
 			setTherapists(therapists);
