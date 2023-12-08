@@ -80,14 +80,11 @@ namespace LLEx
                 case "whileStatement":
                     ProcessWhileStatement(node);
                     break;
-                case "returnStatement":
-                    ProcessReturnStatement(node);
-                    break;
-                case "functionCallStatement":
-                    ProcessFunctionCallStatement(node);
-                    break;
                 case "commandStatement":
                     ProcessCommandStatement(node);
+                    break;
+                case "inputStatement":
+                    ProcessInputStatement(node);
                     break;
             }
         }
@@ -96,9 +93,8 @@ namespace LLEx
         {
             var idNode = (SyntaxNodeLeaf)node.GetAttribute("idNode");
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
-
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}{idNode.Value} = {expressionCode}");
+            code.AppendLine($"{currentIndentation}{idNode.Value} = {expressionCode};");
         }
 
         private void ProcessIfStatement(SyntaxNode node)
@@ -106,32 +102,65 @@ namespace LLEx
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             var elseBlockNode = node.GetAttribute("ifNotBlockNode") as SyntaxNode;
-
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}if {expressionCode}:");
+            code.AppendLine($"{currentIndentation}if ({expressionCode}) {{");
             IncreaseIndentation();
             ProcessBlock(blockNode);
             DecreaseIndentation();
 
             if (elseBlockNode != null)
             {
-                code.AppendLine($"{currentIndentation}else:");
+                code.AppendLine($"{currentIndentation}else {{");
                 IncreaseIndentation();
                 ProcessBlock(elseBlockNode);
                 DecreaseIndentation();
             }
+            code.AppendLine($"{currentIndentation}}}");
         }
 
         private void ProcessWhileStatement(SyntaxNode node)
         {
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
-
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}while {expressionCode}:");
+            code.AppendLine($"{currentIndentation}while ({expressionCode}) {{");
             IncreaseIndentation();
             ProcessBlock(blockNode);
             DecreaseIndentation();
+            code.AppendLine($"{currentIndentation}}}");
+        }
+
+        private void ProcessCommandStatement(SyntaxNode node)
+        {
+            var commandNode = (SyntaxNodeLeaf)node.GetAttribute("commandNode");
+            var expressionListNode = node.GetAttribute("expressionListNode") as SyntaxNode;
+            string expressionListCode = ProcessExpressionList(expressionListNode);
+            code.AppendLine($"{currentIndentation}{commandNode.Value}({expressionListCode});");
+        }
+
+        private void ProcessInputStatement(SyntaxNode node)
+        {
+            var idNode = (SyntaxNodeLeaf)node.GetAttribute("idNode");
+            var inputType = node.GetAttribute("inputType").ToString();
+            switch (inputType)
+            {
+                case "ler":
+                    code.AppendLine($"{currentIndentation}{idNode.Value} = int(input());");
+                    break;
+                 case "ler_varios":
+            var quadNode = node.GetAttribute("quadNode") as SyntaxNode;
+            var qtdNode = node.GetAttribute("qtdNode") as SyntaxNode;
+            var tolNode = node.GetAttribute("tolNode") as SyntaxNode;
+
+            string quadCode = ProcessExpression(quadNode);
+            string qtdCode = ProcessExpression(qtdNode);
+            string tolCode = ProcessExpression(tolNode);
+
+            code.AppendLine($"{currentIndentation}{quadCode} = input()");
+            code.AppendLine($"{currentIndentation}{qtdCode} = input()");
+            code.AppendLine($"{currentIndentation}{tolCode} = input()");
+            break;
+            }
         }
 
         private string ProcessExpression(SyntaxNode node)
@@ -147,31 +176,6 @@ namespace LLEx
                 string right = ProcessExpression(node.GetAttribute("right") as SyntaxNode);
                 return $"({left} {operatorType} {right})";
             }
-        }
-
-        private void ProcessReturnStatement(SyntaxNode node)
-        {
-            var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
-            string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}return {expressionCode}");
-        }
-
-        private void ProcessCommandStatement(SyntaxNode node)
-        {
-            var commandNode = (SyntaxNodeLeaf)node.GetAttribute("commandNode");
-            var expressionListNode = node.GetAttribute("expressionListNode") as SyntaxNode;
-
-            string expressionListCode = ProcessExpressionList(expressionListNode);
-            code.AppendLine($"{currentIndentation}{commandNode.Value}({expressionListCode})");
-        }
-
-        private void ProcessFunctionCallStatement(SyntaxNode node)
-        {
-            var idNode = (SyntaxNodeLeaf)node.GetAttribute("idNode");
-            var expressionListNode = node.GetAttribute("expressionListNode") as SyntaxNode;
-
-            string expressionListCode = ProcessExpressionList(expressionListNode);
-            code.AppendLine($"{currentIndentation}{idNode.Value}({expressionListCode})");
         }
 
         private string ProcessExpressionList(SyntaxNode node)
@@ -195,7 +199,54 @@ namespace LLEx
         private void DecreaseIndentation()
         {
             if (currentIndentation.Length >= 4)
+            {
                 currentIndentation = currentIndentation.Substring(0, currentIndentation.Length - 4);
+            }
+        }
+
+        private string ProcessSumExpression(SyntaxNode node)
+        {
+            if (node == null)
+            {
+                return string.Empty;
+            }
+
+            string leftExpression = ProcessSumExpression(node.GetAttribute("esq") as SyntaxNode);
+            string rightExpression = ProcessSumExpression(node.GetAttribute("dir") as SyntaxNode);
+
+            switch (node.Name)
+            {
+                case "sumExpression":
+                    return $"({leftExpression} + {rightExpression})";
+                case "multiplicativeTerm":
+                    if (node.GetAttribute("operator").ToString() == "MDC")
+                    {
+                        return $"Math.Gcd({leftExpression}, {rightExpression})";
+                    }
+                    return $"({leftExpression} * {rightExpression})";
+                case "powerTerm":
+                    return $"Math.Pow({leftExpression}, {rightExpression})";
+                case "factor":
+                    if (node is SyntaxNodeLeaf leafNode)
+                    {
+                        if (leafNode.Name == "num" or "id")
+                        {
+                            return leafNode.Value;
+                        }
+                        else if (leafNode.Name == "log")
+                        {
+                            return leafNode.Value == "true" ? "True" : "False";
+                        }
+                    }
+                    else
+                    {
+                        string innerExpression = ProcessSumExpression(node.GetAttribute("expression") as SyntaxNode);
+                        return $"(-{innerExpression})";
+                    }
+                    break;
+            }
+
+            return string.Empty;
         }
     }
 }
