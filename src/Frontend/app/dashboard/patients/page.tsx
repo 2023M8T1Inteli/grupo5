@@ -1,15 +1,15 @@
 'use client';
 import ButtonMin from "@/app/components/ButtonMin";
-import FormHeading from "@/app/components/FormHeading";
 import Heading from "@/app/components/Heading";
-import Modal from "@/app/components/Modal";
 import Subheading from "@/app/components/Subheading";
 import Table from "@/app/components/Table";
-import { TherapistItem } from "@/app/components/TherapistItem";
-import { useState } from "react";
-import Form, { Field } from '@/app/components/Form';
+import { useState, useEffect } from "react";
 import { PatitentItem } from "@/app/components/PatientItem";
 import AddNewPatientModal from "@/app/components/AddNewPatientModal";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export interface IPatient {
 	id: string;
@@ -24,16 +24,44 @@ export default function Patients() {
 		{name: 'Data de nascimento', spacing: '64'},
 		{name: 'Cargo', spacing: '44'}
 	];
-
-	const patients : IPatient[] = [
-        {
-			id: '3bbe2596-f302-41c8-9bba-784a6e2948c0',
-            name: 'João Paulo',
-			dateOfBirth: new Date('2016-05-09'),
-		},
-    ];
 	
 	const [modalVisibility, setModalVisibility] = useState(false);
+
+	const router = useRouter();
+
+	const [patients, setPatients] = useState<IPatient[]>([]);
+
+	function getPatients() {
+		const token = localStorage.getItem('token');
+
+		if (!token) {
+			router.push('/login');
+			return;
+		}
+
+		axios.get('http://localhost:80/pacient/all', {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		}).then(response => {
+			console.log(response.data);
+
+			const patients: IPatient[] = response.data.map((patient: any) : IPatient => {
+				return {
+					id: patient.id,
+					name: patient.name,
+					dateOfBirth: new Date(patient.birthDate)
+				}
+			})
+
+			setPatients(patients);
+
+		});
+	}
+
+	useEffect(() => {
+		getPatients();
+	}, []);
 
 	const openModal = () => {
 		setModalVisibility(true);
@@ -41,10 +69,15 @@ export default function Patients() {
 
 	const onSubmit = (data: any) => {
 		setModalVisibility(false);
+		getPatients();
 	}
 
 	const onCancel = () => {
 		setModalVisibility(false);
+	}
+
+	const onDelete = () => {
+		getPatients();
 	}
 
 	return(
@@ -62,13 +95,14 @@ export default function Patients() {
 
 				<Table headers={headers}>
 					{patients.map((patient, index) => (
-						<PatitentItem key={index} patient={patient} />
+						<PatitentItem key={index} patient={patient} onDelete={onDelete}/>
 					))}
 				</Table>
         	</div>
 			{modalVisibility && (
 				<AddNewPatientModal onCancel={onCancel} onSubmit={onSubmit} />
 			)}
+			<ToastContainer closeButton={false} position="bottom-right" />
 		</div>
 	)
 }
