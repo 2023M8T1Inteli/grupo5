@@ -1,26 +1,52 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 
-// Creating a web application builder
-var builder = WebApplication.CreateBuilder(args);
-
-// Adding SignalR services to the application
-builder.Services.AddSignalR();
-
-var app = builder.Build();
-
-// Mapping the hub endpoint to the "/ws" URL
-app.MapHub<MyHub>("/ws");
-
-app.Run();
-
-// Defining a SignalR hub named MyHub
-class MyHub : Hub
+public class Program
 {
-    // Method to send a number to all connected clients
-    public async Task SendNumber(int number)
+    public static void Main(string[] args)
     {
-        await Clients.All.SendAsync("ReceiveNumber", number); // All substituido pelo ID do cliente web socket
+        CreateHostBuilder(args).Build().Run();
+    }
+
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
+}
+
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddSignalR();
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
+        app.UseRouting();
+
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapHub<MyHub>("/ws");
+        });
+
+        app.Run(async (context) =>
+        {
+            await context.Response.WriteAsync("Servidor WebSocket iniciado. Aguardando conexões...");
+        });
     }
 }
 
-// criar projeto windowsForm com websocket do cliente e outro projeto do servidor web socket
+public class MyHub : Hub
+{
+    public async Task SendQuadrante(string quadrante)
+    {
+        Console.WriteLine($"Recebido do cliente: {quadrante}");
+    }
+}
