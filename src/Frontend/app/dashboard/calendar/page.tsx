@@ -4,24 +4,94 @@ import FormHeading from "@/app/components/FormHeading";
 import Heading from "@/app/components/Heading";
 import Modal from "@/app/components/Modal";
 import Subheading from "@/app/components/Subheading";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Form, { Field } from '@/app/components/Form';
 import Calendar from "@/app/components/Calendar";
 import { format } from 'date-fns';
 import NextPatient from "@/app/components/NextPatient";
 import { InputSelectProps } from "@/app/components/InputSelect";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
+
+interface Event {
+    id: number;
+    name: string;
+    hour: string;
+    data: string;
+}
+
+interface Events {
+    [key: string]: Event[];
+}
 
 export default function Agenda() {
 	const [modalVisibility, setModalVisibility] = useState(false);
+
+	const [patients, setPatients] = useState([]);
+
+	const [events, setEvents] = useState<Events>({}); 
+
+	const parseDateTime = (dateTimeString: { includes: (arg0: string) => any; split: (arg0: string) => [any, any]; }) => {
+        let [date, time] = dateTimeString.includes('T') 
+            ? dateTimeString.split('T') 
+            : dateTimeString.split(' ');
+        return { date, time };
+    };
+	
+	useEffect(() => {
+		axios.get('http://localhost:80/pacient/all').then(response => {
+			const loadedPatients = response.data.map((patient: { id: { toString: () => any; }; name: any; }) => ({
+				value: patient.id.toString(),
+				label: patient.name
+			}));
+		
+			setPatients(loadedPatients);
+	
+			const loadedEvents = response.data.reduce((acc: { [x: string]: { id: any; name: any; hour: any; data: any; }[]; }, patient: { sessions: any[]; name: any; }) => {
+				patient.sessions.forEach((session: { startedAt: any; id: any; }) => {
+					const { date, time } = parseDateTime(session.startedAt);
+					acc[date] = acc[date] || [];
+					acc[date].push({
+						id: session.id,
+						name: patient.name,
+						hour: time,
+						data: session.startedAt
+					});
+				});
+				return acc;
+			}, {});
+			setEvents(loadedEvents);
+		});
+	}, []);
+	
+
+	
 
 	const openModal = () => {
 		setModalVisibility(true);
 	}
 
-	const onSubmit = (data: any) => {
-		setModalVisibility(false);
-	}
+	const onSubmit = async (data: { patient: any; date: any; hour: any; }) => {
+		try {
+			// Extrair os dados do formulário
+			const { patient, date, hour } = data;
+	
+			// Criar objeto da sessão
+			const newSession = {
+				StartedAt: date + ' ' + hour, 
+				EndedAt: '', 
+				TherapyName: '', 
+				Results: '', 
+			};
+			await axios.put(`http://localhost:80/pacient/addsession/${patient}`, newSession);
+	
+			setModalVisibility(false);
+	
+		} catch (error) {
+			console.error('Erro ao adicionar sessão', error);
+		}
+	};
+	
 
 	const onCancel = () => {
 		setModalVisibility(false);
@@ -34,13 +104,7 @@ export default function Agenda() {
 			placeholder: 'Selecione um paciente',
 			type: 'select',
 			required: true,
-			options: [
-				{ value: '1', label: 'João Paulo' },
-				{ value: '2', label: 'Maria Eduarda' },
-				{ value: '3', label: 'José Carlos' },
-				{ value: '4', label: 'Ana Maria' },
-				{ value: '5', label: 'Pedro Henrique' },
-			]
+			options: patients,
 		},
 		{
 			label: 'Data',
@@ -58,10 +122,6 @@ export default function Agenda() {
 		},
 	]
 
-	const events: any = {
-		'2023-11-06': [{ id: 1, name: 'João Paulo', hour: '14:00', data: '10 de novembro de 2023' }],
-		'2023-11-24': [{ id: 1, name: 'Maria Eduarda', hour: '13:30', data: 'Hoje, 24 de novembro de 2023' }],
-	};
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -70,10 +130,10 @@ export default function Agenda() {
 	};
 
 	// Function to get events for the selected date
-	const getEventsForSelectedDate = () => {
-		const formattedDate = format(selectedDate, 'yyyy-MM-dd');
-		return events[formattedDate];
-	};
+    const getEventsForSelectedDate = () => {
+        const formattedDate = format(selectedDate, 'yyyy-MM-dd');
+        return events[formattedDate];
+    };
 
 	const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
 		mode: 'all',

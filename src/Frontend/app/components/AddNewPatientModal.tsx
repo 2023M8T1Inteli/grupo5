@@ -1,37 +1,81 @@
-import Modal from "./Modal"
-import FormHeading from "./FormHeading"
-import { Field } from "./Form"
-import Form from "./Form"
+import React from 'react';
+import Modal from "./Modal";
+import FormHeading from "./FormHeading";
+import { Field } from "./Form";
+import Form from "./Form";
 import { useForm } from "react-hook-form";
+import axios from 'axios';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
 
-export default function AddNewPatientModal({onSubmit, onCancel}: { onSubmit: (data: any) => void; onCancel: () => void }) {
-	const fields : Field[] = [
-		{ 
-		  label: 'Nome completo', 
-		  name: 'full-name',
-		  placeholder: 'Digite o nome completo do paciente',
-		  type: 'text',
-		  required: true,
-		  minLength: 5,
-		  maxLength: 100,
-		},
-		{
-		  label: 'Data de nascimento',
-		  name: 'date-of-birth',
-		  placeholder: 'Digite a data de nascimento do paciente',
-		  type: 'date',	
-		  required: true,
-		},
-	  ]
+export default function AddNewPatientModal({ onCancel }: { onCancel: () => void }) {
+    const fields: Field[] = [
+        {
+            label: 'Nome completo',
+            name: 'fullName',
+            placeholder: 'Digite o nome completo do paciente',
+            type: 'text',
+            required: true,
+            minLength: 5,
+            maxLength: 100,
+        },
+        {
+            label: 'Data de nascimento',
+            name: 'dateOfBirth',
+            placeholder: 'Digite a data de nascimento do paciente',
+            type: 'date',
+            required: true,
+        },
+    ];
 
-	  const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
-		mode: 'all',
-	});
+    const { register, handleSubmit, formState: { errors }, trigger, setValue } = useForm({
+        mode: 'all',
+    });
 
-	return(
-		<Modal>
-			<FormHeading>Adicionar novo paciente</FormHeading>
-			<Form fields={fields} buttonText="Adicionar" onSubmit={onSubmit} cancelText="Cancelar" onCancel={onCancel} register={register} handleSubmit={handleSubmit} errors={errors} trigger={trigger} setValue={setValue}/>
-		</Modal>
-	)
+    const onSubmitPatient = async (data: any) => {
+        const toastId = toast.loading('Adicionando paciente...');
+        try {
+            await axios.post('http://localhost:80/pacient/', {
+                name: data['fullName'], 
+                birthDate: data['dateOfBirth'],
+            });
+
+            toast.update(toastId, {
+                render: 'Paciente adicionado com sucesso!',
+                type: 'success',
+                autoClose: 2000,
+                isLoading: false,
+            });
+
+
+            onCancel(); 
+        } catch (error) {
+            toast.update(toastId, {
+                render: 'Erro ao adicionar paciente!',
+                type: 'error',
+                autoClose: 2000,
+                isLoading: false,
+            });
+        }
+    };
+
+    return (
+        <Modal>
+            <FormHeading>Adicionar novo paciente</FormHeading>
+            <Form 
+                fields={fields} 
+                buttonText="Adicionar" 
+                onSubmit={handleSubmit(onSubmitPatient)} 
+                cancelText="Cancelar" 
+                onCancel={onCancel} 
+                register={register} 
+                errors={errors} 
+                trigger={trigger} 
+                setValue={setValue}
+                handleSubmit={handleSubmit}
+            />
+            <ToastContainer closeButton={false} position="bottom-right" />
+
+        </Modal>
+    );
 }
