@@ -52,7 +52,7 @@ export function TherapistItem({therapist, onDelete} : { therapist: ITherapist, o
         <div className='bg-white p-6 flex justify-between hover:bg-[#EAECF0] border-solid border-[#EAECF0]'>
 			<div className='flex'>
 				<TableItem className='w-64'>{therapist.name}</TableItem>
-				<TableItem className='w-64'>{therapist.email}</TableItem>
+				<TableItem className='w-96'>{therapist.email}</TableItem>
 				<TableItem className='w-44'>
 					<Tag bgColor={tagStyle[therapist.role].bgColor} text={tagStyle[therapist.role].text} color={tagStyle[therapist.role].color}/>
 				</TableItem>

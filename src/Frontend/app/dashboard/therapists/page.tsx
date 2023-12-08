@@ -25,7 +25,7 @@ export interface ITherapist {
 export default function Therapists() {
 	const headers = [
 		{ name: 'Nome', spacing: '64' },
-		{ name: 'Endereço de e-mail', spacing: '64' },
+		{ name: 'Endereço de e-mail', spacing: '96' },
 		{ name: 'Cargo', spacing: '44' },
 	];
 
