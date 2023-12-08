@@ -70,11 +70,16 @@ export default function Therapists() {
 	}
 
 	const onSubmit = async (data: any) => {
+		const token = localStorage.getItem('token');
 		const toastId = toast.loading('Adicionando terapeuta...');
 		try {
 			await axios.post('http://localhost:80/user/', {
 				name: data.fullName,
 				email: data.email
+			}, {
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
 			});
 
 			toast.update(toastId, {
