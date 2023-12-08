@@ -23,8 +23,13 @@ export function TherapistItem({therapist, onDelete} : { therapist: ITherapist, o
 	}
 
 	const deleteTherapist = async () => {
+		const token = localStorage.getItem('token');
 		const toastId = toast.loading('Excluindo terapeuta...');
-		axios.delete(`http://localhost:80/user/id/${therapist.id}`).then(() => {
+		axios.delete(`http://localhost:80/user/id/${therapist.id}`, {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		}).then(() => {
 			toast.update(toastId, {
 				render: 'Terapeuta excluído com sucesso!',
 				type: 'success',

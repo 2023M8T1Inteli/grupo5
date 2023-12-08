@@ -34,7 +34,18 @@ export default function Therapists() {
 	const [therapists, setTherapists] = useState<ITherapist[]>([]);
 
 	function getTherapists() {
-		axios.get('http://localhost:80/user/all').then(response => {
+		const token = localStorage.getItem('token');
+
+		if (!token) {
+			router.push('/login');
+			return;
+		}
+
+		axios.get('http://localhost:80/user/all', {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		}).then(response => {
 			console.log(response.data);
 			const therapists: ITherapist[] = response.data.map((therapist: any) : ITherapist => {
 				return {
