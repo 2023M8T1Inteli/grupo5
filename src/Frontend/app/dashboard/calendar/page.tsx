@@ -90,6 +90,7 @@ export default function Agenda() {
 		} catch (error) {
 			console.error('Erro ao adicionar sessão', error);
 		}
+		location.reload()
 	};
 	
 
@@ -155,11 +156,11 @@ export default function Agenda() {
 					<div className='w-[40rem] mr-24'>
 						<Calendar events={events} onDateSelect={handleDateSelect} />
 					</div>
-					<div className='flex flex-col'>
-						{getEventsForSelectedDate()?.map((event: any, index: any) => (
-							<NextPatient key={index} name={event.name} hour={event.hour} data={event.data} />
-						))}
-					</div>
+                    <div className='flex flex-col' style={{ maxHeight: '650px', overflowY: 'auto' }}>
+                        {getEventsForSelectedDate()?.map((event, index) => (
+                            <NextPatient key={index} name={event.name} hour={event.hour} data={event.data} />
+                        ))}
+                    </div>
 				</div>
 
 			</div>
