@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CareApi.Controllers
-{
-    [Authorize]
+{   
+     [Authorize]
     [ApiController]
     [Route("/[controller]")]
     public class TherapyController : ControllerBase

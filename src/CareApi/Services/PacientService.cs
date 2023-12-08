@@ -34,5 +34,12 @@ namespace CareApi.Services
 
         public async Task RemoveByNameAsync(string name) =>
             await _pacientCollection.DeleteOneAsync(x => x.Name == name);
+
+        public async Task<Pacient> GetByIdAsync(string id) =>
+            await _pacientCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        public async Task UpdatePacientAsync(Pacient updatedPacient)
+        {
+            await _pacientCollection.ReplaceOneAsync(pacient => pacient.Id == updatedPacient.Id, updatedPacient);
+        }
     }
 }
