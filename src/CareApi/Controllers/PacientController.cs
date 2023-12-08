@@ -67,5 +67,35 @@ namespace CareApi.Controllers
             await _pacientService.RemoveByNameAsync(name);
             return NoContent();
         }
+
+        [HttpPut("addsession/{pacientId}")]
+        public async Task<IActionResult> AddSessionToPacient(string pacientId, Sessions newSession)
+        {
+            var pacient = await _pacientService.GetByIdAsync(pacientId);
+            if (pacient is null)
+            {
+                return NotFound();
+            }
+
+            pacient.Sessions.Add(newSession);
+            await _pacientService.UpdatePacientAsync(pacient);
+
+            return NoContent(); 
+        }
+
+        [HttpGet("allsessions")]
+        public async Task<ActionResult<IEnumerable<Sessions>>> GetAllSessions()
+        {
+            var patients = await _pacientService.GetManyAsync();
+            var allSessions = new List<Sessions>();
+
+            foreach (var patient in patients)
+            {
+                allSessions.AddRange(patient.Sessions);
+            }
+
+            return allSessions;
+        }
+
     }
 }
