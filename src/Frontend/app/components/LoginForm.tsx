@@ -37,32 +37,37 @@ export default function LoginForm() {
 		setValue('password', 'senhateste123@');
 		trigger();
 	};
-	const fakeLogin = (email: string, password: string) => {
-		return new Promise((resolve, reject) => {
-			// Simulate a network request with a timeout
-			setTimeout(() => {
-				if (email === 'carol@aacd.com.br' && password === 'senhateste123@') {
-					resolve({ data: { message: 'Login successful' } });
-				} else {
-					reject(new Error('Invalid email or password'));
-				}
-			}, 1000);
-		});
-	};
+
 	const onSubmit = async (data: any) => {
-		const promise = fakeLogin(data.email, data.password);
-		toast.promise(promise, {
-			pending: 'Aguarde...',
-			success: 'Login realizado com sucesso!',
-			error: 'Erro ao realizar login!'
-		});
-		promise.then(() => {
-			setTimeout(() => {
-				router.push('/dashboard');
-			}, 2000);
-		}).catch((error) => {
-				console.error('Login error:', error);
-		});
+		const toastId = toast.loading('Realizando login...');
+
+		console.log(data);
+
+		try {
+			const response = await axios.post('http://localhost:80/user/login', {
+				email: data.email,
+				password: data.password
+			});
+
+			toast.update(toastId, {
+				render: 'Login realizado com sucesso!',
+				type: 'success',
+				autoClose: 2000,
+				isLoading: false,
+			});
+
+			localStorage.setItem('token', response.data.token);
+
+			router.push('/dashboard');
+		} catch (error) {
+			toast.update(toastId, {
+				render: 'Erro ao realizar login!',
+				type: 'error',
+				autoClose: 2000,
+				isLoading: false,
+			});
+		}
+
 	}
 	return (
 		<div>
