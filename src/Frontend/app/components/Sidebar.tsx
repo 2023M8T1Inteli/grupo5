@@ -11,7 +11,7 @@ import LogoutButton from "../components/LogoutButton"
 
 const menuItems = [
   {icon: Home, text: 'Página inicial', href: '/dashboard'},
-  {icon: Chart, text: 'Métricas', href: '/dashboard/metrics'},
+  // {icon: Chart, text: 'Métricas', href: '/dashboard/metrics'},
   {icon: Profile, text: 'Pacientes', href: '/dashboard/patients'},
   {icon: Stethoscope, text: 'Terapeutas', href: '/dashboard/therapists'},
   {icon: Heart, text: 'Terapias', href: '/dashboard/therapies'},

@@ -25,7 +25,7 @@ export interface ITherapist {
 export default function Therapists() {
 	const headers = [
 		{ name: 'Nome', spacing: '64' },
-		{ name: 'Endereço de e-mail', spacing: '64' },
+		{ name: 'Endereço de e-mail', spacing: '96' },
 		{ name: 'Cargo', spacing: '44' },
 	];
 
@@ -34,7 +34,18 @@ export default function Therapists() {
 	const [therapists, setTherapists] = useState<ITherapist[]>([]);
 
 	function getTherapists() {
-		axios.get('http://localhost:80/user/all').then(response => {
+		const token = localStorage.getItem('token');
+
+		if (!token) {
+			router.push('/login');
+			return;
+		}
+
+		axios.get('http://localhost:80/user/all', {
+			headers: {
+				'Authorization': `Bearer ${token}`
+			}
+		}).then(response => {
 			console.log(response.data);
 			const therapists: ITherapist[] = response.data.map((therapist: any) : ITherapist => {
 				return {
@@ -59,11 +70,16 @@ export default function Therapists() {
 	}
 
 	const onSubmit = async (data: any) => {
+		const token = localStorage.getItem('token');
 		const toastId = toast.loading('Adicionando terapeuta...');
 		try {
 			await axios.post('http://localhost:80/user/', {
 				name: data.fullName,
 				email: data.email
+			}, {
+				headers: {
+					'Authorization': `Bearer ${token}`
+				}
 			});
 
 			toast.update(toastId, {

@@ -12,7 +12,7 @@ namespace CareApi.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = null!;
         public string BirthDate { get; set; } = null!;
-        public List<Sessions> Sessions { get; set; } = new List<Sessions>();
+        public List<Sessions>? Sessions { get; set; } = new List<Sessions>();
     }
 
     public class Sessions

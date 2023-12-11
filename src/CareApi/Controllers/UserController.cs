@@ -90,9 +90,9 @@ namespace CareApi.Controllers
             updatedUser.Name = user.Name;
             await _userService.UpdateByNameAsync(updatedUser, name);
             return NoContent();
-        }  
+        }
 
-
+        [AllowAnonymous]
         [HttpPost("activate")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
         {
