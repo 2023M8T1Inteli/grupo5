@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 
 namespace LLEx
-{
+{   
+    
     public class SemanticAnalyzer
     {
         private Dictionary<string, VariableInfo> symbolTable;
@@ -22,7 +23,6 @@ namespace LLEx
             EnterScope("global");
             AnalyzeProgram(programNode);
             ExitScope();
-            PrintErrors();
         }
 
         private void AnalyzeProgram(SyntaxNode programNode)
@@ -35,24 +35,42 @@ namespace LLEx
         }
 
         private void AnalyzeBlock(SyntaxNode blockNode)
-        {
+        {   
             EnterScope("block");
             SyntaxNode statementListNode = (SyntaxNode)blockNode.GetAttribute("statementListNode");
-            AnalyzeStatementList(statementListNode);
-            ExitScope();
+            if(statementListNode == null){
+                AnalyzeStatementList(blockNode);
+            }
+            else{
+                SyntaxNode nextNode = null;
+                if(statementListNode != null){
+                    nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
+                }
+                    
+                AnalyzeStatementList(statementListNode);
+
+                if (nextNode.CountAtributtes() != 0)
+                {
+                    AnalyzeStatementList(nextNode);
+                }
+                ExitScope();
+            }
         }
 
         private void AnalyzeStatementList(SyntaxNode statementListNode)
         {
             SyntaxNode statementNode = (SyntaxNode)statementListNode.GetAttribute("statementNode");
-            SyntaxNode nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
+            SyntaxNode nextNode = null;
+            if(statementListNode != null){
+                nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
+            }
 
-            if (nextNode != null)
+            if (statementNode.CountAtributtes() != 0)
             {
                 AnalyzeStatement(statementNode);
             }
 
-            if (nextNode != null)
+            if (nextNode.CountAtributtes() != 0)
             {
                 AnalyzeStatementList(nextNode);
             }
@@ -119,10 +137,10 @@ namespace LLEx
             SyntaxNode expression = (SyntaxNode)ifStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)ifStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
+            AnalyzeBlock(block);
             if(ifStatementNode.VerifyKey("ifNotBlockNode")){
                 SyntaxNode ifNotBlock = (SyntaxNode)ifStatementNode.GetAttribute("ifNotBlockNode");
-                AnalyzeExpression(ifNotBlock);
+                AnalyzeBlock(ifNotBlock);
             }
         }
 
@@ -131,7 +149,7 @@ namespace LLEx
             SyntaxNode expression = (SyntaxNode)whileStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)whileStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
+            AnalyzeBlock(expression);
             
         }
 
@@ -240,7 +258,8 @@ namespace LLEx
             if (idNode != null)
             {   
                 CheckVariableDeclaration(idNode);
-                // CheckVariableInitialization(idNode);
+                
+                CheckVariableInitialization(idNode);
                 // Adicione verificações de tipo aqui se necessário
             }
             else if (integerNode != null)
@@ -280,7 +299,7 @@ namespace LLEx
 
             if (!currentScope.SymbolTable.ContainsKey(variableName))
             {
-                AddError($"Erro semântico: Variável '{variableName}' não foi declarada.");
+                throw new Exception($"Erro semântico: Variável '{variableName}' não foi declarada.");
             }
         }
 
@@ -292,7 +311,7 @@ namespace LLEx
 
             if (currentScope.SymbolTable[variableName].Value != null)
             {
-                AddError($"Erro semântico: Variável '{variableName}' não foi inicializada.");
+                throw new Exception($"Erro semântico: Variável '{variableName}' não foi inicializada.");
             }
         }
 
@@ -324,7 +343,7 @@ namespace LLEx
 
             if (currentScope.SymbolTable.ContainsKey(variableName))
             {
-                AddError($"Erro semântico: Variável '{variableName}' já foi declarada neste escopo.");
+                throw new Exception($"Erro semântico: Variável '{variableName}' já foi declarada neste escopo.");
             }
             else
             {
@@ -333,18 +352,7 @@ namespace LLEx
             }
         }
 
-        private void AddError(string error)
-        {
-            errors.Add(error);
-        }
-
-        private void PrintErrors()
-        {
-            foreach (string error in errors)
-            {
-                Console.WriteLine(error);
-            }
-        }
+        
 
         private class ScopeInfo
         {

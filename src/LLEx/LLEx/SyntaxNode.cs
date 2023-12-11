@@ -29,6 +29,10 @@ namespace LLEx
             return null;
         }
 
+        public int CountAtributtes(){
+            return attributes.Count;
+        }
+
         public bool VerifyKey(string key){
             return attributes.ContainsKey(key);
         }
