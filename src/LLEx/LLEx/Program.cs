@@ -50,7 +50,7 @@ namespace LLEx
             SyntaxNode syntaxNode = parser.ParseProgram();
 
             // Use ToString to print the SyntaxNode
-            Console.WriteLine(syntaxNode.ToString());
+            // Console.WriteLine(syntaxNode.ToString());
 
             XmlDocument syntaxTreeXml = parser.SerializeSyntaxTreeToXml(syntaxNode);
             
