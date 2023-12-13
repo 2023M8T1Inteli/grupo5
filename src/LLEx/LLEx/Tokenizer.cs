@@ -54,7 +54,14 @@ namespace LLEx
                 return null;
             }
 
-            this.lexema.Append(c);
+            if(c == '<'){
+                this.lexema.Append("&lt;");
+            }else if(c == '>'){
+                this.lexema.Append("&gt;");
+            }else{
+                this.lexema.Append(c);
+            }
+            
 
             if (IsCharSlash(c))
             {
@@ -240,8 +247,14 @@ namespace LLEx
             {
                 c = this.src.Peek();
                 if (IsCharRelationalOperator(c))
-                {
-                    this.lexema.Append(c);
+                {   
+                
+
+                    if(c == '>'){
+                        this.lexema.Append("&gt;");
+                    }else{
+                        this.lexema.Append(c);
+                    }
                     return new OPREL(this.lexema.ToString(), line);
                 }
                 else if (IsLexemaEqualsToAtribuicao(this.lexema.ToString()))

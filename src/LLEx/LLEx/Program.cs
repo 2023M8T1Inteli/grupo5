@@ -60,6 +60,12 @@ namespace LLEx
 
             semanticAnalyzer.AnalyzeSyntaxTree(syntaxNode);
 
+            CodeGenerator codeGenerator = new CodeGenerator(syntaxNode);
+
+            string codigo = codeGenerator.GenerateCode();
+
+            Console.WriteLine(codigo);
+
 
 
         }
