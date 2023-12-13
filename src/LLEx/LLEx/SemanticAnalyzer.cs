@@ -124,12 +124,16 @@ namespace LLEx
             string func = (string)inputStatementNode.GetAttribute("comandoNode");
 
             if(func == "ler_varios"){
-                SyntaxNode sumExpression1 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode1");
-                AnalyzeSumExpression(sumExpression1);
-                SyntaxNode sumExpression2 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode2");
-                AnalyzeSumExpression(sumExpression2);
-                SyntaxNode sumExpression3 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode3");
-                AnalyzeSumExpression(sumExpression3);
+                // Parse the multiple input statement
+                
+                
+                for (int i = 0; i < inputStatementNode.CountAtributtes()-1; i++)
+                {
+                    SyntaxNode sumExpression = (SyntaxNode)inputStatementNode.GetAttribute($"sumExpressionNode{i + 1}");
+                    AnalyzeSumExpression(sumExpression);
+                    
+                }
+                
             }
 
             
@@ -174,12 +178,15 @@ namespace LLEx
             string func = (string)commandStatementNode.GetAttribute("comandoNode");
 
             if(func == "mostrar_tocar"){
-                SyntaxNode sumExpression1 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode1");
-                AnalyzeSumExpression(sumExpression1);
-                SyntaxNode sumExpression2 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode2");
-                AnalyzeSumExpression(sumExpression2);
-                SyntaxNode sumExpression3 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode3");
-                AnalyzeSumExpression(sumExpression3);
+                
+                for (int i = 0; i < commandStatementNode.CountAtributtes()-1; i++)
+                {
+                    SyntaxNode sumExpression = (SyntaxNode)commandStatementNode.GetAttribute($"sumExpressionNode{i + 1}");
+                    AnalyzeSumExpression(sumExpression);
+                    
+                }
+                
+            
             }else{
                 SyntaxNode sumExpression = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode");
                 AnalyzeSumExpression(sumExpression);
