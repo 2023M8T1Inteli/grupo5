@@ -29,6 +29,15 @@ namespace LLEx
             return null;
         }
 
+        public IEnumerable<KeyValuePair<string, object>> GetAttributes()
+        {
+            return attributes;
+        }
+
+        public int CountAtributtes(){
+            return attributes.Count;
+        }
+
         public bool VerifyKey(string key){
             return attributes.ContainsKey(key);
         }

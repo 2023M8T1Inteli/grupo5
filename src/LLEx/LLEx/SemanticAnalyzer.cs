@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 
 namespace LLEx
-{
+{   
+    
     public class SemanticAnalyzer
     {
         private Dictionary<string, VariableInfo> symbolTable;
@@ -22,7 +23,6 @@ namespace LLEx
             EnterScope("global");
             AnalyzeProgram(programNode);
             ExitScope();
-            PrintErrors();
         }
 
         private void AnalyzeProgram(SyntaxNode programNode)
@@ -32,27 +32,48 @@ namespace LLEx
 
             SyntaxNode blockNode = (SyntaxNode)programNode.GetAttribute("blockNode");
             AnalyzeBlock(blockNode);
+            if (blockNode == null)
+            {
+                 throw new Exception($"Erro semântico: Bloco vazio seu estado jamais será alterado");
+            }
         }
 
         private void AnalyzeBlock(SyntaxNode blockNode)
-        {
+        {   
             EnterScope("block");
             SyntaxNode statementListNode = (SyntaxNode)blockNode.GetAttribute("statementListNode");
-            AnalyzeStatementList(statementListNode);
-            ExitScope();
+            if(statementListNode == null){
+                AnalyzeStatementList(blockNode);
+            }
+            else{
+                SyntaxNode nextNode = null;
+                if(statementListNode != null){
+                    nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
+                }
+                    
+                AnalyzeStatementList(statementListNode);
+
+
+                ExitScope();
+            }
         }
 
         private void AnalyzeStatementList(SyntaxNode statementListNode)
         {
             SyntaxNode statementNode = (SyntaxNode)statementListNode.GetAttribute("statementNode");
-            SyntaxNode nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
-
-            if (nextNode != null)
-            {
-                AnalyzeStatement(statementNode);
+            SyntaxNode nextNode = null;
+            if(statementListNode != null){
+                nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
             }
 
-            if (nextNode != null)
+            if (statementNode.CountAtributtes() != 0)
+            {
+                AnalyzeStatement(statementNode);
+            }else{
+                throw new Exception($"Erro semântico: Bloco vazio seu estado jamais será alterado");
+            }
+
+            if (nextNode.CountAtributtes() != 0)
             {
                 AnalyzeStatementList(nextNode);
             }
@@ -119,10 +140,18 @@ namespace LLEx
             SyntaxNode expression = (SyntaxNode)ifStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)ifStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
+            AnalyzeBlock(block);
+            if (block == null)
+            {
+                 throw new Exception($"Erro semântico: Bloco vazio seu estado jamais será alterado");
+            }
             if(ifStatementNode.VerifyKey("ifNotBlockNode")){
                 SyntaxNode ifNotBlock = (SyntaxNode)ifStatementNode.GetAttribute("ifNotBlockNode");
-                AnalyzeExpression(ifNotBlock);
+                if (ifNotBlock == null)
+                    {
+                        throw new Exception($"Erro semântico: Bloco vazio seu estado jamais será alterado");
+                    }
+                AnalyzeBlock(ifNotBlock);
             }
         }
 
@@ -131,7 +160,12 @@ namespace LLEx
             SyntaxNode expression = (SyntaxNode)whileStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)whileStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
+
+            if (block == null)
+            {
+                 throw new Exception($"Erro semântico: Bloco vazio seu estado jamais será alterado");
+            }
+            AnalyzeBlock(block);
             
         }
 
@@ -231,7 +265,10 @@ namespace LLEx
         }
 
         private void AnalyzeFactor(SyntaxNode factorNode)
-        {
+        {   
+            if((SyntaxNode)factorNode.GetAttribute("expressionNode") != null){
+                AnalyzeExpression((SyntaxNode)factorNode.GetAttribute("expressionNode"));
+            }
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)factorNode.GetAttribute("idNode");
             SyntaxNodeLeaf integerNode = (SyntaxNodeLeaf)factorNode.GetAttribute("integerNode");
             SyntaxNodeLeaf booleanNode = (SyntaxNodeLeaf)factorNode.GetAttribute("booleanNode");
@@ -240,7 +277,8 @@ namespace LLEx
             if (idNode != null)
             {   
                 CheckVariableDeclaration(idNode);
-                // CheckVariableInitialization(idNode);
+                
+                CheckVariableInitialization(idNode);
                 // Adicione verificações de tipo aqui se necessário
             }
             else if (integerNode != null)
@@ -276,11 +314,15 @@ namespace LLEx
         {
             string variableName = idNode.Value;
 
-            ScopeInfo currentScope = scopeStack.Peek();
-
-            if (!currentScope.SymbolTable.ContainsKey(variableName))
+            foreach (ScopeInfo currentScope in scopeStack)
             {
-                AddError($"Erro semântico: Variável '{variableName}' não foi declarada.");
+                if (!currentScope.SymbolTable.ContainsKey(variableName) && currentScope.Name == "global")
+                {
+                    // A variável foi encontrada em um escopo, então podemos sair da função
+                    throw new Exception($"Erro semântico: Variável '{variableName}' não foi declarada.");
+                }else{
+                    return;
+                }
             }
         }
 
@@ -288,12 +330,19 @@ namespace LLEx
         {
             string variableName = idNode.Value;
 
-            ScopeInfo currentScope = scopeStack.Peek();
-
-            if (currentScope.SymbolTable[variableName].Value != null)
-            {
-                AddError($"Erro semântico: Variável '{variableName}' não foi inicializada.");
+            foreach (ScopeInfo currentScope in scopeStack)
+            {   
+                if(currentScope.SymbolTable.ContainsKey(variableName)){
+                    if (currentScope.SymbolTable[variableName].Value != null && currentScope.Name == "global")
+                    {
+                        // A variável foi encontrada em um escopo, então podemos sair da função
+                        throw new Exception($"Erro semântico: Variável '{variableName}' não foi inicializada.");
+                    }else{
+                        return;
+                    }
+                }
             }
+
         }
 
         private bool IsVariableInitialized(string variableName)
@@ -324,7 +373,7 @@ namespace LLEx
 
             if (currentScope.SymbolTable.ContainsKey(variableName))
             {
-                AddError($"Erro semântico: Variável '{variableName}' já foi declarada neste escopo.");
+                throw new Exception($"Erro semântico: Variável '{variableName}' já foi declarada neste escopo.");
             }
             else
             {
@@ -333,18 +382,7 @@ namespace LLEx
             }
         }
 
-        private void AddError(string error)
-        {
-            errors.Add(error);
-        }
-
-        private void PrintErrors()
-        {
-            foreach (string error in errors)
-            {
-                Console.WriteLine(error);
-            }
-        }
+        
 
         private class ScopeInfo
         {
