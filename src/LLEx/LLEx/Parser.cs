@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Runtime.ExceptionServices;
 using System.Xml;
 using LLEx.Tokens;
@@ -231,12 +232,20 @@ namespace LLEx
                 // Parse the multiple input statement
                 List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
                 Token ler_varios = MatchValue("ler_varios");
+                bool fisrtExpression = true;
+
                 Match("LPAR");
+                // foreach(expression in )
+                // if(fisrtExpression){
+                //     inputStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
+                //     Match("COMMA");
+                // }
+                
+
 
                 // Add attributes for the multiple input statement
                 inputStatement.AddAttributes("comandoNode",ler_varios.Value);
-                inputStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
-                Match("COMMA");
+                
                 inputStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
                 Match("COMMA");
                 inputStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());

@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
+
 namespace LLEx
 {
     public class CodeGenerator
@@ -10,6 +11,17 @@ namespace LLEx
         private StringBuilder code;
         private SemanticAnalyzer semanticAnalyzer;
         private string currentIndentation = "";
+
+
+        private Dictionary<string, string> tokenMap = new Dictionary<string, string>
+            {
+                {"<>", "!="},
+                {"^", "**"},
+                {"e", "and"},
+                {"ou", "or"}
+
+                // Other Operator if need
+            };
 
         public CodeGenerator(SyntaxNode ast)
         {
@@ -132,19 +144,18 @@ namespace LLEx
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             var elseBlockNode = node.GetAttribute("ifNotBlockNode") as SyntaxNode;
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}if ({expressionCode}) {{");
+            code.AppendLine($"{currentIndentation}if {expressionCode}:");
             IncreaseIndentation();
             ProcessBlock(blockNode);
             DecreaseIndentation();
 
             if (elseBlockNode != null)
             {
-                code.AppendLine($"{currentIndentation}else {{");
+                code.AppendLine($"{currentIndentation}else:");
                 IncreaseIndentation();
                 ProcessBlock(elseBlockNode);
                 DecreaseIndentation();
             }
-            code.AppendLine($"{currentIndentation}}}");
         }
 
         private void ProcessWhileStatement(SyntaxNode node)
@@ -152,11 +163,10 @@ namespace LLEx
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}while ({expressionCode}) {{");
+            code.AppendLine($"{currentIndentation}while ({expressionCode}):");
             IncreaseIndentation();
             ProcessBlock(blockNode);
-            DecreaseIndentation();
-            code.AppendLine($"{currentIndentation}}}");
+            DecreaseIndentation();  
         }
 
         private void ProcessCommandStatement(SyntaxNode node)
@@ -170,26 +180,32 @@ namespace LLEx
                 SyntaxNode sumExpression2 = (SyntaxNode)node.GetAttribute("sumExpressionNode2");
                 objects += $"{ProcessExpression(sumExpression2)},";
                 SyntaxNode sumExpression3 = (SyntaxNode)node.GetAttribute("sumExpressionNode3");
-                objects +=$"{ProcessExpression(sumExpression3)},)";
+                objects +=$"{ProcessExpression(sumExpression3)})";
             }else{
                 SyntaxNode sumExpression = (SyntaxNode)node.GetAttribute("sumExpressionNode");
                 objects+=$"{ProcessExpression(sumExpression)})";
             }
 
-            code.AppendLine($"{currentIndentation}{func}({objects}");
+            code.AppendLine($"{currentIndentation}{MapToken(func)}({objects}");
         }
 
         private string ProcessInputStatement(SyntaxNode node)
         {
-            var idNode = (SyntaxNodeLeaf)node.GetAttribute("comandoNode");
-            string inputType = idNode.Value;
+            
+            string inputType = (string)node.GetAttribute("comandoNode");
+            
             switch (inputType)
             {
                 case "ler":
-                    inputType = "int(input())";
+                    inputType +="()";
                     break;
                  case "ler_varios":
-                    inputType = "int(input())";
+                    SyntaxNode sumExpression1 = (SyntaxNode)node.GetAttribute("sumExpressionNode1");
+                    inputType += $"({ProcessExpression(sumExpression1)},";
+                    SyntaxNode sumExpression2 = (SyntaxNode)node.GetAttribute("sumExpressionNode2");
+                    inputType += $"{ProcessExpression(sumExpression2)},";
+                    SyntaxNode sumExpression3 = (SyntaxNode)node.GetAttribute("sumExpressionNode3");
+                    inputType +=$"{ProcessExpression(sumExpression3)})";
                     break;
             
 
@@ -218,36 +234,24 @@ namespace LLEx
             else if (node.VerifyKey("expressionNode"))
             {
                 SyntaxNode value = (SyntaxNode)node.GetAttribute("expressionNode");
-                return ProcessExpression(value);
+                return $"({ProcessExpression(value)})";
             }
             else{
                 string left = ProcessExpression(node.GetAttribute("left") as SyntaxNode);
                 if(node.VerifyKey("operator")){
                     string operatorType = node.GetAttribute("operator").ToString();
                     string right = ProcessExpression(node.GetAttribute("right") as SyntaxNode);
-                    return $"{left} {operatorType} {right}";
+                    return $"{left} {MapToken(operatorType)} {right}";
                 }else if(node.VerifyKey("comparator")){
                     string operatorType = node.GetAttribute("comparator").ToString();
                     string right = ProcessExpression(node.GetAttribute("right") as SyntaxNode);
-                    return $"{left} {operatorType} {right}";
+                    return $"{left} {MapToken(operatorType)} {right}";
                 }
                 
                 return $"{left}";
             }
         }
 
-        private string ProcessExpressionList(SyntaxNode node)
-        {
-            List<string> expressionList = new List<string>();
-            foreach (var attribute in node.GetAttributes())
-            {
-                if (attribute.Value is SyntaxNode childNode)
-                {
-                    expressionList.Add(ProcessExpression(childNode));
-                }
-            }
-            return string.Join(", ", expressionList);
-        }
 
         private void IncreaseIndentation()
         {
@@ -306,6 +310,18 @@ namespace LLEx
             }
 
             return string.Empty;
+        }
+
+        public string MapToken(string originalToken)
+        {
+            // Verifique se há um mapeamento para o token original
+            if (tokenMap.ContainsKey(originalToken))
+            {
+                // Retorna o token correspondente em Python
+                return tokenMap[originalToken];
+            }
+            // Se não houver um mapeamento, retorne o token original
+            return originalToken;
         }
     }
 }
