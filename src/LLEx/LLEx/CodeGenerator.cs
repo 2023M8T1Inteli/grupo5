@@ -2,9 +2,9 @@ using System;
 using System.Text;
 using System.Collections.Generic;
 
-
 namespace LLEx
 {
+    // Class responsible for generating Python code from an abstract syntax tree (AST)
     public class CodeGenerator
     {
         private SyntaxNode ast;
@@ -12,17 +12,17 @@ namespace LLEx
         private SemanticAnalyzer semanticAnalyzer;
         private string currentIndentation = "";
 
-
+        // Mapping of tokens from the LL(1) grammar to their corresponding Python equivalents
         private Dictionary<string, string> tokenMap = new Dictionary<string, string>
-            {
-                {"<>", "!="},
-                {"^", "**"},
-                {"e", "and"},
-                {"ou", "or"}
+        {
+            {"<>", "!="},
+            {"^", "**"},
+            {"e", "and"},
+            {"ou", "or"}
+            // Other Operator mappings if needed
+        };
 
-                // Other Operator if need
-            };
-
+        // Constructor for the CodeGenerator class
         public CodeGenerator(SyntaxNode ast)
         {
             this.ast = ast;
@@ -30,6 +30,7 @@ namespace LLEx
             this.semanticAnalyzer = new SemanticAnalyzer();
         }
 
+        // Generate Python code from the provided abstract syntax tree
         public string GenerateCode()
         {
             semanticAnalyzer.AnalyzeSyntaxTree(ast);
@@ -37,6 +38,7 @@ namespace LLEx
             return code.ToString();
         }
 
+        // Process different types of nodes in the abstract syntax tree
         private void ProcessNode(SyntaxNode node)
         {
             switch (node.Name)
@@ -53,6 +55,7 @@ namespace LLEx
             }
         }
 
+        // Process a program node in the abstract syntax tree
         private void ProcessProgram(SyntaxNode node)
         {
             var idNode = (SyntaxNodeLeaf)node.GetAttribute("idNode");
@@ -62,45 +65,40 @@ namespace LLEx
             DecreaseIndentation();
         }
 
+        // Process a block node in the abstract syntax tree
         private void ProcessBlock(SyntaxNode node)
         {
-
-            
             SyntaxNode statementListNode = (SyntaxNode)node.GetAttribute("statementListNode");
             if(statementListNode == null){
                 ProcessStatementList(node);
             }
             else{
-                SyntaxNode nextNode = null;
-                if(statementListNode != null){
-                    nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
-                }
-                    
+                // Process statement list if present
+                SyntaxNode nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
                 ProcessStatementList(statementListNode);
-
-
-                
             }
         }
 
+        // Process a statement list node in the abstract syntax tree
         private void ProcessStatementList(SyntaxNode node)
-        {   
-
+        {
             SyntaxNode statementNode = (SyntaxNode)node.GetAttribute("statementNode");
             SyntaxNode nextNode = null;
             if(node != null){
                 nextNode = (SyntaxNode)node.GetAttribute("nextNode");
             }
 
+            // Process individual statement
             ProcessStatement(statementNode);
 
+            // Recursively process the next statement if present
             if (nextNode.CountAtributtes() != 0)
             {
                 ProcessStatementList(nextNode);
             }
-
         }
 
+        // Process an individual statement node in the abstract syntax tree
         private void ProcessStatement(SyntaxNode node)
         {
             switch (node.Name)
@@ -120,9 +118,10 @@ namespace LLEx
             }
         }
 
+        // Process an assignment statement node in the abstract syntax tree
         private void ProcessAssignStatement(SyntaxNode node)
-        {   
-            
+        {
+            // Process the assignment statement and generate Python code
             string codeAssign = "";
             var idNode = (SyntaxNodeLeaf)node.GetAttribute("idNode");
             if (node.VerifyKey("inputStatementNode")){
@@ -132,14 +131,14 @@ namespace LLEx
                 var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
                 codeAssign = ProcessExpression(expressionNode);
             }
-            
-
     
             code.AppendLine($"{currentIndentation}{idNode.Value} = {codeAssign}");
         }
 
+        // Process an if statement node in the abstract syntax tree
         private void ProcessIfStatement(SyntaxNode node)
         {
+            // Process the if statement and generate Python code
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             var elseBlockNode = node.GetAttribute("ifNotBlockNode") as SyntaxNode;
@@ -149,6 +148,7 @@ namespace LLEx
             ProcessBlock(blockNode);
             DecreaseIndentation();
 
+            // Process the else block if present
             if (elseBlockNode != null)
             {
                 code.AppendLine($"{currentIndentation}else:");
@@ -158,8 +158,10 @@ namespace LLEx
             }
         }
 
+        // Process a while statement node in the abstract syntax tree
         private void ProcessWhileStatement(SyntaxNode node)
         {
+            // Process the while statement and generate Python code
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             string expressionCode = ProcessExpression(expressionNode);
@@ -169,29 +171,36 @@ namespace LLEx
             DecreaseIndentation();  
         }
 
+        // Process a command statement node in the abstract syntax tree
         private void ProcessCommandStatement(SyntaxNode node)
         {   
+            // Process a command statement and generate Python code
             string func = (string)node.GetAttribute("comandoNode");
             string objects =  "";
 
+            // Process different command statements
             if(func == "mostrar_tocar"){
-                SyntaxNode sumExpression1 = (SyntaxNode)node.GetAttribute("sumExpressionNode1");
-                objects += $"{ProcessExpression(sumExpression1)},";
-                SyntaxNode sumExpression2 = (SyntaxNode)node.GetAttribute("sumExpressionNode2");
-                objects += $"{ProcessExpression(sumExpression2)},";
-                SyntaxNode sumExpression3 = (SyntaxNode)node.GetAttribute("sumExpressionNode3");
-                objects +=$"{ProcessExpression(sumExpression3)})";
+
+                SyntaxNode sumExpression = (SyntaxNode)node.GetAttribute($"sumExpressionNode1");
+                objects += $"{ProcessExpression(sumExpression)}";
+
+                for (int i = 0; i < node.CountAtributtes()-2; i++)
+                {   
+                    sumExpression = (SyntaxNode)node.GetAttribute($"sumExpressionNode{i+2}");
+                    objects += $",{ProcessExpression(sumExpression)}";
+                }
             }else{
                 SyntaxNode sumExpression = (SyntaxNode)node.GetAttribute("sumExpressionNode");
-                objects+=$"{ProcessExpression(sumExpression)})";
+                objects+=$"{ProcessExpression(sumExpression)}";
             }
 
-            code.AppendLine($"{currentIndentation}{MapToken(func)}({objects}");
+            code.AppendLine($"{currentIndentation}{MapToken(func)}({objects})");
         }
 
+        // Process an input statement node in the abstract syntax tree
         private string ProcessInputStatement(SyntaxNode node)
         {
-            
+            // Process an input statement and generate Python code
             string inputType = (string)node.GetAttribute("comandoNode");
             
             switch (inputType)
@@ -200,23 +209,24 @@ namespace LLEx
                     inputType +="()";
                     break;
                  case "ler_varios":
-                    SyntaxNode sumExpression1 = (SyntaxNode)node.GetAttribute("sumExpressionNode1");
-                    inputType += $"({ProcessExpression(sumExpression1)},";
-                    SyntaxNode sumExpression2 = (SyntaxNode)node.GetAttribute("sumExpressionNode2");
-                    inputType += $"{ProcessExpression(sumExpression2)},";
-                    SyntaxNode sumExpression3 = (SyntaxNode)node.GetAttribute("sumExpressionNode3");
-                    inputType +=$"{ProcessExpression(sumExpression3)})";
-                    break;
-            
+                    SyntaxNode sumExpression = (SyntaxNode)node.GetAttribute($"sumExpressionNode1");
+                    inputType += $"({ProcessExpression(sumExpression)}";
 
-           
+                    for (int i = 0; i < node.CountAtributtes()-2; i++)
+                    {   
+                        sumExpression = (SyntaxNode)node.GetAttribute($"sumExpressionNode{i+2}");
+                        inputType += $",{ProcessExpression(sumExpression)}";
+                    }
+                    inputType = $"{inputType})";
+                    break;
             }
             return inputType;
         }
 
+        // Process an expression node in the abstract syntax tree
         private string ProcessExpression(SyntaxNode node)
         {   
-            
+            // Process an expression and generate Python code
             if (node.VerifyKey("idNode"))
             {
                 SyntaxNodeLeaf value = (SyntaxNodeLeaf)node.GetAttribute("idNode");
@@ -252,12 +262,13 @@ namespace LLEx
             }
         }
 
-
+        // Increase the current indentation level
         private void IncreaseIndentation()
         {
             currentIndentation += "    ";
         }
 
+        // Decrease the current indentation level
         private void DecreaseIndentation()
         {
             if (currentIndentation.Length >= 4)
@@ -266,8 +277,10 @@ namespace LLEx
             }
         }
 
+        // Process a sum expression node in the abstract syntax tree
         private string ProcessSumExpression(SyntaxNode node)
         {
+            // Process a sum expression and generate Python code
             if (node == null)
             {
                 return string.Empty;
@@ -312,15 +325,16 @@ namespace LLEx
             return string.Empty;
         }
 
+        // Map LL(1) grammar tokens to their corresponding Python equivalents
         public string MapToken(string originalToken)
         {
-            // Verifique se há um mapeamento para o token original
+            // Check if there is a mapping for the original token
             if (tokenMap.ContainsKey(originalToken))
             {
-                // Retorna o token correspondente em Python
+                // Return the corresponding Python token
                 return tokenMap[originalToken];
             }
-            // Se não houver um mapeamento, retorne o token original
+            // If there is no mapping, return the original token
             return originalToken;
         }
     }

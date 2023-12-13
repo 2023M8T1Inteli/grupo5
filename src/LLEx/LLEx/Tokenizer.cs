@@ -35,7 +35,7 @@ namespace LLEx
             // Ending with tag </tokens>.
             output.AppendLine("</tokens>");
 
-            Console.Write(output.ToString());
+            // Console.Write(output.ToString());
         }
 
         private void ResetLexema()
