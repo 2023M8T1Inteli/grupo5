@@ -20,11 +20,11 @@ export default function Home() {
         const today = format(new Date(), 'yyyy-MM-dd');
 
         axios.get('http://localhost:80/pacient/all').then(response => {
-            const loadedPatients = response.data.flatMap((patient) => {
+            const loadedPatients = response.data.flatMap((patient:any) => {
                 // Filtrar sessões para manter apenas as do dia atual
-                const sessionsToday = patient.sessions.filter(session => session.startedAt.startsWith(today));
+                const sessionsToday = patient.sessions.filter((session:any) => session.startedAt.startsWith(today));
 
-                return sessionsToday.map(session => ({
+                return sessionsToday.map((session:any) => ({
                     name: patient.name,
                     hour: session.startedAt.split(' ')[1],
                     data: session.startedAt.split(' ')[0],
@@ -45,9 +45,7 @@ export default function Home() {
 				<div className='flex flex-col gap-8'>
                         <h2 className='text-4xl'>Próximos pacientes</h2>
                         <div className='flex flex-col gap-4' style={{ maxHeight: '600px', overflowY: 'auto' }}>
-                            {patients.map((patient, index) => (
-                                <NextPatient key={index} name={patient.name} hour={patient.hour} data={patient.data} />
-                            ))}
+
                         </div>
                     </div>
                     <div className='flex flex-col items-start gap-8'>
