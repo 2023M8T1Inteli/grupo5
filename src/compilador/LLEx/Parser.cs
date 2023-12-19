@@ -228,19 +228,32 @@ namespace LLEx
             }
             else if (IsCurrentTokenValue("ler_varios"))
             {
-                // Parse the multiple input statement
+                // Parse the "ler_varios" (read_various) command with multiple expressions
                 List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
                 Token ler_varios = MatchValue("ler_varios");
                 Match("LPAR");
+                bool fisrtExpression = true;
 
-                // Add attributes for the multiple input statement
-                inputStatement.AddAttributes("comandoNode",ler_varios.Value);
-                inputStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
-                Match("COMMA");
-                inputStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
-                Match("COMMA");
-                inputStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());
+                // Parse multiple sum expressions separated by commas
+                while (tokens[currentTokenIndex].Name != "RPAR"){
+                    
+                    if(fisrtExpression){
+                        sumExpressions.Add(ParseSumExpression());
+                        fisrtExpression = false;
+                    }
+                    Match("COMMA");
+                    sumExpressions.Add(ParseSumExpression());
+                    
+                }
                 Match("RPAR");
+                // Add attributes for the "ler_varios" command
+                inputStatement.AddAttributes("comandoNode",ler_varios.Value);
+                // Add each sum expression as a child node
+                for (int i = 0; i < sumExpressions.Count; i++)
+                {
+                    SyntaxNode sumExpression = sumExpressions[i];
+                    inputStatement.AddAttributes($"sumExpressionNode{i + 1}", sumExpression);
+                }
 
             }
 
@@ -334,7 +347,7 @@ namespace LLEx
                 commandStatement.AddAttributes("comandoNode",tocar.Value);
                 commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
-            else if (IsCurrentToken("esperar"))
+            else if (IsCurrentTokenValue("esperar"))
             {
                 // Parse the "esperar" (wait) command
                 Token esperar = MatchValue("esperar");
@@ -347,21 +360,36 @@ namespace LLEx
                 commandStatement.AddAttributes("sumExpressionNode",sumExpression);
             }
             
-            else if (IsCurrentToken("mostrar_tocar"))
+            else if (IsCurrentTokenValue("mostrar_tocar"))
             {
+
                 // Parse the "mostrar_tocar" (show_play) command with multiple expressions
                 List<SyntaxNode> sumExpressions = new List<SyntaxNode>();
                 Token mostrar_tocar = MatchValue("mostrar_tocar");
                 Match("LPAR");
 
+                bool fisrtExpression = true;
+
+                // Parse multiple sum expressions separated by commas
+                while (tokens[currentTokenIndex].Name != "RPAR"){
                 
+                    if(fisrtExpression){
+                        sumExpressions.Add(ParseSumExpression());
+                        fisrtExpression = false;
+                    }
+                    Match("COMMA");
+                    sumExpressions.Add(ParseSumExpression());
+                    
+                }
+                Match("RPAR");
                 // Add attributes for the "mostrar_tocar" command
-                commandStatement.AddAttributes("comandoNode", mostrar_tocar.Value);
-                commandStatement.AddAttributes("sumExpressionNode1", ParseSumExpression());
-                Match("COMMA");
-                commandStatement.AddAttributes("sumExpressionNode2", ParseSumExpression());
-                Match("COMMA");
-                commandStatement.AddAttributes("sumExpressionNode3", ParseSumExpression());
+                commandStatement.AddAttributes("comandoNode",mostrar_tocar.Value);
+                // Add each sum expression as a child node
+                for (int i = 0; i < sumExpressions.Count; i++)
+                {
+                    SyntaxNode sumExpression = sumExpressions[i];
+                    commandStatement.AddAttributes($"sumExpressionNode{i + 1}", sumExpression);
+                }
 
                 
             }
@@ -395,8 +423,6 @@ namespace LLEx
             {
                 // Add attributes for the expression without a relational operator
                 expression.AddAttributes("left",sumExpression1);
-                expression.AddAttributes("comparator",null);
-                expression.AddAttributes("right",null);
             }
 
             return expression;

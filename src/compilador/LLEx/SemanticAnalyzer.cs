@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Reflection;
 
 namespace LLEx
-{
+{   
+    // Class responsible for performing semantic analysis on the abstract syntax tree (AST)
     public class SemanticAnalyzer
     {
-        private Dictionary<string, VariableInfo> symbolTable;
-        private Stack<ScopeInfo> scopeStack;
-        private List<string> errors;
+        private Dictionary<string, VariableInfo> symbolTable; // Dictionary to store variable information
+        private Stack<ScopeInfo> scopeStack; // Stack to manage different scopes
+        private List<string> errors; // List to store semantic errors
 
+        // Constructor for the SemanticAnalyzer class
         public SemanticAnalyzer()
         {
             symbolTable = new Dictionary<string, VariableInfo>();
@@ -17,50 +19,73 @@ namespace LLEx
             errors = new List<string>();
         }
 
+        // Analyze the syntax tree for semantic errors
         public void AnalyzeSyntaxTree(SyntaxNode programNode)
         {
             EnterScope("global");
             AnalyzeProgram(programNode);
             ExitScope();
-            PrintErrors();
         }
 
+        // Analyze a program node in the abstract syntax tree
         private void AnalyzeProgram(SyntaxNode programNode)
         {
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)programNode.GetAttribute("idNode");
-            AddVariableToSymbolTable(idNode.Value, "String", idNode.Name,idNode.Value, false);
+            AddVariableToSymbolTable(idNode.Value, "String", idNode.Name, idNode.Value, false);
 
             SyntaxNode blockNode = (SyntaxNode)programNode.GetAttribute("blockNode");
             AnalyzeBlock(blockNode);
+            if (blockNode == null)
+            {
+                throw new Exception($"Semantic error: Empty block; its state will never be altered.");
+            }
         }
 
+        // Analyze a block node in the abstract syntax tree
         private void AnalyzeBlock(SyntaxNode blockNode)
-        {
+        {   
             EnterScope("block");
             SyntaxNode statementListNode = (SyntaxNode)blockNode.GetAttribute("statementListNode");
-            AnalyzeStatementList(statementListNode);
-            ExitScope();
+            if(statementListNode == null){
+                AnalyzeStatementList(blockNode);
+            }
+            else{
+                SyntaxNode nextNode = null;
+                if(statementListNode != null){
+                    nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
+                }
+                    
+                AnalyzeStatementList(statementListNode);
+
+                ExitScope();
+            }
         }
 
+        // Analyze a statement list node in the abstract syntax tree
         private void AnalyzeStatementList(SyntaxNode statementListNode)
         {
             SyntaxNode statementNode = (SyntaxNode)statementListNode.GetAttribute("statementNode");
-            SyntaxNode nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
-
-            if (nextNode != null)
-            {
-                AnalyzeStatement(statementNode);
+            SyntaxNode nextNode = null;
+            if(statementListNode != null){
+                nextNode = (SyntaxNode)statementListNode.GetAttribute("nextNode");
             }
 
-            if (nextNode != null)
+            if (statementNode != null)
+            {
+                AnalyzeStatement(statementNode);
+            }else{
+                throw new Exception($"Semantic error: Empty block; its state will never be altered.");
+            }
+
+            if (nextNode.CountAtributtes() != 0)
             {
                 AnalyzeStatementList(nextNode);
             }
         }
 
+        // Analyze an individual statement node in the abstract syntax tree
         private void AnalyzeStatement(SyntaxNode statementNode)
         {
-            
             switch(statementNode.Name){
                 case "assignStatement":
                     AnalyzeAssignStatement(statementNode);
@@ -81,6 +106,7 @@ namespace LLEx
             }
         }
 
+        // Analyze an assignment statement node in the abstract syntax tree
         private void AnalyzeAssignStatement(SyntaxNode assignStatementNode)
         {
             Token id;
@@ -95,68 +121,80 @@ namespace LLEx
 
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)assignStatementNode.GetAttribute("idNode");
             AddVariableToSymbolTable(idNode.Value, "Inteiro", idNode.Name, valor, false);
-            
         }
 
+        // Analyze an input statement node in the abstract syntax tree
         private void AnalyzeInputStatement(SyntaxNode inputStatementNode)
         {
             string func = (string)inputStatementNode.GetAttribute("comandoNode");
 
             if(func == "ler_varios"){
-                SyntaxNode sumExpression1 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode1");
-                AnalyzeSumExpression(sumExpression1);
-                SyntaxNode sumExpression2 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode2");
-                AnalyzeSumExpression(sumExpression2);
-                SyntaxNode sumExpression3 = (SyntaxNode)inputStatementNode.GetAttribute("sumExpressionNode3");
-                AnalyzeSumExpression(sumExpression3);
+                // Parse the multiple input statement
+                
+                for (int i = 0; i < inputStatementNode.CountAtributtes()-1; i++)
+                {
+                    SyntaxNode sumExpression = (SyntaxNode)inputStatementNode.GetAttribute($"sumExpressionNode{i + 1}");
+                    AnalyzeSumExpression(sumExpression);
+                }
             }
-
-            
         }
 
+        // Analyze an if statement node in the abstract syntax tree
         private void AnalyzeIfStatement(SyntaxNode ifStatementNode)
         {   
             SyntaxNode expression = (SyntaxNode)ifStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)ifStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
+            AnalyzeBlock(block);
+            if (block == null)
+            {
+                throw new Exception($"Semantic error: Empty block; its state will never be altered.");
+            }
             if(ifStatementNode.VerifyKey("ifNotBlockNode")){
                 SyntaxNode ifNotBlock = (SyntaxNode)ifStatementNode.GetAttribute("ifNotBlockNode");
-                AnalyzeExpression(ifNotBlock);
+                if (ifNotBlock == null)
+                {
+                    throw new Exception($"Semantic error: Empty block; its state will never be altered.");
+                }
+                AnalyzeBlock(ifNotBlock);
             }
         }
 
+        // Analyze a while statement node in the abstract syntax tree
         private void AnalyzeWhileStatement(SyntaxNode whileStatementNode)
         {
             SyntaxNode expression = (SyntaxNode)whileStatementNode.GetAttribute("expressionNode");
             AnalyzeExpression(expression);
             SyntaxNode block = (SyntaxNode)whileStatementNode.GetAttribute("blockNode");
-            AnalyzeExpression(expression);
-            
+
+            if (block == null)
+            {
+                throw new Exception($"Semantic error: Empty block, its state will never be altered.");
+            }
+            AnalyzeBlock(block);
         }
 
+        // Analyze a command statement node in the abstract syntax tree
         private void AnalyzeCommandStatement(SyntaxNode commandStatementNode)
         {
             string func = (string)commandStatementNode.GetAttribute("comandoNode");
 
             if(func == "mostrar_tocar"){
-                SyntaxNode sumExpression1 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode1");
-                AnalyzeSumExpression(sumExpression1);
-                SyntaxNode sumExpression2 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode2");
-                AnalyzeSumExpression(sumExpression2);
-                SyntaxNode sumExpression3 = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode3");
-                AnalyzeSumExpression(sumExpression3);
+                
+                for (int i = 0; i < commandStatementNode.CountAtributtes()-1; i++)
+                {
+                    SyntaxNode sumExpression = (SyntaxNode)commandStatementNode.GetAttribute($"sumExpressionNode{i + 1}");
+                    AnalyzeSumExpression(sumExpression);
+                }
             }else{
                 SyntaxNode sumExpression = (SyntaxNode)commandStatementNode.GetAttribute("sumExpressionNode");
                 AnalyzeSumExpression(sumExpression);
             }
-            
         }
 
+        // Analyze an expression node in the abstract syntax tree
         private void AnalyzeExpression(SyntaxNode expressionNode)
         {
-        
-
             SyntaxNode leftNode = (SyntaxNode)expressionNode.GetAttribute("left");
             string comparator = (string)expressionNode.GetAttribute("comparator");
             SyntaxNode rightNode = (SyntaxNode)expressionNode.GetAttribute("right");
@@ -169,22 +207,14 @@ namespace LLEx
                     AnalyzeSumExpression(rightNode);
                 }
             }
-
-            
-            // AreSameType(id1, id2);
-
-
-            // Adicione verificações de tipo aqui se necessário
-            // Exemplo: Verificar se os tipos de leftNode e rightNode são compatíveis
         }
 
+        // Analyze a sum expression node in the abstract syntax tree
         private void AnalyzeSumExpression(SyntaxNode sumExpressionNode)
         {
-
             SyntaxNode leftNode = (SyntaxNode)sumExpressionNode.GetAttribute("left");
             string operatorType = (string)sumExpressionNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)sumExpressionNode.GetAttribute("right");
-
 
             if(sumExpressionNode.Name != "sumExpression"){
                 AnalyzeMultTerm(sumExpressionNode);
@@ -192,10 +222,9 @@ namespace LLEx
                 AnalyzeMultTerm(leftNode);
                 AnalyzeMultTerm(rightNode);
             }
-
-            // Adicione verificações de tipo aqui se necessário
         }
 
+        // Analyze a multiplication term node in the abstract syntax tree
         private void AnalyzeMultTerm(SyntaxNode multTermNode)
         {
             SyntaxNode leftNode = (SyntaxNode)multTermNode.GetAttribute("left");
@@ -208,30 +237,29 @@ namespace LLEx
                 AnalyzePowerTerm(leftNode);
                 AnalyzePowerTerm(rightNode);
             }
-
-            // Adicione verificações de tipo aqui se necessário
         }
 
+        // Analyze a power term node in the abstract syntax tree
         private void AnalyzePowerTerm(SyntaxNode powerTermNode)
         {
             SyntaxNode leftNode = (SyntaxNode)powerTermNode.GetAttribute("left");
             string operatorType = (string)powerTermNode.GetAttribute("operator");
             SyntaxNode rightNode = (SyntaxNode)powerTermNode.GetAttribute("right");
 
-
             if(powerTermNode.Name != "powerTerm"){
                 AnalyzeFactor(powerTermNode);
             }else{
                 AnalyzeFactor(leftNode);
                 AnalyzeFactor(rightNode);
-
             }
-
-            // Adicione verificações de tipo aqui se necessário
         }
 
+        // Analyze a factor node in the abstract syntax tree
         private void AnalyzeFactor(SyntaxNode factorNode)
-        {
+        {   
+            if((SyntaxNode)factorNode.GetAttribute("expressionNode") != null){
+                AnalyzeExpression((SyntaxNode)factorNode.GetAttribute("expressionNode"));
+            }
             SyntaxNodeLeaf idNode = (SyntaxNodeLeaf)factorNode.GetAttribute("idNode");
             SyntaxNodeLeaf integerNode = (SyntaxNodeLeaf)factorNode.GetAttribute("integerNode");
             SyntaxNodeLeaf booleanNode = (SyntaxNodeLeaf)factorNode.GetAttribute("booleanNode");
@@ -240,76 +268,86 @@ namespace LLEx
             if (idNode != null)
             {   
                 CheckVariableDeclaration(idNode);
-                // CheckVariableInitialization(idNode);
-                // Adicione verificações de tipo aqui se necessário
+                CheckVariableInitialization(idNode);
             }
             else if (integerNode != null)
             {
-                // Adicione verificações de tipo aqui se necessário
+                // Additional type checks can be added here if needed
             }
             else if (booleanNode != null)
             {
-                // Adicione verificações de tipo aqui se necessário
+                // Additional type checks can be added here if needed
             }
         }
 
+        // Check if two variable types are the same
         public static bool AreSameType(VariableType type1, VariableType type2)
         {
-            // Verifica se ambos os tipos são nulos
             if (type1 == null && type2 == null)
             {
                 return true;
             }
 
-            // Verifica se pelo menos um dos tipos é nulo
             if (type1 == null || type2 == null)
             {
                 return false;
             }
 
-            // Compara os tipos
             return type1.Equals(type2);
         }
 
-
+        // Check if a variable has been declared in the current scope
         private void CheckVariableDeclaration(SyntaxNodeLeaf idNode)
         {
             string variableName = idNode.Value;
 
-            ScopeInfo currentScope = scopeStack.Peek();
-
-            if (!currentScope.SymbolTable.ContainsKey(variableName))
+            foreach (ScopeInfo currentScope in scopeStack)
             {
-                AddError($"Erro semântico: Variável '{variableName}' não foi declarada.");
+                if (currentScope.SymbolTable.ContainsKey(variableName))
+                {
+                    return;
+                }
+                if (!currentScope.SymbolTable.ContainsKey(variableName) && currentScope.Name == "global")
+                {
+                    throw new Exception($"Semantic error: Variable '{variableName}' has not been declared.");
+                }
             }
         }
 
+        // Check if a variable has been initialized before use
         private void CheckVariableInitialization(SyntaxNodeLeaf idNode)
         {
             string variableName = idNode.Value;
 
-            ScopeInfo currentScope = scopeStack.Peek();
-
-            if (currentScope.SymbolTable[variableName].Value != null)
-            {
-                AddError($"Erro semântico: Variável '{variableName}' não foi inicializada.");
+            foreach (ScopeInfo currentScope in scopeStack)
+            {   
+                if(currentScope.SymbolTable.ContainsKey(variableName)){
+                    if (currentScope.SymbolTable[variableName].Value == null && currentScope.Name == "global")
+                    {
+                        throw new Exception($"Semantic error: Variable '{variableName}' has not been initialized.");
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
             }
         }
 
+        // Placeholder function for checking if a variable is initialized (not fully implemented)
         private bool IsVariableInitialized(string variableName)
         {
-            // Implemente a lógica para verificar se a variável foi inicializada antes de ser utilizada
-            // Pode envolver o rastreamento de inicialização em diferentes caminhos do código
-            // Por simplicidade, esta implementação assume que todas as variáveis são inicializadas
             return true;
         }
 
+        // Enter a new scope in the symbol table
         private void EnterScope(string scopeName)
         {
             ScopeInfo scopeInfo = new ScopeInfo(scopeName);
             scopeStack.Push(scopeInfo);
         }
 
+        // Exit the current scope in the symbol table
         private void ExitScope()
         {
             if (scopeStack.Count > 0)
@@ -318,13 +356,14 @@ namespace LLEx
             }
         }
 
+        // Add a variable to the symbol table
         private void AddVariableToSymbolTable(string variableName, string variableType, string token, string value, bool used)
         {
             ScopeInfo currentScope = scopeStack.Peek();
 
             if (currentScope.SymbolTable.ContainsKey(variableName))
             {
-                AddError($"Erro semântico: Variável '{variableName}' já foi declarada neste escopo.");
+                throw new Exception($"Semantic error: Variable '{variableName}' has already been declared in this scope.");
             }
             else
             {
@@ -333,19 +372,7 @@ namespace LLEx
             }
         }
 
-        private void AddError(string error)
-        {
-            errors.Add(error);
-        }
-
-        private void PrintErrors()
-        {
-            foreach (string error in errors)
-            {
-                Console.WriteLine(error);
-            }
-        }
-
+        // Class representing information about a scope in the symbol table
         private class ScopeInfo
         {
             public string Name { get; }
@@ -358,6 +385,7 @@ namespace LLEx
             }
         }
 
+        // Class representing information about a variable
         private class VariableInfo
         {
             public string Name { get; }
@@ -377,6 +405,7 @@ namespace LLEx
             }
         }
 
+        // Enumeration representing variable types
         public enum VariableType
         {
             Int,

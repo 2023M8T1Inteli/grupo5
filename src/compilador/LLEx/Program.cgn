@@ -1,7 +1,9 @@
-programa "teste semântico 2":
+programa "exemplo_semantico1":
 inicio
-x = 1
-y = 2
-mostrar(z)
-z = y
+valor = ler()
+se valor >= 10 entao
+inicio
+x = x + 1
+mostrar(x)
+fim
 fim.

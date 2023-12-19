@@ -50,7 +50,7 @@ namespace LLEx
             SyntaxNode syntaxNode = parser.ParseProgram();
 
             // Use ToString to print the SyntaxNode
-            Console.WriteLine(syntaxNode.ToString());
+            // Console.WriteLine(syntaxNode.ToString());
 
             XmlDocument syntaxTreeXml = parser.SerializeSyntaxTreeToXml(syntaxNode);
             
@@ -59,6 +59,12 @@ namespace LLEx
             SemanticAnalyzer semanticAnalyzer = new SemanticAnalyzer();
 
             semanticAnalyzer.AnalyzeSyntaxTree(syntaxNode);
+
+            CodeGenerator codeGenerator = new CodeGenerator(syntaxNode);
+
+            string codigo = codeGenerator.GenerateCode();
+
+            Console.WriteLine(codigo);
 
 
 
