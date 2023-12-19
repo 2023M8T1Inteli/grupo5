@@ -2,8 +2,41 @@ import Image from "next/image";
 import ButtonMin from "./ButtonMin";
 import Trash from "@/public/trash.svg"
 import Play from "@/public/play_white.svg"
+import React, { useCallback } from 'react';
+
 
 export default function TherapyHeader({ therapyName, isEditing, handleNameClick, handleNameChange, handleNameBlur, isToggleOn, handleToggleClick, onClickTrashIcon } : { therapyName: string, isEditing: boolean, handleNameClick: () => void, handleNameChange: (e: React.ChangeEvent<HTMLInputElement>) => void, handleNameBlur: () => void, isToggleOn: boolean, handleToggleClick: () => void, onClickTrashIcon: () => void }) {
+    const iniciarConexaoWebSocket = async () => {
+        try {
+            // Faça uma solicitação POST para iniciar a conexão WebSocket
+            const response = await fetch('http://127.0.0.1:3001/start_websocket', { method: 'POST' });
+    
+            if (response.ok) {
+                console.log('Servidor WebSocket iniciado com sucesso!');
+    
+                // Adicione lógica para criar uma conexão WebSocket
+                const websocket = new WebSocket('ws://localhost:8765');
+    
+                // Adicione um ouvinte para eventos de mensagem
+                websocket.addEventListener('message', (event) => {
+                    // A mensagem recebida do servidor WebSocket contém o valor do quadrante
+                    const quadrante = event.data;
+                    console.log('Quadrante tocado pelo cliente:', quadrante);
+    
+                    // Adicione aqui a lógica para manipular o quadrante recebido, se necessário
+                });
+    
+                // Aqui você pode adicionar lógica adicional após a inicialização do WebSocket, se necessário
+            } else {
+                console.error('Erro ao iniciar o servidor WebSocket.');
+            }
+        } catch (error) {
+            console.error('Erro:', error);
+        }
+    };
+    
+    
+      
     return (
         <div className='flex justify-between items-center p-6 w-full h-[10%] bg-[#F8F8F8] border-b-2 border-[#EFEFEF]'>
             <div className='flex gap-4'>
@@ -38,7 +71,7 @@ export default function TherapyHeader({ therapyName, isEditing, handleNameClick,
                     </div>
                 </div>
                 <div className='w-40'>
-                    <ButtonMin text='Começar' icon={Play}></ButtonMin>
+                <ButtonMin text='Compilar' icon={Play} onClick={iniciarConexaoWebSocket}></ButtonMin>
                 </div>
             </div>
         </div>

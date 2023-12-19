@@ -45,7 +45,6 @@ export default function Home() {
 				<div className='flex flex-col gap-8'>
                         <h2 className='text-4xl'>Próximos pacientes</h2>
                         <div className='flex flex-col gap-4' style={{ maxHeight: '600px', overflowY: 'auto' }}>
- 
                         </div>
                     </div>
                     <div className='flex flex-col items-start gap-8'>
