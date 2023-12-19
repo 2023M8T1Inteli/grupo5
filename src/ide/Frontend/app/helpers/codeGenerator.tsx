@@ -15,8 +15,20 @@ export const generateCommandCode = (droppedItems : IDroppedItem[], commandMappin
     }, '');
 }
 
-export const generateRawCode = (therapyName : string, droppedItems : IDroppedItem[], commandMapping : { [key: string]: string }) => {
+export const generateRawCode = (
+    therapyName: string, 
+    droppedItems: IDroppedItem[], 
+    commandMapping: { [key: string]: string }, 
+    imagePath: string | null, 
+    audioPath: string | null
+) => {
     let code = `programa "${therapyName}":\n`;
+    if (imagePath) {
+        code += `imagem = "${imagePath}"\n`;
+    }
+    if (audioPath) {
+        code += `audio = "${audioPath}"\n`;
+    }
     code += 'inicio\n';
     code += 'quadrante = ler()\n';
     code += generateCommandCode(droppedItems, commandMapping);
