@@ -3,6 +3,7 @@ import { useState } from "react";
 export interface IDroppedItem {
 	icon: any;
 	commandName: string;
+	blockType: string;
 	pairableItems: string[];
 }
 
@@ -11,6 +12,9 @@ const useDrop = (initialItems: IDroppedItem[]) => {
 
     const handleDragOver = (event: React.DragEvent) => {
         event.preventDefault();
+    };
+    const changeItems = (data: IDroppedItem[]) => {
+       setDroppedItems(data)
     };
 
     const handleDrop = async (event: React.DragEvent) => {
@@ -27,7 +31,7 @@ const useDrop = (initialItems: IDroppedItem[]) => {
         setDroppedItems(prevItems => [...prevItems, data]);
     };
 
-    return [droppedItems, handleDragOver, handleDrop] as const;
+    return [droppedItems, handleDragOver, handleDrop, changeItems] as const;
 }
 
 export default useDrop;

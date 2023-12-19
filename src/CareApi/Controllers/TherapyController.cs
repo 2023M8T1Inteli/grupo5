@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CareApi.Controllers
 {   
-     [Authorize]
+    [Authorize]
     [ApiController]
     [Route("/[controller]")]
     public class TherapyController : ControllerBase
@@ -36,6 +36,8 @@ namespace CareApi.Controllers
             return CreatedAtAction(nameof(Get), new { name = newTherapy.Name }, newTherapy);
         }
 
+       
+
         [HttpPost("many")]
         public async Task<IActionResult> Post(List<Therapy> therapies)
         {
@@ -52,6 +54,10 @@ namespace CareApi.Controllers
                 return NotFound();
             }
             updatedTherapy.Name = therapy.Name;
+            if (therapy.Command!=null)
+            {
+               updatedTherapy.Command = therapy.Command;
+            }
             await _therapyService.UpdateByNameAsync(updatedTherapy, name);
             return NoContent();
         }

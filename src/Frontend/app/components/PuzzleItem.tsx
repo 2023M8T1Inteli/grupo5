@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-export default function PuzzleItem({icon, commandName, pairableItems, lastDroppedItem} : {icon: any, commandName : string, pairableItems: string[], lastDroppedItem: {icon: any, commandName: string, pairableItems: string[]} | null}) {
+export default function PuzzleItem({icon, commandName, pairableItems, lastDroppedItem, blockType} : {icon: any, commandName : string, pairableItems: string[], blockType: string, lastDroppedItem: {icon: any, commandName: string, pairableItems: string[], blockType: string} | null}) {
 	const [canDrop, setCanDrop] = useState(true);
 
 	useEffect(() => {

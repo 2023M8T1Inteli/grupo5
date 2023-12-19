@@ -25,15 +25,49 @@ import Form from '@/app/components/Form';
 import DeleteTherapyModal from '@/app/components/DeleteTherapyModal';
 
 export default function Terapy() {
+	const BASE_API_URL = "http://localhost:80/Therapy";
+
     const [activeQuadrant, setActiveQuadrant] = useState(0);
     const [isToggleOn, handleToggleClick] = useToggle(false);
     const [therapyName, isEditing, handleNameClick, handleNameChange, handleNameBlur] = useTherapyName("Terapia 1");
-    const [droppedItems, handleDragOver, handleDrop] = useDrop([]);
-
+    const [droppedItems, handleDragOver, handleDrop, changeItems] = useDrop([]);
+	droppedItems.length
     const handleQuadrantClick = (index : number) => {
         setActiveQuadrant(index);
     };
 
+	const fetchBlocks = ()=>{
+		
+		changeItems([]);
+	}
+	
+	const createTherapyBlocks = async (name: string) => {
+
+		const data = {
+			"name": name,
+			"createdByUser": "admin",
+			"command": []
+		};
+		const token = localStorage.getItem('token') ?? "";
+		// const toastId = toast.loading('Excluindo terapeuta...');
+		// axios.delete(`http://localhost:80/Pacient/name/${patient.name}`, {
+		// 	headers: {
+		// 	}
+			const res = await fetch(BASE_API_URL+"/name/"+{name}, {
+				
+				headers: {
+					"Content-type": "application/json",
+					'Authorization': `Bearer ${token}`
+			},
+			method: "PATCH",
+			body: JSON.stringify(data)
+		})
+
+		if (res.ok) {
+			// getAllTherapies()
+			// console.log("cara salvou")
+		}
+	}
     useEffect(() => {
         generateRawCode(therapyName, droppedItems, commandNameMapping(activeQuadrant));
     }, [therapyName, droppedItems, activeQuadrant]);

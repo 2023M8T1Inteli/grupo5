@@ -3,6 +3,8 @@ FROM node:alpine AS builder
 WORKDIR /src
 
 # Copie os arquivos do projeto
+# USER 0
+# RUN mkdir -p /src/node_modules
 COPY src/Frontend/package.json src/Frontend/package-lock.json ./
 RUN npm install
 
