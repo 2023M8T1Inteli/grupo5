@@ -167,7 +167,7 @@ namespace LLEx
             var expressionNode = node.GetAttribute("expressionNode") as SyntaxNode;
             var blockNode = node.GetAttribute("blockNode") as SyntaxNode;
             string expressionCode = ProcessExpression(expressionNode);
-            code.AppendLine($"{currentIndentation}while ({expressionCode}):");
+            code.AppendLine($"{currentIndentation}while {expressionCode}:");
             IncreaseIndentation();
             ProcessBlock(blockNode);
             DecreaseIndentation();  
@@ -265,7 +265,7 @@ namespace LLEx
                     code.AppendLine($"{currentIndentation}{temp_var_sum} = {left} {MapToken(operatorType)} {right}");
                     return temp_var_sum;
                 }
-                
+                varNumSum = 0;
                 return $"{left}";
             }
         }
