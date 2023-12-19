@@ -17,16 +17,29 @@ export default function TherapyHeader({ therapyName, isEditing, handleNameClick,
                 // Adicione lógica para criar uma conexão WebSocket
                 const websocket = new WebSocket('ws://localhost:8765');
     
+                // Adicione um ouvinte para eventos de abertura da conexão WebSocket
+                websocket.addEventListener('open', () => {
+                    console.log('Conexão WebSocket aberta com sucesso!');
+                });
+    
                 // Adicione um ouvinte para eventos de mensagem
                 websocket.addEventListener('message', (event) => {
-                    // A mensagem recebida do servidor WebSocket contém o valor do quadrante
+                    console.log('Mensagem recebida:', event.data);
                     const quadrante = event.data;
                     console.log('Quadrante tocado pelo cliente:', quadrante);
-    
+                    
                     // Adicione aqui a lógica para manipular o quadrante recebido, se necessário
                 });
     
-                // Aqui você pode adicionar lógica adicional após a inicialização do WebSocket, se necessário
+                // Adicione um ouvinte para eventos de erro na conexão WebSocket
+                websocket.addEventListener('error', (event) => {
+                    console.error('Erro na conexão WebSocket:', event);
+                });
+    
+                // Adicione um ouvinte para eventos de fechamento da conexão WebSocket
+                websocket.addEventListener('close', (event) => {
+                    console.log('Conexão WebSocket fechada:', event);
+                });
             } else {
                 console.error('Erro ao iniciar o servidor WebSocket.');
             }
