@@ -3,7 +3,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: ./src/frontend/Dockerfile
+      dockerfile: ./src/ide/frontend/Dockerfile
     ports:
       - "3000:3000"
     depends_on:
@@ -14,7 +14,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: ./src/CareApi/Dockerfile
+      dockerfile: ./src/ide/CareApi/Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -25,5 +25,5 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - ./src/MongoInit/init-db.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./src/ide/MongoInit/init-db.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     restart: "unless-stopped"
