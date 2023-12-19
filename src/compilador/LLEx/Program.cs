@@ -40,12 +40,12 @@ namespace LLEx
 
             new Tokenizer(source, out output);
 
-            StreamWriter sw = File.CreateText("Output.xml");
+            StreamWriter sw = File.CreateText("bin/Debug/net6.0/Output.xml");
             sw.Write(output);
             sw.Dispose();
             sw.Close();
 
-            Parser parser = new Parser("../net6.0/Output.xml");
+            Parser parser = new Parser("bin/Debug/net6.0/Output.xml");
 
             SyntaxNode syntaxNode = parser.ParseProgram();
 

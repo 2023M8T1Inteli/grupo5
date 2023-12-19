@@ -22,6 +22,8 @@ namespace LLEx
             // Other Operator mappings if needed
         };
 
+        private int varNumSum;
+
         // Constructor for the CodeGenerator class
         public CodeGenerator(SyntaxNode ast)
         {
@@ -225,7 +227,7 @@ namespace LLEx
 
         // Process an expression node in the abstract syntax tree
         private string ProcessExpression(SyntaxNode node)
-        {   
+        {   string temp_var_sum;
             // Process an expression and generate Python code
             if (node.VerifyKey("idNode"))
             {
@@ -244,18 +246,24 @@ namespace LLEx
             else if (node.VerifyKey("expressionNode"))
             {
                 SyntaxNode value = (SyntaxNode)node.GetAttribute("expressionNode");
-                return $"({ProcessExpression(value)})";
+                return $"{ProcessExpression(value)}";
             }
             else{
                 string left = ProcessExpression(node.GetAttribute("left") as SyntaxNode);
+                varNumSum +=1;
+
                 if(node.VerifyKey("operator")){
+                    temp_var_sum = $"_TEMP_VAR_EXP{varNumSum}";
                     string operatorType = node.GetAttribute("operator").ToString();
                     string right = ProcessExpression(node.GetAttribute("right") as SyntaxNode);
-                    return $"{left} {MapToken(operatorType)} {right}";
+                    code.AppendLine($"{currentIndentation}{temp_var_sum} = {left} {MapToken(operatorType)} {right}");
+                    return temp_var_sum;
                 }else if(node.VerifyKey("comparator")){
+                    temp_var_sum = $"_TEMP_VAR_COMP{varNumSum}";
                     string operatorType = node.GetAttribute("comparator").ToString();
                     string right = ProcessExpression(node.GetAttribute("right") as SyntaxNode);
-                    return $"{left} {MapToken(operatorType)} {right}";
+                    code.AppendLine($"{currentIndentation}{temp_var_sum} = {left} {MapToken(operatorType)} {right}");
+                    return temp_var_sum;
                 }
                 
                 return $"{left}";
