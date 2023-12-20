@@ -402,3 +402,4 @@ target
 
 # Data generated from Docker-COmpose
 ./init-mongodb/data
+src/Frontend/AWS.json

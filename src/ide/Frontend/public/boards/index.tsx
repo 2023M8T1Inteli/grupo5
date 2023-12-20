@@ -1,0 +1,18 @@
+export { default as Board1 } from './board-1.svg';
+export { default as Board2 } from './board-2.svg';
+export { default as Board3 } from './board-3.svg';
+export { default as Board4 } from './board-4.svg';
+export { default as Board5 } from './board-5.svg';
+export { default as Board6 } from './board-6.svg';
+// export { default as Board7 } from './board-7.svg';
+// export { default as Board8 } from './board-8.svg';
+// export { default as Board9 } from './board-9.svg';
+// export { default as Board10 } from './board-10.svg';
+// export { default as Board11 } from './board-11.svg';
+// export { default as Board12 } from './board-12.svg';
+// export { default as Board13 } from './board-13.svg';
+// export { default as Board14 } from './board-14.svg';
+// export { default as Board15 } from './board-15.svg';
+// export { default as Board16 } from './board-16.svg';
+// export { default as Board17 } from './board-17.svg';
+// export { default as Board18 } from './board-18.svg';
