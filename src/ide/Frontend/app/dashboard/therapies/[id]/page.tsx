@@ -37,28 +37,59 @@ const s3 = new AWS.S3();
 
 
 export default function Terapy() {
+	const BASE_API_URL = "http://localhost:80/Therapy";
+
     const [activeQuadrant, setActiveQuadrant] = useState(0);
     const [isToggleOn, handleToggleClick] = useToggle(false);
     const [therapyName, isEditing, handleNameClick, handleNameChange, handleNameBlur] = useTherapyName("Terapia 1");
-    const [droppedItems, handleDragOver, handleDrop] = useDrop([]);
+    const [droppedItems, handleDragOver, handleDrop, changeItems] = useDrop([]);
 	const [imageFile, setImageFileUrl] = useState<string | null>(null);
 	const [audioFile, setAudioFileUrl] = useState<string | null>(null);
 	
 	
-
-
     const handleQuadrantClick = (index : number) => {
         setActiveQuadrant(index);
     };
 
+	const fetchBlocks = ()=>{
+		
+		changeItems([]);
+	}
+
+	const createTherapyBlocks = async (name: string) => {
+
+		const data = {
+			"name": name,
+			"createdByUser": "admin",
+			"command": []
+		};
+		const token = localStorage.getItem('token') ?? "";
+		// const toastId = toast.loading('Excluindo terapeuta...');
+		// axios.delete(`http://localhost:80/Pacient/name/${patient.name}`, {
+		// 	headers: {
+		// 	}
+			const res = await fetch(BASE_API_URL+"/name/"+{name}, {
+				
+				headers: {
+					"Content-type": "application/json",
+					'Authorization': `Bearer ${token}`
+			},
+			method: "PATCH",
+			body: JSON.stringify(data)
+		})
+
+		if (res.ok) {
+			// getAllTherapies()
+			// console.log("cara salvou")
+		}
+	}
+	
 	useEffect(() => {
 		if (imageFile && audioFile) {
 			generateRawCode(therapyName, droppedItems, commandNameMapping(activeQuadrant), imageFile, audioFile);
 		}
 	}, [therapyName, droppedItems, activeQuadrant, imageFile, audioFile]);
 	
-	
-
 	const boardIcons = Object.values(Boards);
     const chunkedBoardIcons = useMemo(() => chunkArray(boardIcons, 3), [boardIcons]);
 
@@ -125,9 +156,6 @@ export default function Terapy() {
 		}
 	};
 	
-
-	
-
     return (
         <div className='w-[85%]'>
 			<div className='flex flex-col h-[100vh]'>
