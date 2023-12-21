@@ -45,7 +45,7 @@ namespace LLEx
             sw.Dispose();
             sw.Close();
 
-            Parser parser = new Parser("bin/Debug/net6.0/Output.xml");
+            Parser parser = new Parser("Output.xml");
 
             SyntaxNode syntaxNode = parser.ParseProgram();
 
@@ -69,6 +69,5 @@ namespace LLEx
 
 
         }
-
     }
 }
