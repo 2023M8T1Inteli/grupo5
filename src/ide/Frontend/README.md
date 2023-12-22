@@ -64,6 +64,7 @@ O projeto possui a seguinte estrutura de pastas:
 │   └── hooks
 ├── next-env.d.ts
 ├── next.config.js
+├── AWS.json
 ├── package-lock.json
 ├── package.json
 ├── postcss.config.js
@@ -95,6 +96,8 @@ O projeto possui a seguinte estrutura de pastas:
 - `next-env.d.ts`: Este arquivo contém as definições de tipo para o Next.js.
 
 - `next.config.js`: Este arquivo contém a configuração personalizada para o Next.js.
+  
+- `AWS.json`: Este arquivo contém a configuração necessária para salvar as imagens e sons na AWS - fundamental preencher com os dados de uma conta válida.
 
 - `package-lock.json` e `package.json`: Esses arquivos contêm informações sobre as dependências do projeto.
 
