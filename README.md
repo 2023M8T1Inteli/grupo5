@@ -36,7 +36,7 @@ Para rodar o projeto, basta rodar o comando `docker-compose up`. Ele irá instal
 
 Para mais informações sobre como rodar o projeto localmente, existem arquivos README.md com instruções para o [frontend](./src/Frontend/README.md) e para a [API](./src/CareApi/README.md).
 
-# Releases
+# Tag
 
 * SPRINT1:
     * Análise de entendimento de negócio da AACD;
